@@ -1,0 +1,72 @@
+<%= start_form_tag({:action => 'index'}, {:name => 'filter_form'}) %>
+<p>
+Enter values for the fields you would like to filter on
+<p>
+<table>
+	<tr>
+		<td><strong>Id</strong></td>	
+		<td><strong>Name</strong></td>		
+		<td><strong>Category</strong></td>
+		<td><strong>Content</strong></td>		
+		<td><strong>E-mail</strong></td>		
+		<td><strong>IP Address</strong></td>	
+	</tr>
+	<tr>
+		<td><%= text_field(:note_filter,:id, :size=>4) %></td>	
+		<td><%= text_field(:note_filter,:name, :size=>12) %></td>	
+		<td><%= text_field(:note_filter,:category, :size=>12) %></td>
+		<td><%= text_field(:note_filter,:text, :size=>10) %></td>		
+		<td><%= text_field(:note_filter,:email, :size=>10) %></td>		
+		<td><%= text_field(:note_filter,:ip_address, :size=>11) %></td>	
+	</tr>	
+</table>
+<br/>
+
+Order By: <%= select_tag('note_filter[order_by]', get_order_fields(@note_filter.order_by)) %> <%= select_tag('note_filter[order_direction]', get_order_directions(@note_filter.order_direction)) %>
+Posted During Previous: <%= text_field(:note_filter, :period_count, :size=>2) %> <%= select_tag('note_filter[period_type]', get_periods(@note_filter.period_type)) %>
+<p>
+Show summarized: <%= check_box(:note_filter, 'show_summarized') %>
+<p>
+<%= submit_tag "Run Query", :name=>:form_action %> <%= submit_tag "Clear Query" %>  
+<p>
+
+<div id="usernotes">
+ <div class="head">
+  <strong>Notes</strong>
+ </div>
+</div> 
+
+<% unless(@notes.empty?) %>
+<input type="button" name="on" value="Check All" onClick="setCheckState(document.filter_form, 'ids_for_delete[]', true)">
+<input type="button" name="on" value="Uncheck All" onClick="setCheckState(document.filter_form, 'ids_for_delete[]', false)">
+<input type="button" name="on" value="Select Range" onClick="checkRanges(document.filter_form, 'ids_for_delete[]')">
+<%= submit_tag "Delete Selected", :name=>:form_action %>
+
+<div id="usernotes">
+<% for @note in @notes %>
+ <div class="note">
+  <span style="float:right;"><%= link_to('Edit', :id => @note.id, :action => 'edit') %></span>    
+  <%= check_box_tag('ids_for_delete[]', @note.id) %> <strong>Name:</strong> <%= @note.name %> <strong>Category:</strong> <%= @note.category %> <strong>By:</strong> <%= mangle_email_for_display(@note.email) %>
+  <strong>Posted:</strong> <a href="#"><%= @note.created_at.strftime("%d-%b-%Y %H:%M") %></a>
+  <strong>From:</strong> <%= @note.ip_address %>
+  <div class="text">
+		<div class="ruby">
+		<%= fix_note_for_display(@note.text, @note_filter.show_summarized) %>		
+		</div>
+</div><!-- text -->
+</div><!-- note -->
+ 
+<% end %> 
+</div><!-- usernotes -->
+
+<p>
+<input type="button" name="on" value="Check All" onClick="setCheckState(document.filter_form, 'ids_for_delete[]', true)">
+<input type="button" name="on" value="Uncheck All" onClick="setCheckState(document.filter_form, 'ids_for_delete[]', false)">
+<input type="button" name="on" value="Select Range" onClick="checkRanges(document.filter_form, 'ids_for_delete[]')">
+<%= submit_tag "Delete Selected", :name=>:form_action %>
+<%= end_form_tag %>
+
+<% end %>
+
+ </body>
+ </html>

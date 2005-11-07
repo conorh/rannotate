@@ -1,0 +1,13 @@
+<div id="usernotes">
+ <div class="head">
+  <strong>
+  List of the <%= @notes.length %> newest notes added to the documentation
+  </strong> 
+ </div>
+ 
+<% for @note in @notes %> 
+<%= render :partial => 'note_with_category' %> 
+<% end %>
+ 
+  </div><!-- head -->
+ </div><!-- usernotes -->

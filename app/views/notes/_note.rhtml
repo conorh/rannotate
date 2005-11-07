@@ -1,0 +1,10 @@
+<div class="note">
+  <strong><%= mangle_email_for_display(@note.email) %></strong><br />
+  <a href="#"><%= @note.created_at.strftime("%d-%b-%Y %H:%M") %></a>
+  </strong>
+  <div class="text">
+  <div class="ruby">
+  <%= fix_note_for_display(@note.text) %>
+  </div><!-- ruby -->
+  </div><!-- text -->
+</div><!-- note -->

@@ -1,0 +1,14 @@
+<%= display_errors_for 'note' %>
+
+<%= hidden_field('note', 'name') %>
+<%= hidden_field('note', 'category') %>
+<%= hidden_field('note', 'content_url') %>
+
+<p><label for="note_email"><strong>E-mail:</strong></label><br/>
+<%= text_field('note', 'email', {:size=>60, :maxlength=>40}) %></p>
+
+<p><label for="note_text"><strong>Note</strong></label><br/>
+<%= text_area('note', 'text', {:rows=>20, :cols=>80, :wrap=>:virtual}) %></p>
+
+</p>
+

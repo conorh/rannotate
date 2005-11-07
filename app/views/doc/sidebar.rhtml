@@ -1,0 +1,14 @@
+<div class="left_banner">
+  <%= sidebar_nav %>
+</div>
+
+<div class="left_entries">
+  <% for entry in @list %>
+  	<% if(entry.class == RaMethod || entry.class == RaCodeObject) %>
+  	<%= link_to_container_child(entry) %>  	
+  	<% else %>
+  	<%= link_to_container(entry) %>
+	<% end %>  	
+  	<br/>    
+  <% end %>
+</div>

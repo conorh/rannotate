@@ -1,0 +1,90 @@
+/* User notes display */
+
+.ruby .normal {}
+.ruby .note { color: #005; font-style: italic; }
+.ruby .keyword { color: #A00; font-weight: bold; }
+.ruby .method { color: #077; }
+.ruby .class { color: #074; }
+.ruby .module { color: #050; }
+.ruby .punct { color: #447; font-weight: bold; }
+.ruby .symbol { color: #099; }
+.ruby .string { color: #944; background: #FFE; }
+.ruby .char { color: #F07; }
+.ruby .ident { color: #004; }
+.ruby .constant { color: #07F; }
+.ruby .regex { color: #B66; background: #FEF; }
+.ruby .number { color: #F99; }
+.ruby .attribute { color: #7BB; }
+.ruby .global { color: #7FB; }
+.ruby .expr { color: #227; }
+.ruby .escape { color: #277; }
+
+
+body, td {
+  font-family: "Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
+  background: #FFF;
+  color: #000;
+  margin: 4px;
+  font-size: small;
+}
+
+.file-title-prefix {
+  font-size: large;
+}
+
+.file-title {
+  font-size: large;
+  font-weight: bold;
+  background: #005;
+  color: #FFF;
+}
+
+.banner {
+  background: #005;
+  color: #FFF;
+  border: 1px solid black;
+  padding: 1em;
+}
+
+div#usernotes {
+	background-color: #e0e0e0;
+}
+div#usernotes div.head, div#usernotes div.foot {
+	background: #556;
+	color: white;
+	padding: 4px;
+}
+div#usernotes div.foot {
+	text-align: right;
+}
+div#usernotes div.foot a, div#usernotes div.head a {
+  color: #FF0;
+	background-color: transparent;
+}
+
+div#usernotes div.foot a:hover, div#usernotes div.head a:hover {
+  color: #FF7;
+	background-color: transparent;
+}
+
+div#usernotes span.action {
+	float: right;
+}
+div#usernotes div.note {
+	padding: 4px;
+}
+div#usernotes div.text {
+	background-color: #f0f0f0;
+	color: inherit;
+	padding: 2px;
+	margin-top: 4px;
+}
+
+.errorExplanation {
+border: 2px solid red;
+padding: 1em;
+margin-left: 2em;
+background-color: #f0f0f0;
+width:400px;
+font: bold sans-serif;
+}

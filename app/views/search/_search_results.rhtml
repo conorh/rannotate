@@ -1,0 +1,26 @@
+
+<% if @results[RaModule] %>
+  <h4>Modules</h4>
+  <%= render :partial => "container_result", :collection => @results[RaModule] %>
+<% end %>
+
+<% if @results[RaClass] %>
+  <h4>Classes</h4>
+  <%= render :partial => "container_result", :collection => @results[RaClass] %>
+<% end %>
+
+<% if @results[RaMethod] %>
+  <h4>Methods</h4>
+  <%= render :partial => "container_child_result", :collection => @results[RaMethod] %>
+<% end %>
+
+<% if @results[RaConstant] %>
+  <h4>Constants</h4>
+  <%= render :partial => "container_child_result", :collection => @results[RaConstant] %>
+<% end %>
+
+<% if @results[RaAttribute] %>
+  <h4>Attributes</h4>
+  <%= render :partial => "container_child_result", :collection => @results[RaAttribute] %>
+<% end %>
+

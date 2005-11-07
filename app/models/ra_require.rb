@@ -1,0 +1,3 @@
+class RaRequire < RaCodeObject
+
+end

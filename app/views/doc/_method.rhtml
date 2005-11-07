@@ -1,0 +1,30 @@
+<% for visibility in @ra_visibilities %>
+
+<% if(@ra_methods[visibility]) %>
+<div class="sectiontitle">
+<strong><%= visibility %> Methods</strong>
+</div>
+
+<% for method in @ra_methods[visibility] %>
+
+<div class="method">
+  <div class="title">
+  	<a name="<%= method.name %>"></a><b><%= method.name %></b><%= method.parameters %>
+  </div>
+  <div class="description">
+    <p>
+     <%= markup(method.ra_comment.comment) %>
+     </p>
+  </div>
+  
+  <div class="sourcecode">
+    [ <%= show_source_link(method.ra_source_code_id) %> ]
+    [ <%= show_notes_link(method.name, 'method') %> ]
+    <div id="method_source_<%= method.id %>" class="source" style="display: none"><pre>source</pre></div>
+    <div id="notes_<%= method.name %>" style="display: none"></div>
+  </div>
+</div>
+
+<% end %>
+<% end %>
+<% end %>

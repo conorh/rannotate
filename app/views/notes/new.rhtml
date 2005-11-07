@@ -1,0 +1,41 @@
+<table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
+<tr>
+  <td class="file-title">
+  <span class="file-title-prefix">Add New Note To: <%= @note.category.capitalize %> <%= @note.name %></span>
+  </td>
+</tr>
+</table>
+<p>
+<p>
+<p>
+Here you can add your note to the list of user submitted notes.
+Please read the following instructions before adding the note.
+<p>
+ <strong>Why your note could be edited or removed:</strong> 
+ <ul>
+ <li> If you are trying to submit a bug (go find the issue tracker and submit it there)
+ <li> If you are asking a question (send it to the RubyOnRails mailing list and then post your answer here!)
+ <li> If you are requesting a new feature.
+ </ul>
+</p>
+
+<p>
+ <strong>Things to know about editing:</strong>
+ <ul>
+ <li> HTML tags are not allowed in the posts, but the note formatting is preserved. 
+ <li> URLs starting with http:// will be turned into clickable links
+ <li> Ruby code blocks enclosed in the tags &lt;ruby&gt; &lt;/ruby&gt; will be source highlighted automatically.
+ </ul>
+</p>
+<p>
+If you post a note in any of the categories above, it will be edited or removed. If you would like to be notified of these
+events please put in your real email address (it will be mangled before displaying).
+<p>
+<p>
+<%= start_form_tag :action => 'preview' %>
+ <table border="0" cellpadding="3" class="standard">
+  <%= render :partial => 'form' %>
+  <%= submit_tag "Preview" %>
+ </table>  
+<%= end_form_tag %>
+</div>

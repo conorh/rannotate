@@ -1,0 +1,287 @@
+a {
+  color: #00F;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #77F;
+  text-decoration: underline;
+}
+
+body, td, p {
+  font-family: "Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
+  background: #FFF;
+  color: #000;
+  margin: 0px;
+  font-size: small;
+}
+
+#content {
+  margin: 2em;
+}
+
+#description p {
+  margin-bottom: 0.5em;
+}
+
+.sectiontitle {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 0.5em;
+  padding-left: 2em;
+  background: #005;
+  color: #FFF;
+  border: 1px dotted black;
+}
+
+.sectiontitle_note {
+  margin-top: 1em;
+  padding: 0.5em;
+  padding-left: 2em;
+  background: #005;
+  color: #FFF;
+  border: 1px dotted black;
+}
+
+div.sectiontitle span.note_link {
+	float: right;
+}
+
+.attr-rw {
+  padding-left: 1em;
+  padding-right: 1em;
+  text-align: center;
+  color: #055;
+}
+
+.attr-name {
+  font-weight: bold;
+}
+
+.attr-desc {
+}
+
+.attr-value {
+  font-family: monospace;
+}
+
+.file-title-prefix {
+  font-size: large;
+}
+
+.file-title {
+  font-size: large;
+  font-weight: bold;
+  background: #005;
+  color: #FFF;
+}
+
+.banner {
+  background: #005;
+  color: #FFF;
+  border: 1px solid black;
+  padding: 1em;
+}
+
+.banner td {
+  background: transparent;
+  color: #FFF;
+}
+
+h1 a, h2 a, .sectiontitle a, .sectiontitle_note a,.banner a {
+  color: #FF0;
+}
+
+h1 a:hover, h2 a:hover, .sectiontitle a:hover, .sectiontitle_note a:hover, .banner a:hover {
+  color: #FF7;
+}
+
+.dyn-source {
+  display: none;
+  background: #FFE;
+  color: #000;
+  border: 1px dotted black;
+  margin: 0.5em 2em 0.5em 2em;
+  padding: 0.5em;
+}
+
+.dyn-source .cmt {
+  color: #00F;
+  font-style: italic;
+}
+
+.dyn-source .kw {
+  color: #070;
+  font-weight: bold;
+}
+
+.method {
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+
+.description pre {
+  padding: 0.5em;
+  border: 1px dotted black;
+  background: #FFE;
+}
+
+.method .title {
+  font-family: monospace;
+  font-size: large;
+  border-bottom: 1px dashed black;
+  margin-bottom: 0.3em;
+  padding-bottom: 0.1em;
+}
+
+.method .description, .method .sourcecode {
+  margin-left: 1em;
+}
+
+.description p, .sourcecode p {
+  margin-bottom: 0.5em;
+}
+
+.method .sourcecode p.source-link {
+  text-indent: 0em;
+  margin-top: 0.5em;
+}
+
+.method .aka {
+  margin-top: 0.3em;
+  margin-left: 1em;
+  font-style: italic;
+  text-indent: 2em;
+}
+
+h1 {
+  padding: 1em;
+  border: 1px solid black;
+  font-size: x-large;
+  font-weight: bold;
+  color: #FFF;
+  background: #007;
+}
+
+h2 {
+  padding: 0.5em 1em 0.5em 1em;
+  border: 1px solid black;
+  font-size: large;
+  font-weight: bold;
+  color: #FFF;
+  background: #009;
+}
+
+h3, h4, h5, h6 {
+  padding: 0.2em 1em 0.2em 1em;
+  border: 1px dashed black;
+  color: #000;
+  background: #AAF;
+}
+
+.sourcecode > pre {
+  padding: 0.5em;
+  border: 1px dotted black;
+  background: #FFE;
+}
+
+
+
+
+
+
+.left_sidebar {
+    background: #EEE;
+    font-family: "Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
+    color: #000;
+    margin: 0px;
+    valign: top;
+}
+
+.left_banner {
+	background: #005;
+	color: #FFF;
+	padding: 0.2em;
+	font-size: small;
+	font-weight: bold;
+	text-align: left;
+}
+
+.left_banner a {
+  color: #FF0;
+}
+
+.left_banner a:hover {
+  color: #FF7;
+}
+
+.left_entries {
+    margin: 0.25em 1em 0 1em;
+    font-size: x-small;
+}
+
+.left_entries a {
+    color: #00F;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.left_entries a:hover {
+	color: #77F;
+	text-decoration: underline;
+}
+
+
+div#usernotes {
+	background-color: #e0e0e0;
+}
+div#usernotes div.head, div#usernotes div.foot {
+	background: #556;
+	color: white;
+	padding: 4px;
+}
+div#usernotes div.foot {
+	text-align: right;
+}
+div#usernotes div.foot a, div#usernotes div.head a {
+  color: #FF0;
+	background-color: transparent;
+}
+
+div#usernotes div.foot a:hover, div#usernotes div.head a:hover {
+  color: #FF7;
+	background-color: transparent;
+}
+
+div#usernotes span.action {
+	float: right;
+}
+div#usernotes div.note {
+	padding: 4px;
+}
+div#usernotes div.text {
+	background-color: #f0f0f0;
+	color: inherit;
+	padding: 2px;
+	margin-top: 4px;
+}
+
+.ruby .normal {}
+.ruby .note { color: #005; font-style: italic; }
+.ruby .keyword { color: #A00; font-weight: bold; }
+.ruby .method { color: #077; }
+.ruby .class { color: #074; }
+.ruby .module { color: #050; }
+.ruby .punct { color: #447; font-weight: bold; }
+.ruby .symbol { color: #099; }
+.ruby .string { color: #944; background: #FFE; }
+.ruby .char { color: #F07; }
+.ruby .ident { color: #004; }
+.ruby .constant { color: #07F; }
+.ruby .regex { color: #B66; background: #FEF; }
+.ruby .number { color: #F99; }
+.ruby .attribute { color: #7BB; }
+.ruby .global { color: #7FB; }
+.ruby .expr { color: #227; }
+.ruby .escape { color: #277; }

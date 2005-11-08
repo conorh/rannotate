@@ -90,6 +90,9 @@ class DocController < ApplicationController
 		# Get the other containers that this container is parent of
 		@ra_children = RaContainer.find(:all, :conditions => ["parent_id = ?", @ra_container.id], :order => "full_name ASC")
 		
+		# Get the list of the files that this container is defined in
+		@ra_in_files = RaInFile.find(:all, :conditions => ["container_id = ?", @ra_container.id])
+		
 		# Get a list of counts of the different notes
 		results = Note.connection.select_all("SELECT name, count(name) AS count FROM notes WHERE name LIKE '" + @container_name + ".%' GROUP BY name");
 		@note_count = {}

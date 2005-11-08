@@ -36,7 +36,7 @@ module Generators
       
       # set up a hash to keep track of all of the objects to be output
       @output = {:files => [], :classes => [], :modules => [], :attributes => [], 
-        :methods => [], :aliases => [], :constants => [], :requires => [], :includes => []}   
+        :methods => [], :aliases => [], :constants => [], :requires => [], :includes => [], :infiles => []}   
       
       # sequences used to generate unique ids for inserts
       @seq = 0            
@@ -101,7 +101,8 @@ module Generators
         obj.constants.each { |child| process_constant(child, obj, id) }
         obj.requires.each { |child| process_require(child, obj, id) }
         obj.includes.each { |child| process_include(child, obj, id) }
-        obj.attributes.each { |child| process_attribute(child, obj, id) }   
+        obj.attributes.each { |child| process_attribute(child, obj, id) } 
+        obj.in_files.each { |child| process_in_file(child, obj, id) }  
       end
       
       id = @already_processed[obj.full_name]
@@ -112,11 +113,16 @@ module Generators
     end       
     
     def process_method(obj, parent, parent_id)  
-      id = get_next_id(:methods)  
-      
-      obj.source_code = get_source_code(obj)
-      
+      id = get_next_id(:methods)        
+      obj.source_code = get_source_code(obj)      
       @output[:methods].push(add_object(obj, id, parent_id))                                
+    end
+    
+    # Each class or module contains a list of the files that it is defined in
+    # this method adds that list of files to the output
+    def process_in_file(obj,parent,parent_id)
+      id = get_next_id(:infile)
+      @output[:infiles].push({:id => id, :file => obj, :container_id => parent_id})
     end
     
     def process_alias(obj, parent, parent_id)

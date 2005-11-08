@@ -37,6 +37,13 @@ CREATE TABLE ra_containers
      ra_comment_id INTEGER
 );
 
+CREATE TABLE ra_in_files
+(
+     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     file_name VARCHAR(255),
+     container_id INTEGER
+);
+
 CREATE TABLE ra_methods
 (
      id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,

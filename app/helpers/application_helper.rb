@@ -7,12 +7,19 @@ module ApplicationHelper
     '[' + link_to_unless_current("Methods", :controller => "doc", :action => "sidebar", :type => "methods") + ']<br/>' + 
     '[' + link_to_unless_current("Search", :controller => "search", :action => "index") + ']'
   end
-
+	
   def link_to_container(ra_container)
-    action = ra_container.class.type_string.pluralize    
+    action = ra_container.class.type_string.pluralize
+    
     return link_to(ra_container.full_name, 
       {:controller => "doc", :action=> action, :name => ra_container.full_name},
       :target=>'docwin')
+  end
+  
+  def link_to_container_by_name(name)
+    return link_to(name, 
+      {:controller => "doc", :action=> 'container', :name => name},
+      :target=>'docwin')  
   end
   
   def link_to_container_child(child)

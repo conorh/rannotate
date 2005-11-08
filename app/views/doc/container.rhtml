@@ -8,24 +8,18 @@
                                          :type => @ra_container.class.type_string.pluralize}, 
           {:target => "_top"} %> ]
   </td>
+  <% if(@ra_container.class == RaClass) %>
   <td align="right">
-    <table cellspacing=0 cellpadding=2>
-      <tr valign="top">
-        <td>In:</td>
-        <td>TODO</td>
-      </tr>        
-    	<tr>
-      	<td>Parent:</td>
-      	<td><% if(@ra_container.class == RaClass) %><%= @ra_container.superclass %><% end %></td>
-   		</tr>
-    </table>
+  Parent: <%= @ra_container.superclass %>
   </td>
+  <% end %>
   </tr>
  </table>
 
  <div id="bodyContent">
    <div id="content">
      <div class="description"><%= markup(@ra_container.ra_comment.comment) %></div>
+     <% if(@ra_in_files.length > 0) %><%= render :partial => 'in_file' %><% end %>
      <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'require' %><% end %>
   	 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'include' %><% end %>     
      <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'constant' %><% end %>

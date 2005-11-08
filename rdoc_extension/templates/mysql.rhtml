@@ -19,6 +19,11 @@ INSERT INTO ra_comments(id, comment)
 	VALUES(<%= ramodule.id %>, '<%= escape_sql(ramodule.comment) %>');
 <% end %>
 
+<% for infile in @output[:infiles] %>
+INSERT INTO ra_in_files(id, file_name, container_id)
+	VALUES(<%= infile[:id] %>, '<%= escape_sql(infile[:file].file_absolute_name) %>', <%= infile[:container_id] %>);
+<% end %>
+
 <% for method in @output[:methods] %>
 INSERT INTO ra_methods (id, ra_container_id, name, parent_name, parameters, block_parameters, singleton, visibility, force_documentation, ra_comment_id, ra_source_code_id) 
 	VALUES(<%= method.id %>, <%= method.container_id %>, '<%= escape_sql(method.name) %>', '<%= escape_sql(method.parent.full_name) %>', 	

@@ -1,26 +1,14 @@
-
-<% if @results[RaModule] %>
-  <h4>Modules</h4>
-  <%= render :partial => "container_result", :collection => @results[RaModule] %>
-<% end %>
-
-<% if @results[RaClass] %>
-  <h4>Classes</h4>
-  <%= render :partial => "container_result", :collection => @results[RaClass] %>
-<% end %>
-
-<% if @results[RaMethod] %>
-  <h4>Methods</h4>
-  <%= render :partial => "container_child_result", :collection => @results[RaMethod] %>
-<% end %>
-
-<% if @results[RaConstant] %>
-  <h4>Constants</h4>
-  <%= render :partial => "container_child_result", :collection => @results[RaConstant] %>
-<% end %>
-
-<% if @results[RaAttribute] %>
-  <h4>Attributes</h4>
-  <%= render :partial => "container_child_result", :collection => @results[RaAttribute] %>
-<% end %>
-
+[<%= @results_count %> hits]
+<% # get results for each type in order 
+[RaModule, RaClass, RaConstant, RaMethod, RaAttribute].each do |type|
+  object_array = @results[type]
+  unless object_array.nil? then
+  	%>
+		<h4><%=pluralize(object_array.length, type.type_string.capitalize)%></h4>
+		<% object_array.each do |object| %>
+			<%= link_to_doc_page(object) %>
+		<% 
+		end
+	end		
+end 
+%>

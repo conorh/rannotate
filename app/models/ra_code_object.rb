@@ -5,4 +5,9 @@ class RaCodeObject < ActiveRecord::Base
   TYPE_INCLUDE = 'RaInclude'
   TYPE_CONSTANT = 'RaConstant'
   TYPE_ATTRIBUTE = 'RaAttribute'
+  
+  def container?
+  	false
+  end
+  
 end

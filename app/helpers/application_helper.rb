@@ -8,6 +8,10 @@ module ApplicationHelper
     '[' + link_to_unless_current("Search", :controller => "search", :action => "index") + ']'
   end
 	
+	def link_to_doc_page(object)
+		object.container? ? link_to_container(object) : link_to_container_child(object)
+	end
+	
   def link_to_container(ra_container)
     action = ra_container.class.type_string.pluralize
     
@@ -23,14 +27,10 @@ module ApplicationHelper
   end
   
   def link_to_container_child(child)
-    # TODO: instead of linking to the container use a more general action
-    # /container . It will do the work of discovering the container type etc.
-
-    action = 'container'    
     return link_to(child.name + " (" + child.parent_name + ")", 
-      {:controller => "doc", :action=> action, :name => child.parent_name, 
-      :anchor => child.name },
-      :target=>'docwin')
+      {:controller => "doc", :action=> 'container', :name => child.parent_name, 
+       :parent_id => child.ra_container_id, :anchor => child.name },
+       :target=>'docwin')
   end
   
 end

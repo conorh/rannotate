@@ -10,11 +10,14 @@ class SearchController < ApplicationController
     temp.push(RaMethod.find(:all, :conditions => ["lower(name) like ?", name]))
     temp.push(RaCodeObject.find(:all, :conditions => ["lower(name) like ?", name]))
     
+    temp.flatten!
     # Create a hash of the results
     temp.each do |obj| 
       unless @results.has_key?(obj.class) then @results[obj.class] = [] end
       @results[obj.class].push(obj)
     end 
+    
+    @results_count = temp.length
     
     render :partial => "search_results"
     

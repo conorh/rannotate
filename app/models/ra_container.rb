@@ -8,4 +8,7 @@ class RaContainer < ActiveRecord::Base
   # Converts the visibility integer into a string name (ex. 1 -> 'public')  
   VISIBILITY = {VIS_PUBLIC => 'public', VIS_PROTECTED => 'protected', VIS_PRIVATE => 'private'}
   
+  def container?
+  	true
+  end
 end

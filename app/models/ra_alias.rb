@@ -1,4 +1,8 @@
 class RaAlias < RaCodeObject
+  def RaAlias.type_string
+  	"alias"
+  end
+  
   def old_name
     return @name
   end

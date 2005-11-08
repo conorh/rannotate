@@ -266,6 +266,9 @@ color: #005; font-style: italic;
 color: #A00; font-weight: bold;
 }
 
+pre,tt {
+	font-size: 10pt;
+}
 
 .ruby .normal {}
 .ruby .note { color: #005; font-style: italic; }

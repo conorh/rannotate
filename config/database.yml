@@ -1,23 +1,44 @@
 development:
   adapter: mysql
   database: rannotate
-  socket: localhost
+  host: 
   username: rails
   password: rails
-  
-# Warning: The database defined as 'test' will be erased and
-# re-generated from your development database when you run 'rake'.
-# Do not set this db to the same as development or production.
+  port: 
+  sslcert: 
+  sslcapath: 
+  sslcipher: 
+  socket: /var/run/mysqld/mysqld.sock
+  sslkey: 
+  schema_order: 
+  dbfile: 
+
 test:
   adapter: mysql
   database: rannotate_test
-  socket: localhost
+  host: 
   username: rails
   password: rails
+  port: 
+  sslcert: 
+  sslcapath: 
+  sslcipher: 
+  socket: localhost
+  sslkey: 
+  schema_order: 
+  dbfile: 
 
 production:
   adapter: mysql
   database: rannotate_production
-  socket: /path/to/your/mysql.sock
+  host: 
   username: root
   password: 
+  port: 
+  sslcert: 
+  sslcapath: 
+  sslcipher: 
+  socket: /path/to/your/mysql.sock
+  sslkey: 
+  schema_order: 
+  dbfile: 

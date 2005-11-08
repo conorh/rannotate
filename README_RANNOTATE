@@ -17,17 +17,13 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-== Using Rannotate ==
+== Using Rannotate ==e 
 
-Step 1: Put the rannotate.rb file from the root directory into your
-rdoc templates directory which is in:
-[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\template\html
-
-Step 2: Modify the rannotate.rb file in the templates directory and do
-a search and replace for localhost. Replace it with the IP that the 
-rannotate server will be running on. This step
-because I can't figure out how to get rdoc to accept custom
-parameters.
+Step 1: Put the db_generator.rb file from the rdoc_extension into your
+rdoc generator directory which is:
+[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\
+Put the mysql.rhtml template file from rdoc_extension\templates into:
+[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\template\db
 
 Step 3: Create the DB using the file in \db and modify the
 config\database.yml for your DB setup. The sql inserts a user 'admin'
@@ -35,14 +31,14 @@ with the password 'admin'. I did this because I password protected the
 signup page so you can't signup a new user without logging in :)
 
 Step 4: Generate some rdoc for your application using:
-rdoc --template=rannotate --inline
+rdoc --fmt=db --template=mysql.html
 
-Step 5: Start webrick for rannotate
+Step 5: Import the generated SQL statements into MySql, you can use:
+mysql -u dbuser -p dbname < inserts.sql
 
-Step 6: Open up the index.html of the docs you generated. If you open
-it up locally using a file:// url then some links will not work due to
-javascript security (URLs on rannotate server cannot open file://
-URLs).
+Step 6: Start webrick for rannotate
+
+Step 7: Open up the URL of the documentation http://server:3000/doc/
 
 Admin URL - http://rannotateserver:3000/admin/notes
 Login: admin Password: admin

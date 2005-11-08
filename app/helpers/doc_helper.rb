@@ -3,6 +3,11 @@ require 'rdoc/markup/simple_markup/to_html'
 
 module DocHelper
 
+    def markup_source_code(code)
+		syntax = Syntax::Convertors::HTML.for_syntax "ruby"
+		return syntax.convert(code)    
+    end
+
     def show_source_link(id)
       # construct a javascript function that either hides the source div if it's showing already,
       # or gets the source via an Ajax call and shows it

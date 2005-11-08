@@ -96,25 +96,6 @@ h1 a:hover, h2 a:hover, .sectiontitle a:hover, .sectiontitle_note a:hover, .bann
   color: #FF7;
 }
 
-.dyn-source {
-  display: none;
-  background: #FFE;
-  color: #000;
-  border: 1px dotted black;
-  margin: 0.5em 2em 0.5em 2em;
-  padding: 0.5em;
-}
-
-.dyn-source .cmt {
-  color: #00F;
-  font-style: italic;
-}
-
-.dyn-source .kw {
-  color: #070;
-  font-weight: bold;
-}
-
 .method {
   margin-left: 1em;
   margin-right: 1em;
@@ -266,6 +247,25 @@ div#usernotes div.text {
 	padding: 2px;
 	margin-top: 4px;
 }
+
+
+
+.dyn-source {
+  background: #FFE;
+  color: #000;
+  border: 1px dotted black;
+  margin: 0.5em 2em 0.5em 2em;
+  padding: 0.5em;
+}
+
+.dyn-source .comment {
+color: #005; font-style: italic;
+}
+
+.dyn-source .keyword {
+color: #A00; font-weight: bold;
+}
+
 
 .ruby .normal {}
 .ruby .note { color: #005; font-style: italic; }

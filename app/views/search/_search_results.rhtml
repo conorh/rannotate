@@ -1,4 +1,4 @@
-[<%= @results_count %> hits]
+[<%= pluralize(@results_count, "hit") %>]
 <% # get results for each type in order 
 [RaModule, RaClass, RaConstant, RaMethod, RaAttribute].each do |type|
   object_array = @results[type]

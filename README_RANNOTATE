@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 Step 1: Put the db_generator.rb file from the rdoc_extension into your
 rdoc generator directory which is:
-[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\
+	[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\
 Put the mysql.rhtml template file from rdoc_extension\templates into:
-[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\template\db
+	[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\template\db
 
 Step 3: Create the DB using the file in \db and modify the
 config\database.yml for your DB setup. The sql inserts a user 'admin'

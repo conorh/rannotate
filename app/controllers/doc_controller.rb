@@ -1,8 +1,14 @@
 class DocController < ApplicationController
 	def index
-    unless params[:type].nil? and params[:name].nil?
-      @start_page = url_for(:action => params[:type], :name => params[:name])
-    end
+      unless params[:type].nil? and params[:name].nil?
+        @start_page = url_for(:action => params[:type], :name => params[:name])
+      else
+        # if no page is specified then display a home page if one exists (id == 1)
+        main_page = RaFile.find(:first, :conditions=>['id=1'])
+        if(main_page != nil) 
+          @start_page = url_for(:action => 'files', :name => main_page.full_name)
+        end        
+      end
     render :layout => false
 	end
 

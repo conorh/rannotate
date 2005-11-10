@@ -38,8 +38,13 @@ module Generators
       @output = {:files => [], :classes => [], :modules => [], :attributes => [], 
         :methods => [], :aliases => [], :constants => [], :requires => [], :includes => [], :infiles => []}   
       
+      @main_page = @options.main_page
+      # this boolean keeps track of whether we have found the main page or not
+      @main_page_found = false
+      
       # sequences used to generate unique ids for inserts
-      @seq = 0            
+      # starts from 2 because the main home page always has an ID of 1 (if there is a main page)
+      @seq = 2           
     end
 
     # Rdoc passes in TopLevel objects from the code_objects.rb tree (all files)
@@ -52,9 +57,13 @@ module Generators
       # Each object passed in is a file, process it
       files.each { |file| process_file(file) }
      
-      f = File.new("inserts.sql", File::CREAT|File::TRUNC|File::RDWR)      
+      if(@main_page != nil && @main_page_found == false)
+        puts "\n***** DB GENERATOR WARNING: Could not find main page '" + @main_page + "'\n"
+      end
+     
+      f = File.new("inserts.sql", File::CREAT|File::TRUNC|File::RDWR)
       f << @rhtml.result(get_binding())
-      f.close      
+      f.close
     end
 
     private
@@ -62,7 +71,8 @@ module Generators
     # process a file from the code_object.rb tree
     def process_file(file)
       id = get_next_id(:files)
-      @output[:files].push(add_object(file, id, 0))
+                 
+      @output[:files].push(add_object(file, id, 0))              
           
       # Process all of the objects that this file contains
       file.method_list.each { |child| process_method(child, file, id) }
@@ -75,7 +85,12 @@ module Generators
       # Recursively process contained subclasses and modules 
        file.each_classmodule do |child| 
           process_class_or_module(child, file, id)      
-      end   
+      end       
+      
+      if(@main_page != nil && @main_page == file.file_absolute_name)
+        file.id = 1      
+        @main_page_found = true
+      end
     end
     
     # Process classes and modiles   

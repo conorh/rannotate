@@ -1,7 +1,5 @@
 class NotesController < ApplicationController
-	# TODO: Page caching does not work here because this page has parameters
-	# it seems like such a good idea.. how can this be fixed?
-	# caches_page :list	
+  cache_sweeper :note_sweeper, :only => [:create]
 	
 	# Display a list of notes
   def list
@@ -24,8 +22,8 @@ class NotesController < ApplicationController
     @name = params[:name]    
     @content_url = params[:return_url]
     
-		searchName = @name + Note::METHOD_SEPARATOR + '%';
-		@notes = Note.find_by_sql(["SELECT DISTINCT name FROM notes WHERE category = ? AND name LIKE ?", @category, searchName]) 	
+    searchName = @name + Note::METHOD_SEPARATOR + '%';
+    @notes = Note.find_by_sql(["SELECT DISTINCT name FROM notes WHERE category = ? AND name LIKE ?", @category, searchName]) 	
   end
   
   # Display a list of notes for the entire site.. up to 30
@@ -44,24 +42,28 @@ class NotesController < ApplicationController
     @note.content_url = params[:content_url]
   end
 
-	def preview		
+  def preview		
     @note = Note.new(params[:note])
     @note.created_at = Time.now
     @note.skip_ban_validation = true
     @note.valid?
 		
-		if @params['create'] && @note.errors.empty?
+	if @params['create'] && @note.errors.empty?
       create
-		end
- 	end
+	end
+  end
 
-  def create
+  def create  
     @note = Note.new(params[:note])
     @note.ip_address = request.remote_ip;
     @note.skip_ban_validation = local_request?
     if !@note.save
       render :action => 'preview'
     else        
+      expire_page(:controller => "doc", :action => 'files', :name => @note.name)
+      expire_page(:controller => "doc", :action => 'modules', :name => @note.name)
+      expire_page(:controller => "doc", :action => 'classes', :name => @note.name)    
+    
     	expire_page :action => "list"
     	render :action => 'success'
     end

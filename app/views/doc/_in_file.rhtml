@@ -1,8 +1,8 @@
 <div class="sectiontitle">
-<span class="note_link"><%= show_notes_link('class_infiles', 'infiles') %></span>
+<span class="note_link"><%= show_notes_link('definedin') %></span>
 <strong>Files this <%= @ra_container.class.type_string %> is defined in</strong>
 </div>
 <% for file in @ra_in_files %>
 File: <%= link_to_container_by_name(file.file_name) %><br/>
 <% end %>
-<div id="notes_class_infiles" style="display:none"></div>
+<div id="notes_definedin" style="display:none"></div>

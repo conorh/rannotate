@@ -1,7 +1,7 @@
 <div class="sectiontitle">
-<span class="note_link"><%= show_notes_link('class_children', 'children') %></span>
+<span class="note_link"><%= show_notes_link('children') %></span>
 <strong>Child Classes and Modules</strong></div>
 <% for child in @ra_children %>
 <%= child.class.type_string.capitalize %> <%= link_to_container(child) %><br/>
 <% end %>
-<div id="notes_class_children" style="display:none"></div>
+<div id="notes_children" style="display:none"></div>

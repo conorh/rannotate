@@ -1,13 +1,13 @@
 CREATE TABLE notes (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	category VARCHAR (20),
-	name VARCHAR (100),
-	email VARCHAR(60),
-	text VARCHAR(3000),
-	ip_address VARCHAR(16),
-	created_at TIMESTAMP,
-	updated_at TIMESTAMP,
-	INDEX ind_cat_name (category, name)
+  category VARCHAR (20),
+  name VARCHAR (100),
+  email VARCHAR(60),
+  text VARCHAR(3000),
+  ip_address VARCHAR(16),
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  INDEX ind_cat_name (category, name)
 );
 
 CREATE TABLE users (

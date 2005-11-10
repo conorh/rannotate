@@ -3,7 +3,7 @@
     <%= @ra_container.class.type_string.capitalize %> </span>
     <span class="file-title"><%= @container_name %></span>
     <br/>
-    [ <a href="#notes"><%= pluralize(@note_count[@container_name], "Note") %></a> ]
+    [ <a href="#notes"><%= pluralize(get_count(@note_count, @ra_container.class.type_string), "Note") %></a> ]
     [ <%= link_to "link to this page", { :action => 'index', :name => @container_name, 
                                          :type => @ra_container.class.type_string.pluralize}, 
           {:target => "_top"} %> ]

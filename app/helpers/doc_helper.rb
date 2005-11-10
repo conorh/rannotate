@@ -3,6 +3,11 @@ require 'rdoc/markup/simple_markup/to_html'
 
 module DocHelper
 
+    # return the number of notes in a certain category, or 0 if there are none
+    def get_count(note_count, category)
+      note_count[category] ? note_count[category] : 0
+    end
+
     def markup_source_code(code)
 		syntax = Syntax::Convertors::HTML.for_syntax "ruby"
 		return syntax.convert(code)    
@@ -22,21 +27,22 @@ module DocHelper
   	  return html
     end
 
-    def show_notes_link(name, category)
-      full_name = @container_name + Note::METHOD_SEPARATOR + name
-      if(@note_count[full_name])
-        count = @note_count[full_name].to_i
+    def show_notes_link(category)
+
+      # in the doc_controller we count up the notes, so output them here
+      if(@note_count[category])
+        count = @note_count[category].to_i
       else
         count = 0
       end
       
       # construct a javascript function that either hides the notes div if it's showing already,
       # or gets the notes via an Ajax call and shows it
-      element = "notes_#{name}"
+      element = "notes_" + category
       function = "Element.visible('#{element}') ? Element.hide('#{element}') : " +
                   remote_function(
-                    :update => 'notes_' + name, 
-                    :url => { :action => 'notes', :name=>full_name, :category=>category, :content_url=>@current_url },
+                    :update => 'notes_' + category, 
+                    :url => { :action => 'notes', :name=>@container_name, :category=>category, :content_url=>@current_url },
                     :complete => "Element.show('#{element}')")
       
       html = link_to_function(pluralize(count, "note"), function)

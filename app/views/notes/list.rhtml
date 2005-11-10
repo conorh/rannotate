@@ -3,7 +3,7 @@
   <span class="action">
   		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :category => @category, :name => @name, :content_url => @content_url}) %>
   </span>    
-  <strong><%= pluralize(@notes.length, "Note") %> for <%= @category.capitalize! %> <%= @name %></strong>
+  <strong><%= pluralize(@notes.length, "Note") %> for <%= @category.capitalize! %></strong>
  </div> 
 <% for @note in @notes %> 
 <%= render :partial => 'note' %> 

@@ -19,9 +19,9 @@
   
   <div class="sourcecode">
     [ <%= show_source_link(method.ra_source_code_id) %> ]
-    [ <%= show_notes_link(method.name, 'method') %> ]
+    [ <%= show_notes_link('method_' + method.name) %> ]
     <div id="method_source_<%= method.ra_source_code_id %>" style="display: none"><pre>source</pre></div>
-    <div id="notes_<%= method.name %>" style="display: none"></div>
+    <div id="notes_method_<%= method.name %>" style="display: none"></div>
   </div>
 </div>
 

@@ -1,9 +1,9 @@
 <div class="sectiontitle">
-<span class="note_link"><%= show_notes_link('class_includes', 'includes') %></span>
+<span class="note_link"><%= show_notes_link('includes') %></span>
 <strong>Included Modules</strong></div>
 <ul>
 <% for include in @ra_code_objects[RaInclude] %>
 <li><%= include.name %></li>
 <% end %>
 </ul>
-<div id="notes_class_includes" style="display:none"></div>
+<div id="notes_includes" style="display:none"></div>

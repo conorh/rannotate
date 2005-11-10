@@ -15,9 +15,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect 'doc/link/:type/:name', :controller => 'doc', :action => 'index'
   
+  # make nice cachable URLs for the sidebar
+  map.connect 'doc/sidebar/:type', :controller => 'doc', :action => 'sidebar'
+  
   # make nice URLs for doc/classes and /doc/modules
   map.connect 'doc/:action/:name', :controller => 'doc'
-  
-  
   
 end

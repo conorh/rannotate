@@ -5,12 +5,11 @@
     <br/>
     [ <a href="#notes"><%= pluralize(get_count(@note_count, @ra_container.class.type_string), "Note") %></a> ]
     [ <%= link_to "link to this page", { :action => 'index', :name => @container_name, 
-                                         :type => @ra_container.class.type_string.pluralize}, 
-          {:target => "_top"} %> ]
+                                         :type => @ra_container.class.type_string.pluralize}, {:target => "_top"} %> ]
   </td>
   <% if(@ra_container.class == RaClass) %>
   <td align="right">
-  Parent: <%= @ra_container.superclass %>
+  Parent: <%= link_to_container_by_name('class', @ra_container.superclass) %>
   </td>
   <% end %>
   </tr>
@@ -27,6 +26,6 @@
   	 <% if(@ra_methods.length > 0) %><%= render :partial => 'method' %><% end %>
   	 <% if(@ra_children.length > 0) %><%= render :partial => 'children' %><% end %>
   	 <a name="notes"></a>
-	 <%= render_notes(@ra_container.class.type_string, @container_name, @current_url) %>
+	 <%= render_notes(@ra_container.class.type_string, @container_name, @container_url) %>
    </div>	
  </div>

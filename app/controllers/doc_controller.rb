@@ -1,10 +1,11 @@
 class DocController < ApplicationController
 
   # cache the main controllers for this class
-  # caches_page :files, :modules, :classes, :sidebar
+  caches_page :files, :modules, :classes, :sidebar
 
-  def index       
-  
+
+	# display the index page with an optional home page
+  def index    
   	# if a class/name is specified then set that for the main frame link  
     unless params[:type].nil? and params[:name].nil?
       @start_page = url_for(:action => params[:type], :name => params[:name])
@@ -48,41 +49,67 @@ class DocController < ApplicationController
     render_source(params[:method_id])
   end
 
+	# display a file
   def files
     get_container(RaFile)
     render :action => 'container'
   end
   
+  # display a module
   def modules
     get_container(RaModule)
     render :action => 'container' 
   end
   
+  # display a class
   def classes
     get_container(RaClass)
     render :action => 'container'
   end
   
-	# search the database for classes, methods and other code objects
+	# search the database for classes, methods, files
   def search
-    name = '%' + params[:name].downcase + '%'
-    
+  	@search_text = params[:name]
+  	
+  	if(@search_text == nil || @search_text.length < 3)
+    	@search_results = {}
+    	@error = "Search too short. Must be longer than 2 characters."
+	    render :action => 'sidebar'
+	    return
+  	end
+  	
     @search_results = Hash.new   
     
-    temp = RaContainer.find(:all, :conditions => ["lower(name) like ?", name])    
-    temp.push(RaMethod.find(:all, :conditions => ["lower(name) like ?", name]))
-    temp.push(RaCodeObject.find(:all, :conditions => ["lower(name) like ?", name]))
+    # what type to include in output, and what order to display them in
+    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
+      	
+    name = '%' + params[:name].downcase + '%'    
     
+    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(name) like ? AND type IN ('RaModule', 'RaClass')", name])    
+    
+    temp.push(RaMethod.find(:all, :limit => 100, 
+    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 
+    	:joins => 'ram, ra_containers rc',
+    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type'
+    	)
+    )
+    temp.push(RaCodeObject.find(:all,
+    	:limit => 100, 
+    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id", name],
+    	:joins => 'rco, ra_containers rc',
+    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type'
+    	)
+    )
+        
     temp.flatten!
     # Create a hash of the results
     temp.each do |obj| 
       unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
       @search_results[obj.class].push(obj)
     end 
+    @results_count = temp.length
     
-    @results_count = temp.length    
-    
-    render :action => 'sidebar'    
+    render :action => 'sidebar'
   end    
   
   ### START protected methods
@@ -91,16 +118,15 @@ class DocController < ApplicationController
   # Get a container (file,class, module) and everything necessary to display it's documentation
   def get_container(type)
     @container_name = @params[:name]
-    @current_url = '/doc/' + type.type_string.pluralize + '?name=' + @container_name    
     
-    # Get the container (there can be multiple matches if the container is defined in multiple files)
+    # Get the container
     @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type.to_s])            
                 
     # Get all the methods in this container (and join with their comments)
     methods = RaMethod.find(:all, :include => :ra_comment, :conditions => ["ra_container_id = ?", @ra_container.id], :order => "name ASC")
       
     # Divide up the methods into public/protected and class/instance
-        @ra_methods = {}      
+		@ra_methods = {}      
     methods.each do |method|
         # Don't display private methods
         if(method.visibility.to_i == RaContainer::VIS_PRIVATE) then next end
@@ -109,8 +135,9 @@ class DocController < ApplicationController
         unless @ra_methods[vis] then @ra_methods[vis] = [] end
         @ra_methods[vis].push(method)
     end 
+    
     # setup the order that that the method sections are output
-        @ra_visibilities = ['Public Class', 'Public Instance', 'Protected Class', 'Protected Instance', 'Private Class', 'Private Instance']      
+    @ra_visibilities = ['Public Class', 'Public Instance', 'Protected Class', 'Protected Instance', 'Private Class', 'Private Instance']    
             
     # Get all of the other code objects that this container contains
     results = RaCodeObject.find(:all, :conditions => ["ra_container_id = ?", @ra_container.id], :order => "name ASC")
@@ -135,6 +162,8 @@ class DocController < ApplicationController
     for result in results
       @note_count[result['category']] = result['count']
     end
+                     
+    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name) 
                      
   end   
   

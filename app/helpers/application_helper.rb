@@ -26,12 +26,21 @@ module ApplicationHelper
   end
   
   # If this is a child of a container object (method, constant etc.) then link to it's container
-  def link_to_container_child(child)
-    action = child.ra_container.class.type_string.pluralize
+  def link_to_container_child(child)    
+   	container_name = child.container_name
+    container_type = child.container_type
+    
+    # If we haven't done a database join to pre-retrieve these values then we get them here
+    # this could involve another DB query if no join with the container table has been done
+    if(container_name == nil || container_type == nil)
+    	container_type = child.ra_container.class.to_s
+    	container_name = child.ra_container.full_name
+    end
     
     return link_to(child.name + " (" + child.ra_container.full_name + ")",     
-      {:controller => "doc", :action=> action, :name => child.ra_container.full_name,
-       :anchor => child.name },
-       :target=>'docwin')
+      { :controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name },
+       :target=>'docwin'
+      )
+       
   end
 end

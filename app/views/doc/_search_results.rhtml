@@ -1,7 +1,12 @@
-[<%= pluralize(@results_count, "hit") %>]
+<br/>
+
+<% if(@error) %>Error: <%= @error %>
+<% else %>
+
+[<%= pluralize(@results_count, "hit") %>] for search '<%= h(@search_text) %>'
 <% # get results for each type in order 
-[RaModule, RaClass, RaConstant, RaMethod, RaAttribute].each do |type|
-  object_array = @search_results[type]
+@display.each do |type|
+  object_array = @search_results[type] 
   unless object_array.nil? then
   	%>
 		<h4><%=pluralize(object_array.length, type.type_string.capitalize)%></h4>
@@ -11,4 +16,5 @@
 		end
 	end		
 end 
+end # end if(@error)
 %>

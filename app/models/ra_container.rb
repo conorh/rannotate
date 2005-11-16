@@ -11,4 +11,18 @@ class RaContainer < ActiveRecord::Base
   def container?
   	true
   end
+  
+  def RaContainer.type_to_route(type)
+		case type
+			when 'RaFile' 
+				return 'files'
+			when 'RaClass'
+				return 'classes'
+			when 'RaModule'
+				return 'modules'
+			else
+				return 'unknown'
+		end									
+  end
+  
 end

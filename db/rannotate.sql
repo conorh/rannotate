@@ -49,7 +49,6 @@ CREATE TABLE ra_methods
      id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
      ra_container_id INTEGER,
      name VARCHAR(128),
-     parent_name VARCHAR(255),
      parameters VARCHAR(255),
      block_parameters VARCHAR(255),
      singleton TINYINT(1),
@@ -73,7 +72,6 @@ CREATE TABLE ra_source_codes
      ra_container_id INTEGER,
      type CHAR(15), -- attr,const,include,require,alias
      name VARCHAR(128), -- also old_name for alias
-     parent_name VARCHAR(255),
      value VARCHAR(128),  -- used for constants (also new_name for alias)
      visibility CHAR(1), -- used for attributes     
      read_write CHAR(2), -- used for attributes

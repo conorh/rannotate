@@ -25,8 +25,8 @@ INSERT INTO ra_in_files(id, file_name, container_id)
 <% end %>
 
 <% for method in @output[:methods] %>
-INSERT INTO ra_methods (id, ra_container_id, name, parent_name, parameters, block_parameters, singleton, visibility, force_documentation, ra_comment_id, ra_source_code_id) 
-	VALUES(<%= method.id %>, <%= method.container_id %>, '<%= escape_sql(method.name) %>', '<%= escape_sql(method.parent.full_name) %>', 	
+INSERT INTO ra_methods (id, ra_container_id, name, parameters, block_parameters, singleton, visibility, force_documentation, ra_comment_id, ra_source_code_id) 
+	VALUES(<%= method.id %>, <%= method.container_id %>, '<%= escape_sql(method.name) %>', 	
 	'<%= escape_sql(method.params) %>', '<%= escape_sql(method.block_params) %>', <%= bool_to_int(method.singleton) %>, 
 	<%= VISIBILITY[method.visibility] %>, <%= bool_to_int(method.force_documentation) %>, <%= method.id %>, <%= method.id %>);
 INSERT INTO ra_source_codes (id, source_code)
@@ -36,28 +36,28 @@ INSERT INTO ra_comments(id, comment)
 <% end %>
 
 <% for attribute in @output[:attributes] %>
-INSERT INTO ra_code_objects (id, ra_container_id, type, name, parent_name, value, visibility, read_write, comment) 
-	VALUES(<%= attribute.id %>, <%= attribute.container_id %>, 'RaAttribute', '<%= escape_sql(attribute.name) %>', '<%= escape_sql(attribute.parent.full_name) %>', '',
+INSERT INTO ra_code_objects (id, ra_container_id, type, name, value, visibility, read_write, comment) 
+	VALUES(<%= attribute.id %>, <%= attribute.container_id %>, 'RaAttribute', '<%= escape_sql(attribute.name) %>', '',
   <%= VISIBILITY[attribute.visibility] %>, '<%= escape_sql(attribute.rw) %>', '<%= escape_sql(attribute.comment) %>' );
 <% end %>
 
 <% for raalias in @output[:aliases] %>	
-INSERT INTO ra_code_objects (id, ra_container_id, type, name, parent_name, value, visibility, read_write, comment) 
-	VALUES(<%= raalias.id %>, <%= raalias.container_id %>, 'RaAlias', '<%= escape_sql(raalias.old_name) %>', '<%= escape_sql(raalias.parent.full_name) %>', '<%= escape_sql(raalias.new_name) %>', 0, '', '<%= escape_sql(raalias.comment) %>' );	
+INSERT INTO ra_code_objects (id, ra_container_id, type, name, value, visibility, read_write, comment) 
+	VALUES(<%= raalias.id %>, <%= raalias.container_id %>, 'RaAlias', '<%= escape_sql(raalias.old_name) %>', '<%= escape_sql(raalias.new_name) %>', 0, '', '<%= escape_sql(raalias.comment) %>' );	
 <% end %>
 
 <% for raconstant in @output[:constants] %>
-INSERT INTO ra_code_objects (id, ra_container_id, type, name, parent_name, value, visibility, read_write, comment) 
-	VALUES(<%= raconstant.id %>, <%= raconstant.container_id %>, 'RaConstant', '<%= escape_sql(raconstant.name) %>', '<%= escape_sql(raconstant.parent.full_name) %>', '<%= escape_sql(raconstant.value) %>', 0, '', '<%= escape_sql(raconstant.comment) %>' );	
+INSERT INTO ra_code_objects (id, ra_container_id, type, name, value, visibility, read_write, comment) 
+	VALUES(<%= raconstant.id %>, <%= raconstant.container_id %>, 'RaConstant', '<%= escape_sql(raconstant.name) %>', '<%= escape_sql(raconstant.value) %>', 0, '', '<%= escape_sql(raconstant.comment) %>' );	
 <% end %>
 
 <% for rarequire in @output[:requires] %>
-INSERT INTO ra_code_objects (id, ra_container_id, type, name, parent_name, value, visibility, read_write, comment) 
-	VALUES(<%= rarequire.id %>, <%= rarequire.container_id %>, 'RaRequire', '<%= escape_sql(rarequire.name) %>', '<%= escape_sql(rarequire.parent.full_name) %>', '', 0, '', '<%= escape_sql(rarequire.comment) %>' );
+INSERT INTO ra_code_objects (id, ra_container_id, type, name, value, visibility, read_write, comment) 
+	VALUES(<%= rarequire.id %>, <%= rarequire.container_id %>, 'RaRequire', '<%= escape_sql(rarequire.name) %>', '', 0, '', '<%= escape_sql(rarequire.comment) %>' );
 <% end %>
 
 <% for rainclude in @output[:includes] %>
-INSERT INTO ra_code_objects (id, ra_container_id, type, name, parent_name, value, visibility, read_write, comment) 
-	VALUES(<%= rainclude.id %>, <%= rainclude.id %>, 'RaInclude', '<%= escape_sql(rainclude.name) %>', '<%= escape_sql(rainclude.parent.full_name) %>', '',
+INSERT INTO ra_code_objects (id, ra_container_id, type, name, value, visibility, read_write, comment) 
+	VALUES(<%= rainclude.id %>, <%= rainclude.id %>, 'RaInclude', '<%= escape_sql(rainclude.name) %>', '',
   0, '', '<%= escape_sql(rainclude.comment) %>' );
 <% end %>

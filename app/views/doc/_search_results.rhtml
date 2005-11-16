@@ -6,7 +6,7 @@
   	%>
 		<h4><%=pluralize(object_array.length, type.type_string.capitalize)%></h4>
 		<% object_array.each do |object| %>
-			<%= link_to_doc(object) %>
+			<%= link_to_doc(object) %><br/>
 		<% 
 		end
 	end		

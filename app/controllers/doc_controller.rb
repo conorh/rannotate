@@ -27,11 +27,10 @@ class DocController < ApplicationController
       when 'files'
         @list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
       when 'methods'
-        @list = RaMethod.find(:all, :order => "name ASC")       
+        @list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
       else
         @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
-    end    
-    
+    end   
   end
 
   # Used by AJAX to display inline notes

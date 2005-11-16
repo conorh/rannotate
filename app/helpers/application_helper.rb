@@ -7,8 +7,19 @@ module ApplicationHelper
     '[' + link_to_unless_current("Methods", :controller => "doc", :action => "sidebar", :type => "methods") + ']<br/>' + 
     '[' + link_to_unless_current("Search", :controller => "search", :action => "index") + ']'
   end
-	
-	def link_to_doc_page(object)
+  
+  # Given the name and type of a container (type = method,file, etc..)
+  # link to that type
+  def link_to_container_by_name(type, name)
+    return link_to(name, 
+      {:controller => "doc", :action=> type.pluralize, :name => name},
+      :target=>'docwin')		
+	end
+  
+  # This method looks at the type of the object and creates a link to the correct page
+  # to display that object. ex. if the object is RaMethod then it will link to the parent
+  # class
+	def link_to_doc(object)
 		object.container? ? link_to_container(object) : link_to_container_child(object)
 	end
 	
@@ -20,17 +31,12 @@ module ApplicationHelper
       :target=>'docwin')
   end
   
-  def link_to_container_by_name(name)
-    return link_to(name, 
-      {:controller => "doc", :action=> 'container', :name => name},
-      :target=>'docwin')  
-  end
-  
   def link_to_container_child(child)
-    return link_to(child.name + " (" + child.parent_name + ")", 
-      {:controller => "doc", :action=> 'container', :name => child.parent_name, 
-       :parent_id => child.ra_container_id, :anchor => child.name },
+    action = child.ra_container.class.type_string.pluralize
+    
+    return link_to(child.name + " (" + child.ra_container.full_name + ")",     
+      {:controller => "doc", :action=> action, :name => child.ra_container.full_name,
+       :anchor => child.name },
        :target=>'docwin')
   end
-  
 end

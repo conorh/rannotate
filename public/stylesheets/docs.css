@@ -197,6 +197,17 @@ h3, h4, h5, h6 {
   color: #FF7;
 }
 
+.left_banner form {
+	padding-top: 2px;
+	padding-bottom: 4px;
+  margin-bottom: 0px;	
+}
+
+.left_banner input {
+	margin: 0;
+	font-size: 85%;
+}
+
 .left_entries {
     margin: 0.25em 1em 0 1em;
     font-size: x-small;

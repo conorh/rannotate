@@ -1,18 +1,23 @@
 class DocController < ApplicationController
 
   # cache the main controllers for this class
-  caches_page :files, :modules, :classes, :sidebar
+  # caches_page :files, :modules, :classes, :sidebar
 
-  def index
+  def index       
+  
+  	# if a class/name is specified then set that for the main frame link  
     unless params[:type].nil? and params[:name].nil?
       @start_page = url_for(:action => params[:type], :name => params[:name])
-    else
-      # if no page is specified then display a home page if one exists (id == 1)
-      main_page = RaFile.find(:first, :conditions=>['id=1'])
-      if(main_page != nil) 
-        @start_page = url_for(:action => 'files', :name => main_page.full_name)
-      end        
     end
+    
+    # if no main page is specified then look for a home page to display (id == 1)  
+   	unless @start_page.nil?
+    	main_page = RaFile.find(:first, :conditions=>['id=1'])
+    	unless main_page.nil?
+      	@start_page = url_for(:action => 'files', :name => main_page.full_name)
+      end
+    end
+    
     render :layout => false
   end
 
@@ -38,13 +43,9 @@ class DocController < ApplicationController
     render_notes(params[:category], params[:name], params[:content_url])      
   end
   
+  # Used by AJAX to display inline source code
   def source_code
     render_source(params[:method_id])
-  end
-
-  def container
-    container = RaContainer.find(params[:parent_id])
-    get_container(container.class)
   end
 
   def files
@@ -62,7 +63,30 @@ class DocController < ApplicationController
     render :action => 'container'
   end
   
-  protected
+	# search the database for classes, methods and other code objects
+  def search
+    name = '%' + params[:name].downcase + '%'
+    
+    @search_results = Hash.new   
+    
+    temp = RaContainer.find(:all, :conditions => ["lower(name) like ?", name])    
+    temp.push(RaMethod.find(:all, :conditions => ["lower(name) like ?", name]))
+    temp.push(RaCodeObject.find(:all, :conditions => ["lower(name) like ?", name]))
+    
+    temp.flatten!
+    # Create a hash of the results
+    temp.each do |obj| 
+      unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
+      @search_results[obj.class].push(obj)
+    end 
+    
+    @results_count = temp.length    
+    
+    render :action => 'sidebar'    
+  end    
+  
+  ### START protected methods
+  protected  
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
   def get_container(type)

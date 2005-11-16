@@ -1,8 +1,14 @@
 <div class="left_banner">
-  <%= sidebar_nav %>
+[<%= link_to_unless_current("Files", :controller => "doc", :action => "sidebar", :type => "files") %>]
+[<%= link_to_unless_current("Classes", :controller => "doc", :action => "sidebar", :type => "classes") %>]
+[<%= link_to_unless_current("Methods", :controller => "doc", :action => "sidebar", :type => "methods") %>]
+<%= start_form_tag :action => 'search' %>
+<input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
+<%= end_form_tag %>
 </div>
 
-<div class="left_entries">
-  <% for entry in @list %>
-  <%= link_to_doc(entry) %><br/><% end %> 
-</div>
+<% if(@search_results) %>
+<div id="search_results" class="left_entries"><%= render :partial => 'search_results' %></div>
+<% else %>
+<div class="left_entries"><% for entry in @list %><%= link_to_doc(entry) %><br/><% end %></div>
+<% end %>

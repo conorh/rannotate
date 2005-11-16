@@ -1,14 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-
-  def sidebar_nav
-    return '[' + link_to_unless_current("Files", :controller => "doc", :action => "sidebar", :type => "files") + ']' +
-    '[' + link_to_unless_current("Classes", :controller => "doc", :action => "sidebar", :type => "classes") + ']' +
-    '[' + link_to_unless_current("Methods", :controller => "doc", :action => "sidebar", :type => "methods") + ']<br/>' + 
-    '[' + link_to_unless_current("Search", :controller => "search", :action => "index") + ']'
-  end
   
-  # Given the name and type of a container (type = method,file, etc..)
+  # Given the name and type of a container (type = class,file, etc..)
   # link to that type
   def link_to_container_by_name(type, name)
     return link_to(name, 
@@ -23,14 +16,16 @@ module ApplicationHelper
 		object.container? ? link_to_container(object) : link_to_container_child(object)
 	end
 	
+	# If this is a container type object (class, method, file) then link to it directly
   def link_to_container(ra_container)
     action = ra_container.class.type_string.pluralize
     
     return link_to(ra_container.full_name, 
-      {:controller => "doc", :action=> action, :name => ra_container.full_name},
+      {:controller => "doc", :action => action, :name => ra_container.full_name},
       :target=>'docwin')
   end
   
+  # If this is a child of a container object (method, constant etc.) then link to it's container
   def link_to_container_child(child)
     action = child.ra_container.class.type_string.pluralize
     

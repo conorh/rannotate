@@ -13,6 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   # default route (id must be a number) 
   map.connect ':controller/:action/:id', :id => /\d+/
 
+	# this route allows for 'static' links to be created to a class/module that still display the sidebar frame
   map.connect 'doc/link/:type/:name', :controller => 'doc', :action => 'index'
   
   # make nice cachable URLs for the sidebar

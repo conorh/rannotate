@@ -18,8 +18,6 @@ class DocController < ApplicationController
       	@start_page = url_for(:action => 'files', :name => main_page.full_name)
       end
     end
-    
-    render :layout => false
   end
 
   # display the left sidebar 

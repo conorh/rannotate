@@ -5,15 +5,18 @@
   </td>
 </tr>
 </table>
-<p>
-<p>
-This rdoc generated documentation is running a rannotate server which means that you can add notes to all
+<table width="95%" align="center">
+<tr><td>
+<p>&nbsp;
+<p>&nbsp;
+<p>This rdoc generated documentation is running a rannotate server which means that you can add notes to all
 parts of the documentation - files, classes and methods. These notes will appear in the bottom frame.
-<p>
-To view the newest comments added to this documentation <%= link_to('click here', {:controller => 'notes', :action => 'list_new'}) %>
-<p>
-For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>
-<p>
-<p>
-<p>
-<%= render_notes("Home", "general", url_for(:action => 'index') %>
+<p>&nbsp;
+<p>To view the newest comments added to this documentation <%= link_to('click here', {:controller => 'notes', :action => 'list_new'}) %>
+<p>&nbsp;
+<p>For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>
+<p>&nbsp;
+<p>&nbsp;
+</tr></td>
+</table>
+<%= render_notes "index", "index", url_for(:action => 'index') %>

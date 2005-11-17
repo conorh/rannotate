@@ -46,7 +46,7 @@ module NotesHelper
 			text.gsub!(/(\r\n|\n|\r)/, " ")
 			
 			if(note.length > 100)
-				text += " ... "		
+				text += " ... "
 			end
 		end
 			
@@ -65,8 +65,8 @@ module NotesHelper
 		# Take care of newlines
 		text.gsub!(/(\r\n|\n|\r)/, "\n") # lets make them newlines crossplatform
 		text.gsub!(/\n\n+/, "\n\n") # zap dupes
-		text.gsub!(/\n\n/, '<br/><br/>\n') # turn two newlines into paragraph
-		text.gsub!(/([^\n])(\n)([^\n])/, '\1\2<br />\3') # turn single newline into <br />
+		text.gsub!(/([^\n])(\n)([^\n])/, '\1\2<br/>\3') # turn single newline into <br />		
+		text.gsub!(/\n\n/, "<br/><br/>\n") # turn two newlines into paragraph
 		
 		# Now place back in the ruby code that we extracted
 		text.gsub!(/!CODE_EXTRACT!/) { syntax.convert(@rubycode.pop()) }

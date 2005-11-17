@@ -85,7 +85,7 @@ class DocController < ApplicationController
       	
     name = '%' + params[:name].downcase + '%'    
     
-    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(name) like ? AND type IN ('RaModule', 'RaClass')", name])    
+    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name])    
     
     temp.push(RaMethod.find(:all, :limit => 100, 
     	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 

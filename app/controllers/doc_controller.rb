@@ -85,19 +85,21 @@ class DocController < ApplicationController
       	
     name = '%' + params[:name].downcase + '%'    
     
-    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name])    
+    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name], :order => 'full_name ASC')    
     
     temp.push(RaMethod.find(:all, :limit => 100, 
     	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 
     	:joins => 'ram, ra_containers rc',
-    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type'
+    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
+    	:order => 'ram.name ASC'
     	)
     )
     temp.push(RaCodeObject.find(:all,
     	:limit => 100, 
     	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id", name],
     	:joins => 'rco, ra_containers rc',
-    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type'
+    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
+    	:order => 'rco.name ASC'    	
     	)
     )
         

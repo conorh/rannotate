@@ -18,13 +18,13 @@
  <div id="bodyContent">
    <div id="content">
      <div class="description"><%= markup(@ra_container.ra_comment.comment) %></div>
-     <% if(@ra_in_files.length > 0) %><%= render :partial => 'in_file' %><% end %>
-     <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'require' %><% end %>
-  	 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'include' %><% end %>     
-     <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'constant' %><% end %>
-  	 <% if(@ra_code_objects[RaAttribute]) %><%= render :partial => 'attribute' %><% end %>     
-  	 <% if(@ra_methods.length > 0) %><%= render :partial => 'method' %><% end %>
-  	 <% if(@ra_children.length > 0) %><%= render :partial => 'children' %><% end %>
+     <% if(@ra_in_files.length > 0) %><%= render :partial => 'partials/in_file' %><% end %>
+     <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'partials/require' %><% end %>
+  	 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'partials/include' %><% end %>     
+     <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'partials/constant' %><% end %>
+  	 <% if(@ra_code_objects[RaAttribute]) %><%= render :partial => 'partials/attribute' %><% end %>     
+  	 <% if(@ra_methods.length > 0) %><%= render :partial => 'partials/method' %><% end %>
+  	 <% if(@ra_children.length > 0) %><%= render :partial => 'partials/children' %><% end %>
   	 <a name="notes"></a>
 	 <%= render_notes(@ra_container.class.type_string, @container_name, @container_url) %>
    </div>	

@@ -12,6 +12,15 @@
 	  	  
     	<!-- div.header -->
     	<div id="header">
+		  <span style="float: right;">
+		  <%= form_tag :action => 'search' %>		  
+		  <%= link_to "Files", :action => "list", :type => "files"  %>
+		  <%= link_to "Classes", :action => "list", :type => "classes" %>
+		  <%= link_to "Methods", :action => "list", :type => "methods" %>
+		  <input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
+		  <%= end_form_tag %>
+		  </span>
+		      	
     	  <h1><a href="/" title="sidetime">Project name</a></h1>
     	  
     	  <!-- div.nav -->	
@@ -31,7 +40,6 @@
       <div id="content">
     	  <!-- div.sbar -->
     	  <div id="sidebar">
-    	    <%= render :partial => 'sidebar' %>
     	  </div>
     	  <!-- /div.sbar -->
     	  

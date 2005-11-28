@@ -1,0 +1,20 @@
+<br/>
+
+<% if(@error) %>Error: <%= @error %>
+<% else %>
+
+[<%= pluralize(@results_count, "hit") %>] for search '<%= h(@search_text) %>'
+<% # get results for each type in order 
+@display.each do |type|
+  object_array = @search_results[type] 
+  unless object_array.nil? then
+  	%>
+		<h4><%=pluralize(object_array.length, type.type_string.capitalize)%></h4>
+		<% object_array.each do |object| %>
+			<%= link_to_doc(object) %><br/>
+		<% 
+		end
+	end		
+end 
+end # end if(@error)
+%>

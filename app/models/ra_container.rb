@@ -22,7 +22,7 @@ class RaContainer < ActiveRecord::Base
 				return 'modules'
 			else
 				return 'unknown'
-		end									
+		end					
   end
   
 end

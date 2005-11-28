@@ -17,35 +17,29 @@ class DocController < ApplicationController
       	@start_page = url_for(:action => 'files', :name => main_page.full_name)
       end
     end
-    
-    get_sidebar_list()
   end
 
   # display a file
   def files
     get_container(RaFile)
-    get_sidebar_list()
     render :action => 'container'
   end
   
   # display a module
   def modules
     get_container(RaModule)
-    get_sidebar_list()
     render :action => 'container' 
   end
   
   # display a class
   def classes
     get_container(RaClass)
-    get_sidebar_list()
     render :action => 'container'
   end
   
-  # used by AJAX to display entries in the sidebar
-  def sidebar
-  	get_sidebar_list(params[:type])
-  	render :partial => 'sidebar'
+  # display a list of entries
+  def list
+  	get_list(params[:type])
   end
   
   # Used by AJAX to display inline notes
@@ -62,25 +56,24 @@ class DocController < ApplicationController
   def search
   	@search_text = params[:name]
   	get_search_results(@search_text)
-  	render :partial => 'sidebar'
   end    
   
   ### START protected methods
   protected  
   
   # get a list of entries to display for the left sidevar
-  def get_sidebar_list(type = 'classes') 
+  def get_list(type = 'classes')   	  
     # Get what should be displayed in the left sidebar
     case type
       when 'classes'
-        @sidebar_list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC")               
+       	@list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC")
       when 'files'
-        @sidebar_list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
+        @list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
       when 'methods'
-        @sidebar_list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
+        @list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
       else
-        @sidebar_list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
-    end          	
+        @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
+    end            	
   end
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
@@ -94,7 +87,7 @@ class DocController < ApplicationController
     methods = RaMethod.find(:all, :include => :ra_comment, :conditions => ["ra_container_id = ?", @ra_container.id], :order => "name ASC")
       
     # Divide up the methods into public/protected and class/instance
-		@ra_methods = {}      
+	@ra_methods = {}      
     methods.each do |method|
         # Don't display private methods
         if(method.visibility.to_i == RaContainer::VIS_PRIVATE) then next end

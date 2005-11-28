@@ -5,8 +5,7 @@ module ApplicationHelper
   # link to that type
   def link_to_container_by_name(type, name)
     return link_to(name, 
-      {:controller => "doc", :action=> type.pluralize, :name => name},
-      :target=>'docwin')		
+      {:controller => "doc", :action=> type.pluralize, :name => name})		
 	end
   
   # This method looks at the type of the object and creates a link to the correct page
@@ -21,8 +20,7 @@ module ApplicationHelper
     action = ra_container.class.type_string.pluralize
     
     return link_to(ra_container.full_name, 
-      {:controller => "doc", :action => action, :name => ra_container.full_name},
-      :target=>'docwin')
+      {:controller => "doc", :action => action, :name => ra_container.full_name})
   end
   
   # If this is a child of a container object (method, constant etc.) then link to it's container
@@ -38,8 +36,7 @@ module ApplicationHelper
     end
     
     return link_to(child.name + " (" + child.ra_container.full_name + ")",     
-      { :controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name },
-       :target=>'docwin'
+      { :controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name }
       )
        
   end

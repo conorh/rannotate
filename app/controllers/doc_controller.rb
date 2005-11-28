@@ -1,11 +1,10 @@
 class DocController < ApplicationController
 
-  # cache the main controllers for this class
+  # cache the main controllers for this class  
   caches_page :files, :modules, :classes, :sidebar
 
-
-	# display the index page with an optional home page
-  def index    
+  # display the index page with an optional home page
+  def index
   	# if a class/name is specified then set that for the main frame link  
     unless params[:type].nil? and params[:name].nil?
       @start_page = url_for(:action => params[:type], :name => params[:name])
@@ -18,25 +17,37 @@ class DocController < ApplicationController
       	@start_page = url_for(:action => 'files', :name => main_page.full_name)
       end
     end
+    
+    get_sidebar_list()
   end
 
-  # display the left sidebar 
-  def sidebar 
-    type = params[:type]           
-        
-    # Get what should be displayed in the left sidebar
-    case type
-      when 'classes'
-        @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC")       
-      when 'files'
-        @list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
-      when 'methods'
-        @list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
-      else
-        @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
-    end   
+  # display a file
+  def files
+    get_container(RaFile)
+    get_sidebar_list()
+    render :action => 'container'
   end
-
+  
+  # display a module
+  def modules
+    get_container(RaModule)
+    get_sidebar_list()
+    render :action => 'container' 
+  end
+  
+  # display a class
+  def classes
+    get_container(RaClass)
+    get_sidebar_list()
+    render :action => 'container'
+  end
+  
+  # used by AJAX to display entries in the sidebar
+  def sidebar
+  	get_sidebar_list(params[:type])
+  	render :partial => 'sidebar'
+  end
+  
   # Used by AJAX to display inline notes
   def notes 
     render_notes(params[:category], params[:name], params[:content_url])      
@@ -45,75 +56,32 @@ class DocController < ApplicationController
   # Used by AJAX to display inline source code
   def source_code
     render_source(params[:method_id])
-  end
-
-	# display a file
-  def files
-    get_container(RaFile)
-    render :action => 'container'
-  end
+  end  
   
-  # display a module
-  def modules
-    get_container(RaModule)
-    render :action => 'container' 
-  end
-  
-  # display a class
-  def classes
-    get_container(RaClass)
-    render :action => 'container'
-  end
-  
-	# search the database for classes, methods, files
+  # search the database for classes, methods, files
   def search
   	@search_text = params[:name]
-  	
-  	if(@search_text == nil || @search_text.length < 3)
-    	@search_results = {}
-    	@error = "Search too short. Must be longer than 2 characters."
-	    render :action => 'sidebar'
-	    return
-  	end
-  	
-    @search_results = Hash.new   
-    
-    # what type to include in output, and what order to display them in
-    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
-      	
-    name = '%' + params[:name].downcase + '%'    
-    
-    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name], :order => 'full_name ASC')    
-    
-    temp.push(RaMethod.find(:all, :limit => 100, 
-    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 
-    	:joins => 'ram, ra_containers rc',
-    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
-    	:order => 'ram.name ASC'
-    	)
-    )
-    temp.push(RaCodeObject.find(:all,
-    	:limit => 100, 
-    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id", name],
-    	:joins => 'rco, ra_containers rc',
-    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
-    	:order => 'rco.name ASC'    	
-    	)
-    )
-        
-    temp.flatten!
-    # Create a hash of the results
-    temp.each do |obj| 
-      unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
-      @search_results[obj.class].push(obj)
-    end 
-    @results_count = temp.length
-    
-    render :action => 'sidebar'
+  	get_search_results(@search_text)
+  	render :partial => 'sidebar'
   end    
   
   ### START protected methods
   protected  
+  
+  # get a list of entries to display for the left sidevar
+  def get_sidebar_list(type = 'classes') 
+    # Get what should be displayed in the left sidebar
+    case type
+      when 'classes'
+        @sidebar_list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC")               
+      when 'files'
+        @sidebar_list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
+      when 'methods'
+        @sidebar_list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
+      else
+        @sidebar_list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
+    end          	
+  end
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
   def get_container(type)
@@ -166,6 +134,49 @@ class DocController < ApplicationController
     @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name) 
                      
   end   
+  
+  # execute a search and return the results
+  # results are put in the @search_results class variable and @result_count contains the total result count
+  # if something goes wrong then the class variable @error contains the error message
+  def get_search_results(search_text)
+  	@search_results = Hash.new
+  	
+  	if(search_text == nil || search_text.length < 3)
+    	@search_results = {}
+    	@error = "Search too short. Must be longer than 2 characters."
+	    return
+  	end
+    
+    # what type to include in output, and what order to display them in
+    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
+      	
+    name = '%' + params[:name].downcase + '%'    
+    
+    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name], :order => 'full_name ASC')        
+    temp.push(RaMethod.find(:all, :limit => 100, 
+    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 
+    	:joins => 'ram, ra_containers rc',
+    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
+    	:order => 'ram.name ASC'
+    	)
+    )
+    temp.push(RaCodeObject.find(:all,
+    	:limit => 100, 
+    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id", name],
+    	:joins => 'rco, ra_containers rc',
+    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
+    	:order => 'rco.name ASC'    	
+    	)
+    )
+        
+    temp.flatten!
+    # Create a hash of the results
+    temp.each do |obj| 
+      unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
+      @search_results[obj.class].push(obj)
+    end 
+    @results_count = temp.length 	
+  end
   
   # Render the notes inline
   def render_notes(container_type, container_name, current_url)

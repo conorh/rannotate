@@ -1,0 +1,14 @@
+<div class="left_banner">
+[<%= link_to_remote "Files", :update => "sidebar", :url => { :action => "sidebar", :type => "files" } %>]
+[<%= link_to_remote "Classes", :update => "sidebar", :url => { :action => "sidebar", :type => "classes" } %>]
+[<%= link_to_remote "Methods", :update => "sidebar", :url => { :action => "sidebar", :type => "methods" } %>]
+<%= form_remote_tag :update => 'sidebar', :url => { :action => 'search' } %>
+<input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
+<%= end_form_tag %>
+</div>
+
+<% if(@search_results) %>
+<div id="search_results" class="left_entries"><%= render :partial => 'search_results' %></div>
+<% else %>
+<div class="left_entries"><% for entry in @sidebar_list %><%= link_to_doc(entry) %><br/><% end %></div>
+<% end %>

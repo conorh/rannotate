@@ -181,7 +181,7 @@ class DocController < ApplicationController
   # Render the source inline
   def render_source(id)
     @source_code = RaSourceCode.find(id).source_code
-    render :partial => 'source_code'
+    render :partial => 'partials/source_code'
   end
 
 end

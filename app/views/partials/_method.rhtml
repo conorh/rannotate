@@ -9,7 +9,8 @@
 
 <div class="method">
   <div class="title">
-  	<a name="<%= method.name %>"></a><b><%= method.name %></b><%= method.parameters %>
+  	<a name="meth_<%= method.name %>"></a>
+  	<b><%= link_to(method.name, :action => @ra_container.class.type_string.pluralize, :method => method.name) %></b><%= method.parameters %>
   </div>
   <div class="description">
     <p>

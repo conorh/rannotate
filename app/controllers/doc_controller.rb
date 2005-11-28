@@ -21,31 +21,54 @@ class DocController < ApplicationController
 
   # display a file
   def files
-    get_container(RaFile)
-    render :action => 'container'
+  	if(params[:method])
+  	  	method(RaFile.to_s)
+	    render :action => 'method'   	  	
+  	else  
+	    get_container(RaFile.to_s) 
+	    render :action => 'container'       
+	end
   end
-  
+
   # display a module
   def modules
-    get_container(RaModule)
-    render :action => 'container' 
+  	if(params[:method])
+  	  	method(RaModule.to_s)
+	    render :action => 'method'   	  	  	
+  	else
+  		get_container(RaModule.to_s)
+    	render :action => 'container'     	
+    end
   end
   
-  # display a class
-  def classes
-    get_container(RaClass)
-    render :action => 'container'
+  # display a class  
+  def classes    
+  	if(params[:method])
+  	  	method(RaClass.to_s)
+	    render :action => 'method'   	  	  	
+  	else	    	
+	  	get_container(RaClass.to_s)
+	    render :action => 'container'     	
+	end
+  end
+
+  # display a method  
+  def method(type)
+  	@container_name = params[:name]
+    @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type])  	
+    @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, params[:method]])  	
+    @source_code = RaSourceCode.find(@method.id).source_code
   end
   
   # display a list of entries
   def list
   	get_list(params[:type])
-  end
+  end 
   
   # Used by AJAX to display inline notes
   def notes 
     render_notes(params[:category], params[:name], params[:content_url])      
-  end
+  end   
   
   # Used by AJAX to display inline source code
   def source_code
@@ -81,7 +104,11 @@ class DocController < ApplicationController
     @container_name = @params[:name]
     
     # Get the container
-    @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type.to_s])            
+    @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type])
+    unless(@ra_container)
+    	@error = "Could not find: " + @container_name
+    	return
+    end
                 
     # Get all the methods in this container (and join with their comments)
     methods = RaMethod.find(:all, :include => :ra_comment, :conditions => ["ra_container_id = ?", @ra_container.id], :order => "name ASC")

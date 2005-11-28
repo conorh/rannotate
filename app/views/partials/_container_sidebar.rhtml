@@ -1,0 +1,36 @@
+<%= @container_name %> Contents
+<br/><br/>
+<!-- Children -->
+<% if @ra_children.length > 0 %>
+<strong>Child Classes and Modules</strong><br/>
+<% for child in @ra_children %>
+<%= child.class.type_string.capitalize %> <%= link_to_container(child) %><br/>
+<% end %>
+<br/>
+<% end %>
+
+<!-- Constants -->
+<strong>Constants</strong><br/>
+<% if @ra_code_objects[RaConstant] %>
+<% for constant in @ra_code_objects[RaConstant] %>
+<a href="#const_<%= constant.name %>"><%= constant.name %></a><br/>
+<% end %>
+<br/>
+<% end %>
+<!-- Attributes -->
+<% if @ra_code_objects[RaAttribute] %>
+<strong>Attributes</strong><br/>
+<% for attribute in @ra_code_objects[RaAttribute] %>  
+[<%= attribute.read_write %>] <a href="#attr_<%= attribute.name %>"><%= attribute.name %></a><br/>
+<% end 
+end %>  
+
+<!-- Methods -->  	   	 
+<% for visibility in @ra_visibilities %>
+<% if(@ra_methods[visibility]) %>
+<br/><strong><%= visibility %> Methods</strong><br/><br/>
+<% for method in @ra_methods[visibility] %>
+<a href="#meth_<%= method.name %>"><b><%= method.name %></b></a><br/>
+<% end 
+ end 
+end %>	 

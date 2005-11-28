@@ -1,0 +1,10 @@
+<b><%= @method.name %></b><%= @method.parameters %>
+<div class="description">
+<p><%= markup(@method.ra_comment.comment) %></p>
+</div>
+  
+<div class="sourcecode">
+<%= render :partial => 'partials/source_code' %>
+</div>
+
+<%= render_notes(@container_name, 'method_' + @method.name, '#') %>

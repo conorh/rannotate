@@ -5,7 +5,7 @@
 <table>
 <% for constant in @ra_code_objects[RaConstant] %>
   <tr valign='top'>
-    <td class="attr-name"><%= constant.name %></td>
+    <td class="attr-name"><a name="const_<%= constant.name %>"></a><%= constant.name %></td>
     <td>=</td>
     <td class="attr-value"><%= constant.value %></td>
   </tr>

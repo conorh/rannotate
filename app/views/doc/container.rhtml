@@ -1,4 +1,17 @@
-  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
+<% if @error %>
+	<%= @error %>
+<% else %>
+
+<!-- div.sbar -->
+<div id="sidebar">
+<%= render :partial => 'partials/container_sidebar' %>
+</div>
+<!-- /div.sbar -->
+    	  
+<!-- div.main -->
+<div id="main">
+
+<table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
   <td><span class="file-title-prefix">
     <%= @ra_container.class.type_string.capitalize %> </span>
     <span class="file-title"><%= @container_name %></span>
@@ -13,7 +26,7 @@
   </td>
   <% end %>
   </tr>
- </table>
+</table>
 
  <div id="bodyContent">
    <div id="content">
@@ -29,3 +42,7 @@
 	 <%= render_notes(@ra_container.class.type_string, @container_name, @container_url) %>
    </div>	
  </div>
+ 
+</div>
+<!-- /div.main -->
+<% end %>

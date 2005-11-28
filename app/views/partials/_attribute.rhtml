@@ -6,7 +6,7 @@
 	<% for attribute in @ra_code_objects[RaAttribute] %>  
   <tr valign='top'>
     <td class='attr-rw'>[<%= attribute.read_write %>]</td>
-    <td class='attr-name'><%= attribute.name %></td>
+    <td class='attr-name'><a name="attr_<%= attribute.name %>"></a><%= attribute.name %></td>
     <td class='attr-desc'><%= markup(attribute.comment) %></td>
   </tr>
   	<% end %>  

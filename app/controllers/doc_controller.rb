@@ -55,9 +55,9 @@ class DocController < ApplicationController
   # display a method  
   def method(type)
   	@container_name = params[:name]
-    @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type])  	
+    @ra_container = RaContainer.find_highest_version(:first, full_name, type, @params[:lib]) 	
     @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, params[:method]])  	
-    @source_code = RaSourceCode.find(@method.id).source_code
+    @source_code = RaSourceCode.find(@method.ra_source_code_id).source_code
   end
   
   # display a list of entries
@@ -72,39 +72,35 @@ class DocController < ApplicationController
   
   # Used by AJAX to display inline source code
   def source_code
-    render_source(params[:method_id])
+    render_source(params[:source_id])
   end  
   
   # search the database for classes, methods, files
   def search
   	@search_text = params[:name]
   	get_search_results(@search_text)
-  end    
+  end
   
   ### START protected methods
   protected  
   
   # get a list of entries to display for the left sidevar
-  def get_list(type = 'classes')   	  
+  def get_list(type = 'classes')
     # Get what should be displayed in the left sidebar
     case type
-      when 'classes'
-       	@list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC")
       when 'files'
-        @list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
+        @list = RaContainer.find_all_highest_version([RaFile.to_s])   
       when 'methods'
-        @list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
+        @list = RaMethod.find_all_highest_version()
       else
-        @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
+       	@list = RaContainer.find_all_highest_version([RaClass.to_s, RaModule.to_s])
     end            	
   end
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
   def get_container(type)
     @container_name = @params[:name]
-    
-    # Get the container
-    @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type])
+    @ra_container = RaContainer.find_highest_version(@container_name, type)    
     unless(@ra_container)
     	@error = "Could not find: " + @container_name
     	return
@@ -141,7 +137,7 @@ class DocController < ApplicationController
     @ra_children = RaContainer.find(:all, :conditions => ["parent_id = ?", @ra_container.id], :order => "full_name ASC")
     
     # Get the list of the files that this container is defined in
-    @ra_in_files = RaInFile.find(:all, :conditions => ["container_id = ?", @ra_container.id])
+    @ra_in_files = RaInFile.find(:all, :conditions => ["ra_container_id = ?", @ra_container.id])
     
     # Get a list of counts of the different categories of notes for this container
     # TODO: make this more active recordish
@@ -172,20 +168,23 @@ class DocController < ApplicationController
       	
     name = '%' + params[:name].downcase + '%'    
     
-    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name], :order => 'full_name ASC')        
+    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass') AND rl.id = ra_library_id AND rl.current = ?", name, true], 
+    :joins => "ra_libraries AS rl",
+    :order => 'full_name ASC')
+    
     temp.push(RaMethod.find(:all, :limit => 100, 
-    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 
-    	:joins => 'ram, ra_containers rc',
+    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true], 
+    	:joins => 'ram, ra_containers AS rc, ra_libraries AS rl',
     	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
     	:order => 'ram.name ASC'
     	)
     )
     temp.push(RaCodeObject.find(:all,
     	:limit => 100, 
-    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id", name],
-    	:joins => 'rco, ra_containers rc',
+    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true],
+    	:joins => 'rco, ra_containers AS rc, ra_libraries AS rl',
     	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
-    	:order => 'rco.name ASC'    	
+    	:order => 'rco.name ASC'
     	)
     )
         

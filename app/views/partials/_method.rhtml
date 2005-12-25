@@ -19,9 +19,10 @@
   </div>
   
   <div class="sourcecode">
-    [ <%= show_source_link(method.ra_source_code_id) %> ]
+    [ <%= show_source_link(method.id, method.ra_source_code_id) %> ]
     [ <%= show_notes_link('method_' + method.name) %> ]
-    <div id="method_source_<%= method.ra_source_code_id %>" style="display: none"><pre>source</pre></div>
+    [ <%= link_to 'History', { :action => 'history', :name => method.name, :type => 'RaMethod' } %> ]
+    <div id="method_source_<%= method.id %>" style="display: none"><pre>source</pre></div>
     <div id="notes_method_<%= method.name %>" style="display: none"></div>
   </div>
 </div>

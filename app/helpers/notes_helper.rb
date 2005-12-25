@@ -12,20 +12,6 @@ module NotesHelper
 		
 		return name
 	end
-
-	# Display errors in a nicely formatted box
-	def display_errors_for(object_name, options = {})
-		options = options.symbolize_keys
-		object = instance_variable_get("@#{object_name}")
-	
-		unless object.errors.empty?
-			content_tag("div",			
-				content_tag("p", "There were problems with the following fields:") +
-				content_tag("ul", object.errors.full_messages.collect { |msg| content_tag("li", msg) }),
-					"id" => options[:id] || "errorExplanation", "class" => options[:class] || "errorExplanation"
-			)
-		end		
-	end
 	
 	# Mangle the input email address to hide it from email address harvesters
 	def mangle_email_for_display(email)

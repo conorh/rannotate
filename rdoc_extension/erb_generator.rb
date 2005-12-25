@@ -17,13 +17,13 @@ module Generators
 
   # This generator takes the output of the rdoc parser
   # and turns it into a bunch of INSERT sql statements for a database
-  class DBGenerator                 
+  class ERBGenerator                 
 
     TYPE = {:file => 1, :class => 2, :module => 3 }
     VISIBILITY = {:public => 1, :private => 2, :protected => 3 }
         
     # Create a new DB Generator object (used by RDoc)
-    def DBGenerator.for(options)
+    def ERBGenerator.for(options)
       new(options)
     end
         
@@ -44,7 +44,7 @@ module Generators
       
       # sequences used to generate unique ids for inserts
       # starts from 2 because the main home page always has an ID of 1 (if there is a main page)
-      @seq = 2           
+      @seq = 2
     end
 
     # Rdoc passes in TopLevel objects from the code_objects.rb tree (all files)
@@ -237,5 +237,5 @@ module Generators
    class RDoc::AnyMethod
      attr_accessor :source_code	  
    end
-
+   
 end

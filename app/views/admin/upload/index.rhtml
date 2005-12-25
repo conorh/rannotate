@@ -1,0 +1,14 @@
+Import documentation into the database:
+<%= display_errors_for 'library' %>
+<%= form_tag({:action=>'import'}, :multipart => true)%>
+ Library Name: <%= text_field 'library', 'name' %><br/> 
+ Version - Major: <%= text_field 'library', 'major', {:size=>3} %> 
+ Minor: <%= text_field 'library', 'minor', {:size=>3} %>
+ Release: <%= text_field 'library', 'release', {:size=>3} %><br/>
+ Select YAML File: <input type="file" name="doc_file" /><br/>
+ <input type="submit" value="Upload" />
+ 
+ <% if @total_time %>
+ <p>Total time = <%= @total_time %>
+ <% end %>
+</form>

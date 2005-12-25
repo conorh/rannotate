@@ -1,26 +1,26 @@
 <% for file in @output[:files] %>
-INSERT INTO ra_containers(id, type, parent_id, name, full_name, superclass, ra_comment_id) 
-	VALUES(<%= file.id %>, 'RaFile', 0, '<%= escape_sql(file.file_relative_name) %>', '<%= escape_sql(file.file_absolute_name) %>', '', <%= file.id %>);
+INSERT INTO ra_containers(id, ra_library_id, type, parent_id, name, full_name, superclass, ra_comment_id) 
+	VALUES(<%= file.id %>, 0, 'RaFile', 0, '<%= escape_sql(file.file_relative_name) %>', '<%= escape_sql(file.file_absolute_name) %>', '', <%= file.id %>);
 INSERT INTO ra_comments(id, comment)
 	VALUES(<%= file.id %>, '<%= escape_sql(file.comment) %>');
 <% end %>
 
 <% for raclass in @output[:classes] %>
-INSERT INTO ra_containers(id, type, parent_id, name, full_name, superclass, ra_comment_id) 
-	VALUES(<%= raclass.id %>, 'RaClass', <%= raclass.container_id %>, '<%= escape_sql(raclass.name) %>', '<%= escape_sql(raclass.full_name) %>', '<%= escape_sql(raclass.superclass) %>', <%= raclass.id %>);
+INSERT INTO ra_containers(id, ra_library_id, type, parent_id, name, full_name, superclass, ra_comment_id) 
+	VALUES(<%= raclass.id %>, 0, 'RaClass', <%= raclass.container_id %>, '<%= escape_sql(raclass.name) %>', '<%= escape_sql(raclass.full_name) %>', '<%= escape_sql(raclass.superclass) %>', <%= raclass.id %>);
 INSERT INTO ra_comments(id, comment)
 	VALUES(<%= raclass.id %>, '<%= escape_sql(raclass.comment) %>');
 <% end %>
 
 <% for ramodule in @output[:modules] %>
-INSERT INTO ra_containers(id, type, parent_id, name, full_name, superclass, ra_comment_id) 
-	VALUES(<%= ramodule.id %>, 'RaModule', <%= ramodule.container_id %>, '<%= escape_sql(ramodule.name) %>', '<%= escape_sql(ramodule.full_name) %>', '<%= escape_sql(ramodule.superclass) %>', <%= ramodule.id %>);
+INSERT INTO ra_containers(id, ra_library_id, type, parent_id, name, full_name, superclass, ra_comment_id) 
+	VALUES(<%= ramodule.id %>, 0, 'RaModule', <%= ramodule.container_id %>, '<%= escape_sql(ramodule.name) %>', '<%= escape_sql(ramodule.full_name) %>', '<%= escape_sql(ramodule.superclass) %>', <%= ramodule.id %>);
 INSERT INTO ra_comments(id, comment)
 	VALUES(<%= ramodule.id %>, '<%= escape_sql(ramodule.comment) %>');
 <% end %>
 
 <% for infile in @output[:infiles] %>
-INSERT INTO ra_in_files(id, file_name, container_id)
+INSERT INTO ra_in_files(id, file_name, ra_container_id)
 	VALUES(<%= infile[:id] %>, '<%= escape_sql(infile[:file].file_absolute_name) %>', <%= infile[:container_id] %>);
 <% end %>
 

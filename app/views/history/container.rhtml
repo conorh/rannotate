@@ -1,0 +1,20 @@
+<% @versions.each do |version| %>
+<% container = version[:container]%>
+Version: <%= container.ra_library.major %>.<%= container.ra_library.minor %>.<%= container.ra_library.release %><br/><br/>
+
+Added: 
+<% version[:added].each do |obj| %>
+<%= obj.class.type_string %> <%= obj.name %>
+<% end %>
+<br/>
+Removed: 
+<% version[:removed].each do |obj| %>
+<%= obj.class.type_string %> <%= obj.name %>
+<% end %>
+<br/>
+Changed: 
+<% version[:changed].each do |obj| %>
+<%= obj %>
+<% end %>
+<br/><br/>
+<% end %>

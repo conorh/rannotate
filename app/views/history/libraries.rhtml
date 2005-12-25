@@ -1,0 +1,7 @@
+<% @libraries.each do |name,ver_array| %>
+<%= name %><br/>
+<% ver_array.each do |ver| %>
+* <%= ver.major %>.<%= ver.minor %>.<%= ver.release %><br/>
+<% end %>
+<br/><br/>
+<% end %>

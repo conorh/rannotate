@@ -1,5 +1,6 @@
 class RaContainer < ActiveRecord::Base
   belongs_to :ra_comment
+  belongs_to :ra_library
 
   VIS_PUBLIC = 1
   VIS_PROTECTED = 2  
@@ -10,6 +11,19 @@ class RaContainer < ActiveRecord::Base
   
   def container?
   	true
+  end
+
+  def RaContainer.find_all_highest_version(types, library = nil)
+    RaContainer.find(:all, :joins => ",ra_libraries AS rl",
+    	:conditions => ["type IN (?) AND ra_library_id = rl.id AND rl.current = ?", types, true],
+    	:order => "full_name ASC"    	
+    )  	
+  end
+  
+  def RaContainer.find_highest_version(full_name, type, library = nil)
+    RaContainer.find(:first, :joins => ",ra_libraries AS rl",
+    	:conditions => ["full_name = ? AND type = ? AND ra_library_id = rl.id AND rl.current = ?", full_name, type, true]
+    )  	
   end
   
   def RaContainer.type_to_route(type)

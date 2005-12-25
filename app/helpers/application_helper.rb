@@ -1,5 +1,19 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+	# Display errors in a nicely formatted box
+	def display_errors_for(object_name, options = {})
+		options = options.symbolize_keys
+		object = instance_variable_get("@#{object_name}")
+	
+		unless object.errors.empty?
+			content_tag("div",			
+				content_tag("p", "There were problems with the following fields:") +
+				content_tag("ul", object.errors.full_messages.collect { |msg| content_tag("li", msg) }),
+					"id" => options[:id] || "errorExplanation", "class" => options[:class] || "errorExplanation"
+			)
+		end		
+	end
   
   # Given the name and type of a container (type = class,file, etc..)
   # link to that type

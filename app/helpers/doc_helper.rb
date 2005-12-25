@@ -15,14 +15,14 @@ module DocHelper
     end
 
 		# show a link to display the source code for a method
-    def show_source_link(id)
+    def show_source_link(method_id, source_id)
       # construct a javascript function that either hides the source div if it's showing already,
       # or gets the source via an Ajax call and shows it
-      element = "method_source_#{id}"
+      element = "method_source_#{method_id}"
       function = "Element.visible('#{element}') ? Element.hide('#{element}') : " +
                   remote_function(
-                    :update => 'method_source_' + id.to_s, 
-                    :url => { :action => 'source_code', :method_id=>id },
+                    :update => 'method_source_' + method_id.to_s, 
+                    :url => { :action => 'source_code', :source_id=>source_id },
                     :complete => "Element.show('#{element}')")
       
       html = link_to_function("Source", function)

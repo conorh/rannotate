@@ -166,11 +166,15 @@ class DocController < ApplicationController
     # what type to include in output, and what order to display them in
     @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
       	
-    name = '%' + params[:name].downcase + '%'    
+    breakpoint
+    name = '%' + search_text + '%'    
     
-    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass') AND rl.id = ra_library_id AND rl.current = ?", name, true], 
-    :joins => "ra_libraries AS rl",
-    :order => 'full_name ASC')
+    temp = RaContainer.find(:all, :limit => 100, 
+    	:conditions => ["lower(rc.full_name) like ? AND rc.type IN ('RaModule', 'RaClass') AND rl.id = rc.ra_library_id AND rl.current = ?", name, true], 
+    	:select => 'rc.*',
+    	:joins => "rc, ra_libraries AS rl",
+    	:order => 'rc.full_name ASC'
+    )
     
     temp.push(RaMethod.find(:all, :limit => 100, 
     	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true], 
@@ -179,8 +183,7 @@ class DocController < ApplicationController
     	:order => 'ram.name ASC'
     	)
     )
-    temp.push(RaCodeObject.find(:all,
-    	:limit => 100, 
+    temp.push(RaCodeObject.find(:all, :limit => 100, 
     	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true],
     	:joins => 'rco, ra_containers AS rc, ra_libraries AS rl',
     	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',

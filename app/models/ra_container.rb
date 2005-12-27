@@ -14,16 +14,16 @@ class RaContainer < ActiveRecord::Base
   end
 
   def RaContainer.find_all_highest_version(types, library = nil)
-    RaContainer.find(:all, :joins => ",ra_libraries AS rl",
-    	:conditions => ["type IN (?) AND ra_library_id = rl.id AND rl.current = ?", types, true],
-    	:order => "full_name ASC"    	
-    )  	
+    RaContainer.find_by_sql(["SELECT rc.* FROM ra_containers AS rc, ra_libraries AS rl WHERE " +
+      "type IN (?) AND ra_library_id = rl.id AND rl.current = ? ORDER BY full_name ASC", types, true])	
   end
   
   def RaContainer.find_highest_version(full_name, type, library = nil)
-    RaContainer.find(:first, :joins => ",ra_libraries AS rl",
-    	:conditions => ["full_name = ? AND type = ? AND ra_library_id = rl.id AND rl.current = ?", full_name, type, true]
-    )  	
+    result = RaContainer.find_by_sql(["SELECT rc.* FROM ra_containers AS rc, ra_libraries AS rl WHERE " +
+      "full_name = ? AND type = ? AND ra_library_id = rl.id AND rl.current = ? ORDER BY full_name ASC", full_name, type, true])
+    if(result)
+    	return result[0]
+    end  
   end
   
   def RaContainer.type_to_route(type)

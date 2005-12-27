@@ -13,17 +13,30 @@ class Admin::UploadController < ApplicationController
 		# recreated each time
 		@col_hash = Hash.new
 		
-		ActiveRecord::Base.connection.transaction do	
+		file_name = @params['doc_file'].original_filename
+		match = /([a-zA-Z]+)-([0-9]+)\.([0-9]+)\.([0-9]+)\.out/.match(file_name)
+		if(!match)
+			@error = "File name must have the format name-major.minor.release.out, ex: rails-1.2.1.out"				 
+			render :action => :index	
+			return
+		end	
 		
+		ActiveRecord::Base.connection.transaction do						
+			
 			# Create a new library object		
-			@library = RaLibrary.new(@params['library'])
-			@library.save		
+			@library = RaLibrary.new()
+			@library.name = match[1]
+			@library.major = match[2]
+			@library.minor = match[3]
+			@library.release = match[4]			
+			@library.current = false
+			@library.save
 		
 			# ok now we need to see if the library version that we uploaded is the most recent version of this library			
-			higher_version = RaLibrary.find(:first, :conditions => ["name = ? AND version > ?", @params['library']['name'], @library.version])
+			higher_version = RaLibrary.find(:first, :conditions => ["name = ? AND version > ?", @library.name, @library.version])
 			if(higher_version == nil)
 				# if our version is the most recent remove the current status from all the current entryes
-				currents = RaLibrary.find(:all, :conditions => ["name = ? AND current = ?", @params['library']['name'], true])
+				currents = RaLibrary.find(:all, :conditions => ["name = ? AND current = ?", @library.name, true])
 				if(currents)
 					currents.each do |c|
 						c.current = false
@@ -34,8 +47,7 @@ class Admin::UploadController < ApplicationController
 				@library.current = true
 				@library.save
 			end						
-			
-						
+									
 			if(@library.valid?)
 				# measure the time it takes to do the DB inserts
 		 		start = Time.now

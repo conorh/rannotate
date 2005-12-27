@@ -1,6 +1,15 @@
-<% require 'yaml' %>
-
-<% for file in @output[:files] %>
+<% require 'yaml' 
+def string_to_yaml(obj)
+	result = ""
+	if(obj)
+		result = obj.to_yaml() 
+		if(result[0,3] == "---")
+			result = result[4..-1].gsub(/^  /,'    ')
+		end
+	end
+	return result
+end
+%><% for file in @output[:files] %>
 --- !ruby/object:RaComment 
 attributes: 
   id: <%= file.id %>
@@ -15,9 +24,7 @@ attributes:
   type: RaFile
   full_name: <%= file.file_absolute_name %>
   parent_id: 0
-new_record: true
-<% end %>
-<% for raclass in @output[:classes] %>
+new_record: true<% end %><% for raclass in @output[:classes] %>
 --- !ruby/object:RaComment 
 attributes: 
   id: <%= raclass.id %>
@@ -33,9 +40,7 @@ attributes:
   type: RaClass
   full_name: <%= raclass.full_name %>
   parent_id: <%= raclass.container_id %>
-new_record: true
-<% end %>
-<% for ramodule in @output[:modules] %>
+new_record: true<% end %><% for ramodule in @output[:modules] %>
 --- !ruby/object:RaComment 
 attributes: 
   id: <%= ramodule.id %>
@@ -51,17 +56,13 @@ attributes:
   type: RaModule
   full_name: <%= ramodule.full_name %>
   parent_id: <%= ramodule.container_id %>
-new_record: true
-<% end %>
-<% for infile in @output[:infiles] %>
+new_record: true<% end %><% for infile in @output[:infiles] %>
 --- !ruby/object:RaInFile 
 attributes: 
   id: <%= infile[:id] %>
   ra_container_id: <%= infile[:container_id] %>
   file_name: <%= infile[:file].file_absolute_name %>
-new_record: true
-<% end %>
-<% for method in @output[:methods] %>
+new_record: true<% end %><% for method in @output[:methods] %>
 --- !ruby/object:RaSourceCode 
 attributes: 
   id: <%= method.id %>
@@ -77,16 +78,14 @@ attributes:
   id: <%= method.id %>
   ra_comment_id: <%= method.id %>
   visibility: <%= VISIBILITY[method.visibility] %>
-  name: <%= method.name %>
+  name: <%= method.name.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   ra_container_id: <%= method.container_id %>
-  parameters: <%= method.params %>
+  parameters: <%= method.params.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   singleton: <%= bool_to_int(method.singleton) %>
   force_documentation: <%= bool_to_int(method.force_documentation) %>
-  block_parameters: <%= method.block_params %>
+  block_parameters: <%= method.block_params.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   ra_source_code_id: <%= method.id %>
-new_record: true
-<% end %>
-<% for attribute in @output[:attributes] %>
+new_record: true<% end %><% for attribute in @output[:attributes] %>
 --- !ruby/object:RaAttribute 
 attributes: 
   id: <%= attribute.id %>
@@ -96,9 +95,7 @@ attributes:
   ra_container_id: <%= attribute.container_id %>
   type: RaAttribute
   comment: <%= attribute.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
-new_record: true
-<% end %>
-<% for raalias in @output[:aliases] %>	
+new_record: true<% end %><% for raalias in @output[:aliases] %>	
 --- !ruby/object:RaAlias 
 attributes: 
   id: <%= raalias.id %>
@@ -107,36 +104,29 @@ attributes:
   type: RaAlias
   value: <%= raalias.new_name %>
   comment: <%= raalias.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
-new_record: true
-<% end %>
-<% for raconstant in @output[:constants] %>
+new_record: true<% end %><% for raconstant in @output[:constants] %>
 --- !ruby/object:RaConstant 
 attributes: 
   id: <%= raconstant.id %>
   name: <%= raconstant.name %>
   ra_container_id: <%= raconstant.container_id %>
   type: RaConstant
-  value: <%= raconstant.value %>
+  value: <%= raconstant.value.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   comment: <%= raconstant.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
-new_record: true
-<% end %>
-<% for rainclude in @output[:includes] %>
+new_record: true<% end %><% for rainclude in @output[:includes] %>
 --- !ruby/object:RaInclude 
 attributes: 
   id: <%= rainclude.id %>
-  name: <%= rainclude.name %>
+  name: <%= rainclude.name.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   ra_container_id: 
   type: RaInclude
   comment: <%= rainclude.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
-new_record: true
-<% end %>
-<% for rarequire in @output[:requires] %>
+new_record: true<% end %><% for rarequire in @output[:requires] %>
 --- !ruby/object:RaRequire 
 attributes: 
   id: <%= rarequire.id %>
-  name: <%= rarequire.name %>
+  name: <%= rarequire.name.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   ra_container_id: <%= rarequire.container_id %>
   type: RaRequire
   comment: <%= rarequire.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
-new_record: true
-<% end %>
+new_record: true<% end %>

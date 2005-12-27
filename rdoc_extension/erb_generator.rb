@@ -1,7 +1,8 @@
 require 'erb'
 
 # This class processes the results of the rdoc parsing and outputs sql INSERT 
-# statements into a file called inserts.sql
+# statements into a file. The file name must be specified on the commandline
+# using the --opname option of RDoc ex. --opname=outfile.txt 
 #
 # How does it work?
 # Rdoc calls the generate method of this class from inside of rdoc.rb. By the 
@@ -12,6 +13,9 @@ require 'erb'
 # generate gets passed an array of 'toplevel' objects which are files
 # we process these toplevel objects recursivley extracting all of the code 
 # objects they contain: classes, modules, methods, attributes etc..
+#
+# Example usage 
+# rdoc --fmt=erb --template=ran_yaml.rhtml --opname=outfile.txt activerecord-1.1.13
 
 module Generators
 
@@ -45,15 +49,25 @@ module Generators
       # sequences used to generate unique ids for inserts
       # starts from 2 because the main home page always has an ID of 1 (if there is a main page)
       @seq = 2
+      
+      # before doing anything make sure we can output
+      @rhtml = ERB.new(load_template())          
+            
+      # An output filename must be specified on the commandline
+      @output_file = @options.op_name
+      if @output_file == nil || !(@output_file =~ /[a-zA-Z]+-[0-9]+\.[0-9]+\.[0-9]+/)
+        puts "Error:"
+      	puts "You must specify an output filename on the command line."
+      	puts "and it must have the format: name-[major]-[minor]-[release"
+      	puts "(matching the regex: [a-zA-Z]+-[0-9]+\.[0-9]+\.[0-9]+)"
+      	puts "Ex: rdoc --fmt=erb --template=ran_yaml.rhtml --opname=rannotate-1.2.1"
+      	exit
+      end  
+                 
     end
 
     # Rdoc passes in TopLevel objects from the code_objects.rb tree (all files)
-    def generate(files)                             
-      # before doing anything make sure we can output
-      @rhtml = ERB.new(load_template())          
-      f = File.new("inserts.sql", File::CREAT|File::TRUNC|File::RDWR)
-      f.close       
-    
+    def generate(files)                                  
       # Each object passed in is a file, process it
       files.each { |file| process_file(file) }
      
@@ -61,7 +75,7 @@ module Generators
         puts "\n***** DB GENERATOR WARNING: Could not find main page '" + @main_page + "'\n"
       end
      
-      f = File.new("inserts.sql", File::CREAT|File::TRUNC|File::RDWR)
+      f = File.new(@output_file + ".out", File::CREAT|File::TRUNC|File::RDWR)      
       f << @rhtml.result(get_binding())
       f.close
     end

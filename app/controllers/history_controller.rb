@@ -13,9 +13,31 @@ class HistoryController < ApplicationController
   	end  	  	
   end
 
+  # show the file, class, module differences beteween two versions of a library
   def diff_libraries
-  	# show the file,class,module differences
-  	# beteween two versions of a library  	
+  	
+  	# Get the two versions of the library
+  	new_lib = RaLibrary.find(:first, :conditions => ["version = ?", new_ver])
+  	old_lib = RaLibrary.find(:first, :conditions => ["version = ?", old_ver])
+  	containers = RaContainer.find(:all, :conditions => ["ra_library_id IN(?)", [new_lib.id, old_lib.id]])
+  	
+    # Now we have to put the information into the format required by
+    # check_changes so that it can diff the two lists
+    
+    # create an array with the two libraries
+    @versions = Array.new
+    @versions.push({:container => old_lib})
+    @versions.push({:container => new_lib, :added => [], :changed => [], :removed => []})    
+  	
+    # Group the containers by library id
+    containers_hash = Hash.new
+    containers.each do |c|
+    	unless containers_hash[c.ra_library_id] then methods_hash[c.ra_library_id] = Hash.new end
+    	containers_hash[c.ra_library_id][c.class.to_s + c.full_name] = c
+	end 	
+  	
+  	# Diff the two lists and put the results in @versions
+  	check_changes(@versions, :library, containers_hash)  	
   end
 
   # Show the differences for all versions of a container
@@ -50,8 +72,10 @@ class HistoryController < ApplicationController
     # Group the methods by container id
     methods_hash = Hash.new
     methods.each do |method|
-    	unless methods_hash[method.ra_container_id] then methods_hash[method.ra_container_id] = Hash.new end
-    	methods_hash[method.ra_container_id][method.class.to_s + method.name] = method
+    	if(method.visibility != RaContainer::VIS_PRIVATE)
+    		unless methods_hash[method.ra_container_id] then methods_hash[method.ra_container_id] = Hash.new end
+	    	methods_hash[method.ra_container_id][method.class.to_s + method.name] = method
+    	end
 	end
 	
 	# Group the code_objects by container id

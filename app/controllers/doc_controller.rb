@@ -99,6 +99,7 @@ class DocController < ApplicationController
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
   def get_container(type)
+  	logger.level = Logger::DEBUG
     @container_name = @params[:name]
     @ra_container = RaContainer.find_highest_version(@container_name, type)    
     unless(@ra_container)
@@ -147,8 +148,7 @@ class DocController < ApplicationController
       @note_count[result['category']] = result['count']
     end
                      
-    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name) 
-                     
+    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name)                      
   end   
   
   # execute a search and return the results

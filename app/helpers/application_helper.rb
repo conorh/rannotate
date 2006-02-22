@@ -49,7 +49,7 @@ module ApplicationHelper
     	container_name = child.ra_container.full_name
     end
     
-    return link_to(child.name + " (" + child.ra_container.full_name + ")",     
+    return link_to(child.name + " (" + container_name + ")",     
       { :controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name }
       )
        

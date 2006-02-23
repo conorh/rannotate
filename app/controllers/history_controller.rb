@@ -1,21 +1,7 @@
 class HistoryController < ApplicationController
 
-  def libraries
-  	# list all of the libraries
-  	all_libs = RaLibrary.find(:all, :order => "name ASC, version DESC")
-  	
-  	# collect all of the libraries into a hash by library name, each
-  	# entry in the hash contains a list of all the library versions
-  	@libraries = Hash.new
-  	all_libs.each do |l|
-  		unless @libraries[l.name] then @libraries[l.name] = Array.new end
-  		@libraries[l.name].push(l)
-  	end  	  	
-  end
-
   # show the file, class, module differences beteween two versions of a library
-  def diff_libraries
-  	
+  def diff_libraries  	
   	# Get the two versions of the library
   	new_lib = RaLibrary.find(:first, :conditions => ["version = ?", new_ver])
   	old_lib = RaLibrary.find(:first, :conditions => ["version = ?", old_ver])
@@ -44,7 +30,7 @@ class HistoryController < ApplicationController
   # Sets a @version variable that contains an array of all the versions
   # with their differences to the previous version
   def container
-  	# Get all of the info used to display the normal page
+    @versions = Array.new
     @container_name = @params[:name]
     type = @params[:type]
     
@@ -53,20 +39,22 @@ class HistoryController < ApplicationController
     	:conditions => ["full_name = ? AND type = ?", @container_name, type],
     	:order => "version ASC")
     	
-    unless(container_versions)
-    	@error = "Could not find: " + @container_name
+    unless(container_versions && container_versions.length > 0)
+    	@error = "Could not find: " + type + " " + @container_name + " for history"
     	return
     end     
     
     # Put all the versions into an array of hashtables
-    @versions = Array.new
     container_ids = Array.new
     container_versions.each do |v|
-    	@versions.push({:container => v, :added => [], :changed => [], :removed => []})
+        # each entry in the hashtable contains the container
+        # as well as arrays for all of the items that were added/removed/changed between versions
+    	@versions.push({:container => v, :added => {}, :changed => {}, :removed => {}})
+    	# the hashtable is indexed by the container ids
     	container_ids.push(v.id)
    	end
     
-    # Get all of the methods for all versions of this container
+    # Get all of the methods for all versions of this container    
     methods = RaMethod.find(:all, :conditions => ["ra_container_id IN (?)", container_ids], :order => "name ASC")
     
     # Group the methods by container id
@@ -83,13 +71,15 @@ class HistoryController < ApplicationController
 	code_objects_hash = Hash.new
 	code_objects.each do |obj|
    		unless code_objects_hash[obj.ra_container_id] then code_objects_hash[obj.ra_container_id] = Hash.new end
+   		# note that we index the second level of the has table using the object name
+   		# and object class, we have to do this because several different objects could have the same name (I think) 	
     	code_objects_hash[obj.ra_container_id][obj.class.to_s + obj.name] = obj
-	end    	
+	end
 	
 	check_changes(@versions, :methods, methods_hash)
 	check_changes(@versions, :code_objects, code_objects_hash)
 #	check_changes(@versions, :in_files, in_files_hash)
-  	
+  	  	
   	@versions.reverse!
   end
   
@@ -99,36 +89,49 @@ protected
 		# For each version check all of the methods against the previous version
 		# to see if they have changed or if they were added or removed
 		for i in 1...versions.length			
+		
+		    # get the id of each version and it's previous version
 			current_ver = versions[i][:container].id
 			pre_ver = versions[i-1][:container].id
-			unless type_hash[current_ver] == nil
-    			type_hash[current_ver].values.each do |obj|
-    				old_obj = type_hash[pre_ver][obj.class.to_s + obj.name]	    			
+			
+			# if there is no entry in the type_has for these ids then do not continue
+			# this could happen if for example all of the methods are removed between versions
+			unless type_hash[current_ver] == nil || type_hash[pre_ver] == nil
+			
+			    # for each of the entries in the current version check to see if it
+			    # has been added or removed since the previous version
+    			type_hash[current_ver].values.each do |obj|    			    
+    				old_obj = type_hash[pre_ver][obj.class.to_s + obj.name]
+    				type_string = obj.class.type_string	    			
 		    		if (old_obj == nil)
-    					versions[i][:added].push(obj)
+		    		    if(versions[i][:added][type_string] == nil) then versions[i][:added][type_string] = [] end
+    					versions[i][:added][type_string].push(obj)
     				else
-    					change = compare_object(obj, old_obj)
-    					if(change) then versions[i][:changed].push(change) end
+    					change = compare_object(obj, old_obj)		    		        					
+    					if(change)
+    					  if(versions[i][:changed][type_string] == nil) then versions[i][:changed][type_string] = [] end
+    					   versions[i][:changed][type_string].push(change)
+    					end    					   
 		    		end    		    		
     				# remove the method from the hash because it is already processed
     				type_hash[pre_ver].delete(obj.class.to_s + obj.name)
 	    		end
-		    	# all the methods left over are methods that were removed between versions
+		    	# all the items left over are methods that were removed between versions
     			type_hash[pre_ver].values.each do |obj|
-    				versions[i][:removed].push(obj)	
+        			type_string = obj.class.type_string	 
+		    		if(versions[i][:removed][type_string] == nil) then versions[i][:removed][type_string] = [] end     			
+    				versions[i][:removed][type_string].push(obj)	
     			end
 		    end
 	    end    	
-    end
-    
-    
+    end        
     
     def compare_object(new, old)    	
     	result = nil
     	case new.class.to_s
     		when 'RaMethod'    		
     			if(new.parameters != old.parameters)
-    				result = new.name + " parameters changed"
+    				result = new.name + new.parameters + " -> " + old.name + old.parameters
     			end
     		when 'RaAlias'    			
     		when 'RaAttribute'

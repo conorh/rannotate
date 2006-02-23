@@ -1,7 +1,7 @@
 class DocController < ApplicationController
 
-  # cache the main controllers for this class  
-  caches_page :files, :modules, :classes, :sidebar
+  # cache the main actions for this controller
+  caches_page :list, :files, :modules, :classes
 
   # display the index page with an optional home page
   def index
@@ -54,15 +54,15 @@ class DocController < ApplicationController
 
   # display a method  
   def method(type)
-  	@container_name = params[:name]
-    @ra_container = RaContainer.find_highest_version(:first, full_name, type, @params[:lib]) 	
-    @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, params[:method]])  	
+  	@container_name = @params[:name]
+    @ra_container = RaContainer.find_highest_version(:first, full_name, type, @params[:version])
+    @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, @params[:method]])  	
     @source_code = RaSourceCode.find(@method.ra_source_code_id).source_code
   end
   
   # display a list of entries
   def list
-  	get_list(params[:type])
+  	get_list(params[:type], params[:library], params[:version])
   end 
   
   # Used by AJAX to display inline notes
@@ -81,27 +81,48 @@ class DocController < ApplicationController
   	get_search_results(@search_text)
   end
   
+  # list all of the libraries in the system  
+  def libraries
+  	all_libs = RaLibrary.find(:all, :order => "name ASC, version DESC")
+  	
+  	# collect all of the libraries into a hash by library name, each
+  	# entry in the hash contains a list of all the library versions
+  	@libraries = Hash.new
+  	all_libs.each do |l|
+  		unless @libraries[l.name] then @libraries[l.name] = Array.new end
+  		@libraries[l.name].push(l)
+  	end  	  	
+  end  
+  
+  # Display the history for a container
+  def history
+    get_container(@params[:type])
+  end
+  
+  ###########################
   ### START protected methods
+  ###########################
   protected  
   
   # get a list of entries to display for the left sidevar
-  def get_list(type = 'classes')
+  def get_list(type = 'classes', library = nil, version = nil)
     # Get what should be displayed in the left sidebar
     case type
       when 'files'
-        @list = RaContainer.find_all_highest_version([RaFile.to_s])   
+        @list = RaContainer.find_all_highest_version([RaFile.to_s], library, version)   
       when 'methods'
         @list = RaMethod.find_all_highest_version()
       else
-       	@list = RaContainer.find_all_highest_version([RaClass.to_s, RaModule.to_s])
+       	@list = RaContainer.find_all_highest_version([RaClass.to_s, RaModule.to_s], library, version)
     end            	
   end
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
-  def get_container(type)
+  def get_container(cont_type)
   	logger.level = Logger::DEBUG
     @container_name = @params[:name]
-    @ra_container = RaContainer.find_highest_version(@container_name, type)    
+    @version = @params[:version] # this can be nil if the most recent version is requested
+    @ra_container = RaContainer.find_highest_version(@container_name, cont_type, @version)    
     unless(@ra_container)
     	@error = "Could not find: " + @container_name
     	return
@@ -147,9 +168,10 @@ class DocController < ApplicationController
     for result in results
       @note_count[result['category']] = result['count']
     end
-                     
+
+    @container_type = @ra_container.class.type_string                         
     @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name)                      
-  end   
+  end       
   
   # execute a search and return the results
   # results are put in the @search_results class variable and @result_count contains the total result count
@@ -166,7 +188,6 @@ class DocController < ApplicationController
     # what type to include in output, and what order to display them in
     @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
       	
-    breakpoint
     name = '%' + search_text + '%'    
     
     temp = RaContainer.find(:all, :limit => 100, 

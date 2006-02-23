@@ -4,7 +4,7 @@
 
 <!-- div.sbar -->
 <div id="sidebar">
-<%= render :partial => 'partials/container_sidebar' %>
+<%= render :partial => 'doc/partials/container_sidebar' %>
 </div>
 <!-- /div.sbar -->
     	  
@@ -14,10 +14,10 @@
 <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
   <td><span class="file-title-prefix">
     <%= @ra_container.class.type_string.capitalize %> </span>
-    <span class="file-title"><%= @container_name %></span>
+    <span class="file-title"><%= @container_name %></span> 
     <br/>
-    [ <a href="#notes"><%= pluralize(get_count(@note_count, @ra_container.class.type_string), "Note") %></a> ]
-    [ <%= link_to 'History', { :controller => 'history', :action => 'container', :name => @container_name, :type => @ra_container.class.to_s } %> ]
+    [ <a href="#notes"><%= pluralize(get_count(@note_count, @container_type), "Note") %></a> ]
+    [ <%= link_to 'History', {:action => 'history', :name => @container_name, :type => @ra_container.class.to_s } %> ]
   </td>
   <% if(@ra_container.class == RaClass) %>
   <td align="right">
@@ -30,15 +30,15 @@
  <div id="bodyContent">
    <div id="content">
      <div class="description"><%= markup(@ra_container.ra_comment.comment) %></div>
-     <% if(@ra_in_files.length > 0) %><%= render :partial => 'partials/in_file' %><% end %>
-     <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'partials/require' %><% end %>
-  	 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'partials/include' %><% end %>     
-     <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'partials/constant' %><% end %>
-  	 <% if(@ra_code_objects[RaAttribute]) %><%= render :partial => 'partials/attribute' %><% end %>     
-  	 <% if(@ra_methods.length > 0) %><%= render :partial => 'partials/method' %><% end %>
-  	 <% if(@ra_children.length > 0) %><%= render :partial => 'partials/children' %><% end %>
+     <% if(@ra_in_files.length > 0) %><%= render :partial => 'doc/partials/in_file' %><% end %>
+     <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'doc/partials/require' %><% end %>
+  	 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'doc/partials/include' %><% end %>     
+     <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'doc/partials/constant' %><% end %>
+  	 <% if(@ra_code_objects[RaAttribute]) %><%= render :partial => 'doc/partials/attribute' %><% end %>     
+  	 <% if(@ra_methods.length > 0) %><%= render :partial => 'doc/partials/method' %><% end %>
+  	 <% if(@ra_children.length > 0) %><%= render :partial => 'doc/partials/children' %><% end %>
   	 <a name="notes"></a>
-	 <%= render_notes(@ra_container.class.type_string, @container_name, @container_url) %>
+	 <%= render_notes(@container_type, @container_name, @container_url) %>
    </div>	
  </div>
  

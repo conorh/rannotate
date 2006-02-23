@@ -3,6 +3,25 @@ class Admin::UploadController < ApplicationController
 		@library = RaLibrary.new()
 	end
 	
+	# show a list of all libraries in the system 
+	def list
+		
+	end
+	
+	# delete a library and all of its contents
+	def delete
+		library_id = @params[:library_id]
+			
+		RaCodeObject.connection.delete("DELETE ra FROM ra_code_objects AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaInFile.connection.delete("DELETE ra FROM ra_in_files AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaSourceCode.connection.delete("DELETE rs FROM ra_source_codes AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_source_code_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_comment_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaMethod.connection.delete("DELETE ra FROM ra_methods AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rc.ra_comment_id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaContainer.connection.delete("DELETE rc FROM ra_containers AS rc, ra_libraries AS rl WHERE rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		RaLibrary.connection.delete("DELETE FROM ra_libraries WHERE id =" + library_id)	
+	end
+	
 	def import
 		@connection = ActiveRecord::Base.connection
 		
@@ -24,11 +43,7 @@ class Admin::UploadController < ApplicationController
 		ActiveRecord::Base.connection.transaction do						
 			
 			# Create a new library object		
-			@library = RaLibrary.new()
-			@library.name = match[1]
-			@library.major = match[2]
-			@library.minor = match[3]
-			@library.release = match[4]			
+			@library = RaLibrary.new({:name => match[1], :major => match[2], :minor => match[3], :release => match[4]})		
 			@library.current = false
 			@library.save
 		

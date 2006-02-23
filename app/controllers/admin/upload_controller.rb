@@ -1,6 +1,8 @@
 class Admin::UploadController < ApplicationController
+	before_filter :login_required
+
 	def index	
-		@library = RaLibrary.new()
+	
 	end
 	
 	# show a list of all libraries in the system 
@@ -40,16 +42,17 @@ class Admin::UploadController < ApplicationController
 			return
 		end	
 		
-		ActiveRecord::Base.connection.transaction do						
-			
+		ActiveRecord::Base.connection.transaction do									
 			# Create a new library object		
 			@library = RaLibrary.new({:name => match[1], :major => match[2], :minor => match[3], :release => match[4]})		
 			@library.current = false
 			@library.save
 		
-			# ok now we need to see if the library version that we uploaded is the most recent version of this library			
-			higher_version = RaLibrary.find(:first, :conditions => ["name = ? AND version > ?", @library.name, @library.version])
-			if(higher_version == nil)
+			if(@library.valid?)		
+		
+			  # ok now we need to see if the library version that we uploaded is the most recent version of this library			
+			  higher_version = RaLibrary.find(:first, :conditions => ["name = ? AND version > ?", @library.name, @library.version])
+			  if(higher_version == nil)
 				# if our version is the most recent remove the current status from all the current entryes
 				currents = RaLibrary.find(:all, :conditions => ["name = ? AND current = ?", @library.name, true])
 				if(currents)
@@ -61,36 +64,37 @@ class Admin::UploadController < ApplicationController
 				# now set the status of this library to be most recent and save it
 				@library.current = true
 				@library.save
-			end						
+			  end						
 									
-			if(@library.valid?)
-				# measure the time it takes to do the DB inserts
-		 		start = Time.now
+			  # measure the time it takes to do the DB inserts
+		 	  start = Time.now
 	 	
-			 	# Set the logging level to ERROR so that we do not output SQL when we are debugging
-		 		# that really slows things down
-	 			loglevel = logger.level
-	 			logger.level = Logger::ERROR
-				# Read in the YAML file			
-				yp = YAML::load_documents( @params['doc_file'] ) { |doc| 
-					# Each record has a unique id. This id changes though when we insert it into the
-					# database. This would not be a problem excep that all of the records are associated 
-					# by these ids so when a record is inserted into the DB we need to make sure the associations are
-					# updated. get_ids takes care of this updating.
-					# IMPORTANT NOTE: This requires that the YAML is written out in the correct order so that we always insert
-					# a record before we need its id for an association.
-					id = doc.id
-					get_ids(doc, lookup)
-					doc.id = nil	
-					lookup[id] = insert_object(doc)
-				}		
+	  	 	  # Set the logging level to ERROR so that we do not output SQL when we are debugging
+		 	  # that really slows things down
+	 		  loglevel = logger.level
+	 		  logger.level = Logger::ERROR
+			  # Read in the YAML file			
+			  yp = YAML::load_documents( @params['doc_file'] ) { |doc| 
+				# Each record has a unique id. This id changes though when we insert it into the
+				# database. This would not be a problem excep that all of the records are associated 
+				# by these ids so when a record is inserted into the DB we need to make sure the associations are
+				# updated. get_ids takes care of this updating.
+				# IMPORTANT NOTE: This requires that the YAML is written out in the correct order so that we always insert
+				# a record before we need its id for an association.
+				id = doc.id
+				get_ids(doc, lookup)
+				doc.id = nil	
+				lookup[id] = insert_object(doc)
+			  }		
 				
-				@total_time = Time.now - start		
-				logger.level = loglevel
-			end
+			  @total_time = Time.now - start		
+			  logger.level = loglevel
+    		else
+    		  @error = "Could not import library, already exists"
+    		end			
 		end			
 		
-		render :action => :index		
+		render :action => :create		
 	end
 	
 private

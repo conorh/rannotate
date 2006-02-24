@@ -7,6 +7,7 @@ class InitialSchema < ActiveRecord::Migration
     create_table "notes", :force => true do |t|
       t.column "category", :string, :limit => 20 
       t.column "name", :string, :limit => 100
+      t.column "container_version", :integer
       t.column "email", :string, :limit => 60
       t.column "text", :text
       t.column "ip_address", :string, :limit => 16
@@ -79,6 +80,9 @@ class InitialSchema < ActiveRecord::Migration
       t.column "login", :string, :limit => 80
       t.column "password", :string, :limit => 40
     end  
+    
+    # create an admin/admin user
+    User.create :login => "admin", :password => "admin", :password_confirmation => "admin"
   end
 
   def self.down

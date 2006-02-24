@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   # You can have the root of your site routed by hooking up '' 
   # -- just remember to delete public/index.html.
   map.connect '', :controller => "doc"  
+  map.connect 'admin/', :controller => "admin/upload"  
   
   map.connect 'class/:name/:method', :controller => 'doc', :action => 'classes', :method => nil
   map.connect 'file/:name/:method', :controller => 'doc', :action => 'files', :method => nil

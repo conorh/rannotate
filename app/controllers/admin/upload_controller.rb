@@ -73,6 +73,9 @@ class Admin::UploadController < ApplicationController
 		 	  # that really slows things down
 	 		  loglevel = logger.level
 	 		  logger.level = Logger::ERROR
+
+	 		  # TODO: Check if this causes problems on other DBs
+	 		  # Turn off autocommit to make inserts for MySQL InnoDB tables muuuch faster
 	 		  ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=0' )
 	 		  count = 0
 			  # Read in the YAML file			

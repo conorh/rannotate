@@ -10,30 +10,32 @@ def string_to_yaml(obj)
 	return result
 end
 %><% for file in @output[:files] %>
+<% comment_id = get_next_id(:comment) %>
 --- !ruby/object:RaComment 
 attributes: 
-  id: <%= file.id %>
+  id: <%= comment_id %>
   comment: <%= file.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
 new_record: true
 --- !ruby/object:RaFile
 attributes:
   id: <%= file.id %>
-  ra_comment_id: <%= file.id %>
+  ra_comment_id: <%= comment_id %>
   ra_library_id: 0
   name: <%= file.file_relative_name %>
   type: RaFile
   full_name: <%= file.file_absolute_name %>
   parent_id: 0
 new_record: true<% end %><% for raclass in @output[:classes] %>
+<% comment_id = get_next_id(:comment) %>
 --- !ruby/object:RaComment 
 attributes: 
-  id: <%= raclass.id %>
+  id: <%= comment_id %>
   comment: <%= raclass.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
 new_record: true
 --- !ruby/object:RaClass
 attributes: 
   id: <%= raclass.id %>
-  ra_comment_id: <%= raclass.id %>
+  ra_comment_id: <%= comment_id %>
   ra_library_id: 0  
   superclass: <%= raclass.superclass %>
   name: <%= raclass.name %>
@@ -41,15 +43,16 @@ attributes:
   full_name: <%= raclass.full_name %>
   parent_id: <%= raclass.container_id %>
 new_record: true<% end %><% for ramodule in @output[:modules] %>
+<% comment_id = get_next_id(:comment) %>
 --- !ruby/object:RaComment 
 attributes: 
-  id: <%= ramodule.id %>
+  id: <%= comment_id %>
   comment: <%= ramodule.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
 new_record: true
 --- !ruby/object:RaModule
 attributes: 
   id: <%= ramodule.id %>
-  ra_comment_id: <%= ramodule.id %>
+  ra_comment_id: <%= comment_id %>
   ra_library_id: 0  
   superclass: <%= ramodule.superclass %>
   name: <%= ramodule.name %>
@@ -63,20 +66,22 @@ attributes:
   ra_container_id: <%= infile[:container_id] %>
   file_name: <%= infile[:file].file_absolute_name %>
 new_record: true<% end %><% for method in @output[:methods] %>
+<% comment_id = get_next_id(:comment) %>
+<% source_code_id = get_next_id(:source_code) %>
 --- !ruby/object:RaSourceCode 
 attributes: 
-  id: <%= method.id %>
+  id: <%= source_code_id %>
   source_code: <%= method.source_code.to_yaml()[4..-1].gsub(/^  /,'    ') %>
 new_record: true
 --- !ruby/object:RaComment 
 attributes: 
-  id: <%= method.id %>
+  id: <%= comment_id %>
   comment: <%= method.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
 new_record: true
 --- !ruby/object:RaMethod 
 attributes: 
   id: <%= method.id %>
-  ra_comment_id: <%= method.id %>
+  ra_comment_id: <%= comment_id %>
   visibility: <%= VISIBILITY[method.visibility] %>
   name: <%= method.name.to_yaml()[4..-1].gsub(/^  /,'    ') %>
   ra_container_id: <%= method.container_id %>
@@ -84,7 +89,7 @@ attributes:
   singleton: <%= bool_to_int(method.singleton) %>
   force_documentation: <%= bool_to_int(method.force_documentation) %>
   block_parameters: <%= method.block_params.to_yaml()[4..-1].gsub(/^  /,'    ') %>
-  ra_source_code_id: <%= method.id %>
+  ra_source_code_id: <%= source_code_id %>
 new_record: true<% end %><% for attribute in @output[:attributes] %>
 --- !ruby/object:RaAttribute 
 attributes: 

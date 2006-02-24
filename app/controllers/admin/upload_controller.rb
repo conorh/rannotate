@@ -73,21 +73,25 @@ class Admin::UploadController < ApplicationController
 		 	  # that really slows things down
 	 		  loglevel = logger.level
 	 		  logger.level = Logger::ERROR
+	 		  ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=0' )
+	 		  count = 0
 			  # Read in the YAML file			
 			  yp = YAML::load_documents( @params['doc_file'] ) { |doc| 
-				# Each record has a unique id. This id changes though when we insert it into the
-				# database. This would not be a problem excep that all of the records are associated 
-				# by these ids so when a record is inserted into the DB we need to make sure the associations are
-				# updated. get_ids takes care of this updating.
-				# IMPORTANT NOTE: This requires that the YAML is written out in the correct order so that we always insert
-				# a record before we need its id for an association.
-				id = doc.id
-				get_ids(doc, lookup)
-				doc.id = nil	
-				lookup[id] = insert_object(doc)
+				  # Each record has a unique id. This id changes though when we insert it into the
+				  # database. This would not be a problem excep that all of the records are associated 
+				  # by these ids so when a record is inserted into the DB we need to make sure the associations are
+				  # updated. get_ids takes care of this updating.
+				  # IMPORTANT NOTE: This requires that the YAML is written out in the correct order so that we always insert
+				  # a record before we need its id for an association.
+				  id = doc.id
+				  get_ids(doc, lookup)
+				  doc.id = nil	
+				  lookup[id] = insert_object(doc)
+				  count = count + 1
 			  }		
-				
-			  @total_time = Time.now - start		
+			  ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=1' )		 
+			  @total_time = Time.now - start	
+			  @total_count = count
 			  logger.level = loglevel
     		else
     		  @error = "Could not import library, already exists"

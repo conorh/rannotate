@@ -56,7 +56,6 @@ class NotesController < ApplicationController
   def create  
     @note = Note.new(params[:note])
     @note.ip_address = request.remote_ip;
-    @note.skip_ban_validation = local_request?
     if !@note.save
       render :action => 'preview'
     else        

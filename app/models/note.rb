@@ -22,8 +22,8 @@ class Note < ActiveRecord::Base
 	# TODO: Finish this method and make each of these checks an application configurable option
 	def validate
 		if(@skip_ban_validation == false)		
-			searchIp = ip_address[0,ip_address.rindex('.')] + '%'
-			ban = Ban.find(:first, :conditions => ["ip_filter LIKE ?", searchIp])
+			searchIp = ip_address[0,ip_address.rindex('.')]
+			ban = Ban.find(:first, :conditions => ["? LIKE ip_filter", searchIp])
 			if(ban != nil)
 				errors.add_to_base("Your IP subnet has been banned from posting due to abuse. Please contact the system administrator for more information")
 			end			

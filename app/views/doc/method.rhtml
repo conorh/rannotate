@@ -1,4 +1,4 @@
-<b><%= @method.name %></b><%= @method.parameters %>
+<b><%= @method.name %></b><%= @method.parameters %> <% if(@version) then %>Version <%= @version %><% end %>
 <div class="description">
 <p><%= markup(@method.ra_comment.comment) %></p>
 </div>

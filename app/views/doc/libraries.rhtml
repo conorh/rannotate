@@ -3,7 +3,7 @@
 <% ver_array.each do |ver| %>
 * <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'classes', {:action => 'list', :type => 'classes', :library => name, :version => ver.ver_string} %>] 
-[<%= link_to 'modules', {:action => 'list', :type => 'modules', :library => name, :version => ver.ver_string} %>]<br/>
+[<%= link_to 'methods', {:action => 'list', :type => 'methods', :library => name, :version => ver.ver_string} %>]<br/>
 <% end %>
 <br/><br/>
 <% end %>

@@ -17,10 +17,13 @@ module ApplicationHelper
   
   # Given the name and type of a container (type = class,file, etc..)
   # link to that type
-  def link_to_container_by_name(type, name)
-    return link_to(name, 
-      {:controller => "doc", :action=> type.pluralize, :name => name})		
-	end
+  def link_to_container_by_name(type, name)      
+    link_params = {:controller => "doc", :action=> type.pluralize, :name => name}
+    if(@version)
+      link_params[:version] = @version
+    end    
+    return link_to(name, link_params)
+  end
   
   # This method looks at the type of the object and creates a link to the correct page
   # to display that object. ex. if the object is RaMethod then it will link to the parent
@@ -52,10 +55,21 @@ module ApplicationHelper
     	container_type = child.ra_container.class.to_s
     	container_name = child.ra_container.full_name
     end
+   
+    link_params = {:controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name }
+    if(@version)
+      link_params[:version] = @version
+    end
     
-    return link_to(child.name + " (" + container_name + ")",     
-      { :controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name }
-      )
+    return link_to(child.name + " (" + container_name + ")", link_params)
        
+  end
+  
+  def link_to_method(method_name, container_type)
+    link_params = {:action => container_type.pluralize, :method => method_name}
+    if(@version)
+      link_params[:version] = @version
+    end    
+    link_to(method_name, link_params)  
   end
 end

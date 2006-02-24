@@ -4,8 +4,9 @@
 <% end %>
 
 <% @versions.each do |version| %>
-<% container = version[:container]%>
-<strong>Version: <%= container.ra_library.major %>.<%= container.ra_library.minor %>.<%= container.ra_library.release %></strong><br/>
+<% container = version[:container] %>
+<% link_params = {:controller => "doc", :action => container.class.type_string.pluralize, :name => container.full_name, :version => container.ra_library.ver_string } %>
+<strong>Version: <%= link_to container.ra_library.ver_string, link_params %></strong><br/>
 <%if(version[:added].length > 0) %>
 <strong>Added</strong><br/>
 <% version[:added].each do |type_name, obj_hash| %>

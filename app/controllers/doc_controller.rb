@@ -55,7 +55,8 @@ class DocController < ApplicationController
   # display a method  
   def method(type)
   	@container_name = @params[:name]
-    @ra_container = RaContainer.find_highest_version(@container_name, type, @params[:version])
+  	@version = @params[:version]
+    @ra_container = RaContainer.find_highest_version(@container_name, type, @version)
     @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, @params[:method]])  	
     @source_code = RaSourceCode.find(@method.ra_source_code_id).source_code
   end

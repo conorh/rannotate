@@ -114,7 +114,10 @@ class DocController < ApplicationController
         @list = RaMethod.find_all_highest_version()
       else
        	@list = RaContainer.find_all_highest_version([RaClass.to_s, RaModule.to_s], library, version)
-    end            	
+    end
+    @version = version
+    @library = library
+    @type = type
   end
   
   # Get a container (file,class, module) and everything necessary to display it's documentation

@@ -6,7 +6,7 @@ class RaLibrary < ActiveRecord::Base
 
 	# return a string with the version in the form major.minor.release ex. 1.2.11
 	def ver_string
-		return @major.to_s + "." + @minor.to_s + "." + @release.to_s
+		return major.to_s + "." + minor.to_s + "." + release.to_s
 	end
 	
 	# calculate a single integer from the version string

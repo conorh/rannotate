@@ -1,8 +1,9 @@
 <% @libraries.each do |name,ver_array| %>
 <%= name %><br/>
 <% ver_array.each do |ver| %>
-<% verstring = ver.major.to_s + "." + ver.minor.to_s + "." + ver.release.to_s %>
-* <%= link_to verstring, {:action => 'list', :library => name, :version => verstring} %><br/>
+* <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
+[<%= link_to 'classes', {:action => 'list', :type => 'classes', :library => name, :version => ver.ver_string} %>] 
+[<%= link_to 'modules', {:action => 'list', :type => 'modules', :library => name, :version => ver.ver_string} %>]<br/>
 <% end %>
 <br/><br/>
 <% end %>

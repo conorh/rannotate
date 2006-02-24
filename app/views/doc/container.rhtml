@@ -13,8 +13,8 @@
 
 <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
   <td><span class="file-title-prefix">
-    <%= @ra_container.class.type_string.capitalize %> </span>
-    <span class="file-title"><%= @container_name %></span> 
+    <%= @ra_container.class.type_string.capitalize %></span>
+    <span class="file-title"><%= @container_name %> <% if(@version) then %>Version <%= @version %><% end %></span> 
     <br/>
     [ <a href="#notes"><%= pluralize(get_count(@note_count, @container_type), "Note") %></a> ]
     [ <%= link_to 'History', {:action => 'history', :name => @container_name, :type => @ra_container.class.to_s } %> ]

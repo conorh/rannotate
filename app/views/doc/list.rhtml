@@ -1,5 +1,10 @@
 <!-- div.main -->
 <div id="main">
+
+<% if(@library != nil) %>
+List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
+<% end %>
+
 <% for entry in @list %>
 <%= link_to_doc(entry) %><br/>
 <% end %>

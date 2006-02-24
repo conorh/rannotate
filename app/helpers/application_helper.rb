@@ -33,8 +33,12 @@ module ApplicationHelper
   def link_to_container(ra_container)
     action = ra_container.class.type_string.pluralize
     
-    return link_to(ra_container.full_name, 
-      {:controller => "doc", :action => action, :name => ra_container.full_name})
+    link_params = {:controller => "doc", :action => action, :name => ra_container.full_name }
+    if(@version)
+      link_params[:version] = @version
+    end
+    
+    return link_to(ra_container.full_name, link_params)
   end
   
   # If this is a child of a container object (method, constant etc.) then link to it's container

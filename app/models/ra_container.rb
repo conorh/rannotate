@@ -29,9 +29,16 @@ class RaContainer < ActiveRecord::Base
    	end    			  		
   end
   
-  def RaContainer.find_highest_version(full_name, type, library = nil)
-    result = RaContainer.find_by_sql(["SELECT rc.* FROM ra_containers AS rc, ra_libraries AS rl WHERE " +
-      "full_name = ? AND type = ? AND ra_library_id = rl.id AND rl.current = ? ORDER BY full_name ASC", full_name, type, true])
+  def RaContainer.find_highest_version(full_name, type, library = nil)  
+    if(library == nil)  
+      result = RaContainer.find_by_sql(["SELECT rc.* FROM ra_containers AS rc, ra_libraries AS rl WHERE " +
+        "full_name = ? AND type = ? AND ra_library_id = rl.id AND rl.current = ? ORDER BY full_name ASC", full_name, type, true])
+    else
+      version = RaLibrary.ver_string_to_int(library)
+      result = RaContainer.find_by_sql(["SELECT rc.* FROM ra_containers AS rc, ra_libraries AS rl WHERE " +
+        "full_name = ? AND type = ? AND ra_library_id = rl.id AND rl.version = ? ORDER BY full_name ASC", full_name, type, version])    
+    end
+    
     if(result)
     	return result[0]
     end  

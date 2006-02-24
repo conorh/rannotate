@@ -1,0 +1,6032 @@
+
+--- !ruby/object:RaComment 
+attributes: 
+  id: 3
+  comment: ''
+new_record: true
+--- !ruby/object:RaFile
+attributes:
+  id: 3
+  ra_comment_id: 3
+  ra_library_id: 0
+  name: testdoc-1.0.0/base.rb
+  type: RaFile
+  full_name: testdoc-1.0.0/base.rb
+  parent_id: 0
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 9
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 9
+  ra_comment_id: 9
+  ra_library_id: 0  
+  superclass: StandardError
+  name: ReadOnlyRecord
+  type: RaClass
+  full_name: ActiveRecord::ReadOnlyRecord
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 11
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 11
+  ra_comment_id: 11
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: StatementInvalid
+  type: RaClass
+  full_name: ActiveRecord::StatementInvalid
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 13
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 13
+  ra_comment_id: 13
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: AdapterNotSpecified
+  type: RaClass
+  full_name: ActiveRecord::AdapterNotSpecified
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 15
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 15
+  ra_comment_id: 15
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: AttributeAssignmentError
+  type: RaClass
+  full_name: ActiveRecord::AttributeAssignmentError
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 17
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 17
+  ra_comment_id: 17
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: AssociationTypeMismatch
+  type: RaClass
+  full_name: ActiveRecord::AssociationTypeMismatch
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 19
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 19
+  ra_comment_id: 19
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: RecordNotFound
+  type: RaClass
+  full_name: ActiveRecord::RecordNotFound
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 21
+  comment: >2
+    # Active Record objects don't specify their attributes directly, but rather
+    infer them from the table definition with
+
+    # which they're linked. Adding, removing, and changing attributes and their type
+    is done directly in the database. Any change
+
+    # is instantly reflected in the Active Record objects. The mapping that binds a
+    given Active Record class to a certain
+
+    # database table will happen automatically in most common cases, but can be
+    overwritten for the uncommon ones.
+
+    #
+
+    # See the mapping rules in table_name and the full example in
+    link:files/README.html for more insight.
+
+    #
+
+    # == Creation
+
+    #
+
+    # Active Records accept constructor parameters either in a hash or as a block.
+    The hash method is especially useful when
+
+    # you're receiving the data from somewhere else, like a HTTP request. It works
+    like this:
+
+    #
+
+    #   user = User.new(:name => "David", :occupation => "Code Artist")
+
+    #   user.name # => "David"
+
+    #
+
+    # You can also use block initialization:
+
+    #
+
+    #   user = User.new do |u|
+
+    #     u.name = "David"
+
+    #     u.occupation = "Code Artist"
+
+    #   end
+
+    #
+
+    # And of course you can just create a bare object and specify the attributes
+    after the fact:
+
+    #
+
+    #   user = User.new
+
+    #   user.name = "David"
+
+    #   user.occupation = "Code Artist"
+
+    #
+
+    # == Conditions
+
+    #
+
+    # Conditions can either be specified as a string or an array representing the
+    WHERE-part of an SQL statement.
+
+    # The array form is to be used when the condition input is tainted and requires
+    sanitization. The string form can
+
+    # be used for statements that don't involve tainted data. Examples:
+
+    #
+
+    #   User < ActiveRecord::Base
+
+    #     def self.authenticate_unsafely(user_name, password)
+
+    #       find(:first, :conditions => "user_name = '#{user_name}' AND password =
+    '#{password}'")
+
+    #     end
+
+    #
+
+    #     def self.authenticate_safely(user_name, password)
+
+    #       find(:first, :conditions => [ "user_name = ? AND password = ?",
+    user_name, password ])
+
+    #     end
+
+    #   end
+
+    #
+
+    # The <tt>authenticate_unsafely</tt> method inserts the parameters directly into
+    the query and is thus susceptible to SQL-injection
+
+    # attacks if the <tt>user_name</tt> and +password+ parameters come directly from
+    a HTTP request. The <tt>authenticate_safely</tt> method,
+
+    # on the other hand, will sanitize the <tt>user_name</tt> and +password+ before
+    inserting them in the query, which will ensure that
+
+    # an attacker can't escape the query and fake the login (or worse).
+
+    #
+
+    # When using multiple parameters in the conditions, it can easily become hard to
+    read exactly what the fourth or fifth
+
+    # question mark is supposed to represent. In those cases, you can resort to
+    named bind variables instead. That's done by replacing
+
+    # the question marks with symbols and supplying a hash with values for the
+    matching symbol keys:
+
+    #
+
+    #   Company.find(:first, [
+
+    #     "id = :id AND name = :name AND division = :division AND created_at >
+    :accounting_date",
+
+    #     { :id => 3, :name => "37signals", :division => "First", :accounting_date
+    => '2005-01-01' }
+
+    #   ])
+
+    #
+
+    # == Overwriting default accessors
+
+    #
+
+    # All column values are automatically available through basic accessors on the
+    Active Record object, but some times you
+
+    # want to specialize this behavior. This can be done by either by overwriting
+    the default accessors (using the same
+
+    # name as the attribute) calling read_attribute(attr_name) and
+    write_attribute(attr_name, value) to actually change things.
+
+    # Example:
+
+    #
+
+    #   class Song < ActiveRecord::Base
+
+    #     # Uses an integer of seconds to hold the length of the song
+
+    #
+
+    #     def length=(minutes)
+
+    #       write_attribute(:length, minutes * 60)
+
+    #     end
+
+    #
+
+    #     def length
+
+    #       read_attribute(:length) / 60
+
+    #     end
+
+    #   end
+
+    #
+
+    # You can alternatively use self[:attribute]=(value) and self[:attribute]
+    instead of write_attribute(:attribute, vaule) and
+
+    # read_attribute(:attribute) as a shorter form.
+
+    #
+
+    # == Accessing attributes before they have been typecasted
+
+    #
+
+    # Sometimes you want to be able to read the raw attribute data without having
+    the column-determined typecast run its course first.
+
+    # That can be done by using the <attribute>_before_type_cast accessors that all
+    attributes have. For example, if your Account model
+
+    # has a balance attribute, you can call account.balance_before_type_cast or
+    account.id_before_type_cast.
+
+    #
+
+    # This is especially useful in validation situations where the user might supply
+    a string for an integer field and you want to display
+
+    # the original string back in an error message. Accessing the attribute normally
+    would typecast the string to 0, which isn't what you
+
+    # want.
+
+    #
+
+    # == Dynamic attribute-based finders
+
+    #
+
+    # Dynamic attribute-based finders are a cleaner way of getting (and/or creating)
+    objects by simple queries without turning to SQL. They work by
+
+    # appending the name of an attribute to <tt>find_by_</tt> or
+    <tt>find_all_by_</tt>, so you get finders like Person.find_by_user_name,
+
+    # Person.find_all_by_last_name, Payment.find_by_transaction_id. So instead of
+    writing
+
+    # <tt>Person.find(:first, ["user_name = ?", user_name])</tt>, you just do
+    <tt>Person.find_by_user_name(user_name)</tt>.
+
+    # And instead of writing <tt>Person.find(:all, ["last_name = ?",
+    last_name])</tt>, you just do <tt>Person.find_all_by_last_name(last_name)</tt>.
+
+    #
+
+    # It's also possible to use multiple attributes in the same find by separating
+    them with "_and_", so you get finders like
+
+    # <tt>Person.find_by_user_name_and_password</tt> or even
+    <tt>Payment.find_by_purchaser_and_state_and_country</tt>. So instead of writing
+
+    # <tt>Person.find(:first, ["user_name = ? AND password = ?", user_name,
+    password])</tt>, you just do
+
+    # <tt>Person.find_by_user_name_and_password(user_name, password)</tt>.
+
+    #
+
+    # It's even possible to use all the additional parameters to find. For example,
+    the full interface for Payment.find_all_by_amount
+
+    # is actually Payment.find_all_by_amount(amount, options). And the full
+    interface to Person.find_by_user_name is
+
+    # actually Person.find_by_user_name(user_name, options). So you could call
+    <tt>Payment.find_all_by_amount(50, :order => "created_on")</tt>.
+
+    #
+
+    # The same dynamic finder style can be used to create the object if it doesn't
+    already exist. This dynamic finder is called with
+
+    # <tt>find_or_create_by_</tt> and will return the object if it already exists
+    and otherwise creates it, then returns it. Example:
+
+    #
+
+    #   # No 'Summer' tag exists
+
+    #   Tag.find_or_create_by_name("Summer") # equal to Tag.create(:name =>
+    "Summer")
+
+    #   
+
+    #   # Now the 'Summer' tag does exist
+
+    #   Tag.find_or_create_by_name("Summer") # equal to Tag.find_by_name("Summer")
+
+    #
+
+    # == Saving arrays, hashes, and other non-mappable objects in text columns
+
+    #
+
+    # Active Record can serialize any object in text columns using YAML. To do so,
+    you must specify this with a call to the class method +serialize+.
+
+    # This makes it possible to store arrays, hashes, and other non-mappable objects
+    without doing any additional work. Example:
+
+    #
+
+    #   class User < ActiveRecord::Base
+
+    #     serialize :preferences
+
+    #   end
+
+    #
+
+    #   user = User.create(:preferences) => { "background" => "black", "display" =>
+    large })
+
+    #   User.find(user.id).preferences # => { "background" => "black", "display" =>
+    large }
+
+    #
+
+    # You can also specify a class option as the second parameter that'll raise an
+    exception if a serialized object is retrieved as a
+
+    # descendent of a class not in the hierarchy. Example:
+
+    #
+
+    #   class User < ActiveRecord::Base
+
+    #     serialize :preferences, Hash
+
+    #   end
+
+    #
+
+    #   user = User.create(:preferences => %w( one two three ))
+
+    #   User.find(user.id).preferences    # raises SerializationTypeMismatch
+
+    #
+
+    # == Single table inheritance
+
+    #
+
+    # Active Record allows inheritance by storing the name of the class in a column
+    that by default is called "type" (can be changed
+
+    # by overwriting <tt>Base.inheritance_column</tt>). This means that an
+    inheritance looking like this:
+
+    #
+
+    #   class Company < ActiveRecord::Base; end
+
+    #   class Firm < Company; end
+
+    #   class Client < Company; end
+
+    #   class PriorityClient < Client; end
+
+    #
+
+    # When you do Firm.create(:name => "37signals"), this record will be saved in
+    the companies table with type = "Firm". You can then
+
+    # fetch this row again using Company.find(:first, "name = '37signals'") and it
+    will return a Firm object.
+
+    #
+
+    # If you don't have a type column defined in your table, single-table
+    inheritance won't be triggered. In that case, it'll work just
+
+    # like normal subclasses with no special magic for differentiating between them
+    or reloading the right type with find.
+
+    #
+
+    # Note, all the attributes for all the cases are kept in the same table. Read
+    more:
+
+    # http://www.martinfowler.com/eaaCatalog/singleTableInheritance.html
+
+    #
+
+    # == Connection to multiple databases in different models
+
+    #
+
+    # Connections are usually created through
+    ActiveRecord::Base.establish_connection and retrieved by
+    ActiveRecord::Base.connection.
+
+    # All classes inheriting from ActiveRecord::Base will use this connection. But
+    you can also set a class-specific connection.
+
+    # For example, if Course is a ActiveRecord::Base, but resides in a different
+    database you can just say Course.establish_connection
+
+    # and Course *and all its subclasses* will use this connection instead.
+
+    #
+
+    # This feature is implemented by keeping a connection pool in ActiveRecord::Base
+    that is a Hash indexed by the class. If a connection is
+
+    # requested, the retrieve_connection method will go up the class-hierarchy until
+    a connection is found in the connection pool.
+
+    #
+
+    # == Exceptions
+
+    #
+
+    # * +ActiveRecordError+ -- generic error class and superclass of all other
+    errors raised by Active Record
+
+    # * +AdapterNotSpecified+ -- the configuration hash used in
+    <tt>establish_connection</tt> didn't include a
+
+    #   <tt>:adapter</tt> key.
+
+    # * +AdapterNotFound+ -- the <tt>:adapter</tt> key used in
+    <tt>establish_connection</tt> specified an non-existent adapter
+
+    #   (or a bad spelling of an existing one).
+
+    # * +AssociationTypeMismatch+ -- the object assigned to the association wasn't
+    of the type specified in the association definition.
+
+    # * +SerializationTypeMismatch+ -- the object serialized wasn't of the class
+    specified as the second parameter.
+
+    # * +ConnectionNotEstablished+ -- no connection has been established. Use
+    <tt>establish_connection</tt> before querying.
+
+    # * +RecordNotFound+ -- no record responded to the find* method.
+
+    #   Either the row with the given ID doesn't exist or the row didn't meet the
+    additional restrictions.
+
+    # * +StatementInvalid+ -- the database server rejected the SQL statement. The
+    precise error is added in the  message.
+
+    #   Either the record with the given ID doesn't exist or the record didn't meet
+    the additional restrictions.
+
+    # * +MultiparameterAssignmentErrors+ -- collection of errors that occurred
+    during a mass assignment using the
+
+    #   +attributes=+ method. The +errors+ property of this exception contains an
+    array of +AttributeAssignmentError+
+
+    #   objects that should be inspected to determine which attributes triggered the
+    errors.
+
+    # * +AttributeAssignmentError+ -- an error occurred while doing a mass
+    assignment through the +attributes=+ method.
+
+    #   You can inspect the +attribute+ property of the exception object to
+    determine which attribute triggered the error.
+
+    #
+
+    # *Note*: The attributes listed are class-level attributes (accessible from both
+    the class and instance level).
+
+    # So it's possible to assign a logger to the class through Base.logger= which
+    will then be used by all
+
+    # instances in the current object space.
+
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 21
+  ra_comment_id: 21
+  ra_library_id: 0  
+  superclass: Object
+  name: Base
+  type: RaClass
+  full_name: ActiveRecord::Base
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 170
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 170
+  ra_comment_id: 170
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: SerializationTypeMismatch
+  type: RaClass
+  full_name: ActiveRecord::SerializationTypeMismatch
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 172
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 172
+  ra_comment_id: 172
+  ra_library_id: 0  
+  superclass: StandardError
+  name: ActiveRecordError
+  type: RaClass
+  full_name: ActiveRecord::ActiveRecordError
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 174
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 174
+  ra_comment_id: 174
+  ra_library_id: 0  
+  superclass: StandardError
+  name: ConfigurationError
+  type: RaClass
+  full_name: ActiveRecord::ConfigurationError
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 176
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 176
+  ra_comment_id: 176
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: ConnectionNotEstablished
+  type: RaClass
+  full_name: ActiveRecord::ConnectionNotEstablished
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 178
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 178
+  ra_comment_id: 178
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: SubclassNotFound
+  type: RaClass
+  full_name: ActiveRecord::SubclassNotFound
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 180
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 180
+  ra_comment_id: 180
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: MultiparameterAssignmentErrors
+  type: RaClass
+  full_name: ActiveRecord::MultiparameterAssignmentErrors
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 182
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 182
+  ra_comment_id: 182
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: AdapterNotFound
+  type: RaClass
+  full_name: ActiveRecord::AdapterNotFound
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 184
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 184
+  ra_comment_id: 184
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: StaleObjectError
+  type: RaClass
+  full_name: ActiveRecord::StaleObjectError
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 186
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 186
+  ra_comment_id: 186
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: PreparedStatementInvalid
+  type: RaClass
+  full_name: ActiveRecord::PreparedStatementInvalid
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 188
+  comment: ''
+new_record: true
+--- !ruby/object:RaClass
+attributes: 
+  id: 188
+  ra_comment_id: 188
+  ra_library_id: 0  
+  superclass: ActiveRecordError
+  name: ConnectionFailed
+  type: RaClass
+  full_name: ActiveRecord::ConnectionFailed
+  parent_id: 7
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 7
+  comment: ''
+new_record: true
+--- !ruby/object:RaModule
+attributes: 
+  id: 7
+  ra_comment_id: 7
+  ra_library_id: 0  
+  superclass: 
+  name: ActiveRecord
+  type: RaModule
+  full_name: ActiveRecord
+  parent_id: 3
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 8
+  ra_container_id: 7
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 10
+  ra_container_id: 9
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 12
+  ra_container_id: 11
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 14
+  ra_container_id: 13
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 16
+  ra_container_id: 15
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 18
+  ra_container_id: 17
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 20
+  ra_container_id: 19
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 169
+  ra_container_id: 21
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 171
+  ra_container_id: 170
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 173
+  ra_container_id: 172
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 175
+  ra_container_id: 174
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 177
+  ra_container_id: 176
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 179
+  ra_container_id: 178
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 181
+  ra_container_id: 180
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 183
+  ra_container_id: 182
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 185
+  ra_container_id: 184
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 187
+  ra_container_id: 186
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaInFile 
+attributes: 
+  id: 189
+  ra_container_id: 188
+  file_name: testdoc-1.0.0/base.rb
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 22
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 260
+        def self.reset_subclasses
+          nonreloadables = []
+          subclasses.each do |klass|
+            unless klass.reloadable?
+              nonreloadables << klass
+              next
+            end
+            klass.instance_variables.each { |var| klass.send(:remove_instance_variable, var) }
+            klass.instance_methods(false).each { |m| klass.send :undef_method, m }
+          end
+          @@subclasses = {}
+          nonreloadables.each { |klass| (@@subclasses[klass.superclass] ||= []) << klass }
+        end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 22
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 22
+  ra_comment_id: 22
+  visibility: 1
+  name: reset_subclasses
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 22
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 23
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 378
+          def find(*args)
+            options = extract_options_from_args!(args)
+
+            # Inherit :readonly from finder scope if set.  Otherwise,
+            # if :joins is not blank then :readonly defaults to true.
+            unless options.has_key?(:readonly)
+              if scoped?(:find, :readonly)
+                options[:readonly] = scope(:find, :readonly)
+              elsif !options[:joins].blank?
+                options[:readonly] = true
+              end
+            end
+
+            case args.first
+              when :first
+                find(:all, options.merge(options[:include] ? { } : { :limit => 1 })).first
+              when :all
+                records = options[:include] ? find_with_associations(options) : find_by_sql(construct_finder_sql(options))
+                records.each { |record| record.readonly! } if options[:readonly]
+                records
+              else
+                return args.first if args.first.kind_of?(Array) && args.first.empty?
+                expects_array = args.first.kind_of?(Array)
+                
+                conditions = " AND (#{sanitize_sql(options[:conditions])})" if options[:conditions]
+
+                ids = args.flatten.compact.uniq
+                case ids.size
+                  when 0
+                    raise RecordNotFound, "Couldn't find #{name} without an ID#{conditions}"
+                  when 1
+                    if result = find(:first, options.merge({ :conditions => "#{table_name}.#{primary_key} = #{sanitize(ids.first)}#{conditions}" }))
+                      return expects_array ? [ result ] : result
+                    else
+                      raise RecordNotFound, "Couldn't find #{name} with ID=#{ids.first}#{conditions}"
+                    end
+                  else
+                    # Find multiple ids
+                    ids_list = ids.map { |id| sanitize(id) }.join(',')
+                    result   = find(:all, options.merge({ :conditions => "#{table_name}.#{primary_key} IN (#{ids_list})#{conditions}"}))
+                    if result.size == ids.size
+                      return result
+                    else
+                      raise RecordNotFound, "Couldn't find all #{name.pluralize} with IDs (#{ids_list})#{conditions}"
+                    end
+                end
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 23
+  comment: >2
+    # Find operates with three different retrieval approaches:
+
+    #
+
+    # * Find by id: This can either be a specific id (1), a list of ids (1, 5, 6),
+    or an array of ids ([5, 6, 10]).
+
+    #   If no record can be found for all of the listed ids, then RecordNotFound
+    will be raised.
+
+    # * Find first: This will return the first record matched by the options used.
+    These options can either be specific
+
+    #   conditions or merely an order. If no record can matched, nil is returned.
+
+    # * Find all: This will return all the records matched by the options used. If
+    no records are found, an empty array is returned.
+
+    #
+
+    # All approaches accept an option hash as their last parameter. The options are:
+
+    #
+
+    # * <tt>:conditions</tt>: An SQL fragment like "administrator = 1" or [
+    "user_name = ?", username ]. See conditions in the intro.
+
+    # * <tt>:order</tt>: An SQL fragment like "created_at DESC, name".
+
+    # * <tt>:group</tt>: An attribute name by which the result should be grouped.
+    Uses the GROUP BY SQL-clause.
+
+    # * <tt>:limit</tt>: An integer determining the limit on the number of rows that
+    should be returned.
+
+    # * <tt>:offset</tt>: An integer determining the offset from where the rows
+    should be fetched. So at 5, it would skip the first 4 rows.
+
+    # * <tt>:joins</tt>: An SQL fragment for additional joins like "LEFT JOIN
+    comments ON comments.post_id = id". (Rarely needed).
+
+    #   The records will be returned read-only since they will have attributes that
+    do not correspond to the table's columns.
+
+    #   Pass :readonly => false to override.
+
+    # * <tt>:include</tt>: Names associations that should be loaded alongside using
+    LEFT OUTER JOINs. The symbols named refer
+
+    #   to already defined associations. See eager loading under Associations.
+
+    # * <tt>:select</tt>: By default, this is * as in SELECT * FROM, but can be
+    changed if you for example want to do a join, but not
+
+    #   include the joined columns.
+
+    # * <tt>:readonly</tt>: Mark the returned records read-only so they cannot be
+    saved or updated.
+
+    #
+
+    # Examples for find by id:
+
+    #   Person.find(1)       # returns the object for ID = 1
+
+    #   Person.find(1, 2, 6) # returns an array for objects with IDs in (1, 2, 6)
+
+    #   Person.find([7, 17]) # returns an array for objects with IDs in (7, 17)
+
+    #   Person.find([1])     # returns an array for objects the object with ID = 1
+
+    #   Person.find(1, :conditions => "administrator = 1", :order => "created_on
+    DESC")
+
+    #
+
+    # Examples for find first:
+
+    #   Person.find(:first) # returns the first object fetched by SELECT * FROM
+    people
+
+    #   Person.find(:first, :conditions => [ "user_name = ?", user_name])
+
+    #   Person.find(:first, :order => "created_on DESC", :offset => 5)
+
+    #
+
+    # Examples for find all:
+
+    #   Person.find(:all) # returns an array of objects for all the rows fetched by
+    SELECT * FROM people
+
+    #   Person.find(:all, :conditions => [ "category IN (?)", categories], :limit =>
+    50)
+
+    #   Person.find(:all, :offset => 10, :limit => 10)
+
+    #   Person.find(:all, :include => [ :account, :friends ])
+
+    #   Person.find(:all, :group => "category")
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 23
+  ra_comment_id: 23
+  visibility: 1
+  name: find
+  ra_container_id: 21
+  parameters: "(*args)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 23
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 24
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 430
+          def find_by_sql(sql)
+            connection.select_all(sanitize_sql(sql), "#{name} Load").collect! { |record| instantiate(record) }
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 24
+  comment: >2
+    # Works like find(:all), but requires a complete SQL string. Examples:
+
+    #   Post.find_by_sql "SELECT p.*, c.author FROM posts p, comments c WHERE p.id =
+    c.post_id"
+
+    #   Post.find_by_sql ["SELECT * FROM posts WHERE author = ? AND created > ?",
+    author_id, start_date]
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 24
+  ra_comment_id: 24
+  visibility: 1
+  name: find_by_sql
+  ra_container_id: 21
+  parameters: "(sql)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 24
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 25
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 437
+          def exists?(id)
+            !find(:first, :conditions => ["#{primary_key} = ?", id]).nil? rescue false
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 25
+  comment: >2
+    # Returns true if the given +id+ represents the primary key of a record in the
+    database, false otherwise.
+
+    # Example:
+
+    #   Person.exists?(5)
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 25
+  ra_comment_id: 25
+  visibility: 1
+  name: "exists?"
+  ra_container_id: 21
+  parameters: "(id)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 25
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 26
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 443
+          def create(attributes = nil)
+            if attributes.is_a?(Array)
+              attributes.collect { |attr| create(attr) }
+            else
+              attributes.reverse_merge!(scope(:create)) if scoped?(:create)
+
+              object = new(attributes)
+              object.save
+              object
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 26
+  comment: >2
+    # Creates an object, instantly saves it as a record (if the validation permits
+    it), and returns it. If the save
+
+    # fails under validations, the unsaved object is still returned.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 26
+  ra_comment_id: 26
+  visibility: 1
+  name: create
+  ra_container_id: 21
+  parameters: "(attributes = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 26
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 27
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 457
+          def update(id, attributes)
+            if id.is_a?(Array)
+              idx = -1
+              id.collect { |id| idx += 1; update(id, attributes[idx]) }
+            else
+              object = find(id)
+              object.update_attributes(attributes)
+              object
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 27
+  comment: >2
+    # Finds the record from the passed +id+, instantly saves it with the passed
+    +attributes+ (if the validation permits it),
+
+    # and returns it. If the save fails under validations, the unsaved object is
+    still returned.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 27
+  ra_comment_id: 27
+  visibility: 1
+  name: update
+  ra_container_id: 21
+  parameters: "(id, attributes)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 27
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 28
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 470
+          def delete(id)
+            delete_all([ "#{primary_key} IN (?)", id ])
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 28
+  comment: >2
+    # Deletes the record with the given +id+ without instantiating an object first.
+    If an array of ids is provided, all of them
+
+    # are deleted.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 28
+  ra_comment_id: 28
+  visibility: 1
+  name: delete
+  ra_container_id: 21
+  parameters: "(id)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 28
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 29
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 476
+          def destroy(id)
+            id.is_a?(Array) ? id.each { |id| destroy(id) } : find(id).destroy
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 29
+  comment: >2
+    # Destroys the record with the given +id+ by instantiating the object and
+    calling #destroy (all the callbacks are the triggered).
+
+    # If an array of ids is provided, all of them are destroyed.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 29
+  ra_comment_id: 29
+  visibility: 1
+  name: destroy
+  ra_container_id: 21
+  parameters: "(id)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 29
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 30
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 483
+          def update_all(updates, conditions = nil)
+            sql  = "UPDATE #{table_name} SET #{sanitize_sql(updates)} "
+            add_conditions!(sql, conditions)
+            connection.update(sql, "#{name} Update")
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 30
+  comment: >2
+    # Updates all records with the SET-part of an SQL update statement in +updates+
+    and returns an integer with the number of rows updated.
+
+    # A subset of the records can be selected by specifying +conditions+. Example:
+
+    #   Billing.update_all "category = 'authorized', approved = 1", "author =
+    'David'"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 30
+  ra_comment_id: 30
+  visibility: 1
+  name: update_all
+  ra_container_id: 21
+  parameters: "(updates, conditions = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 30
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 31
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 492
+          def destroy_all(conditions = nil)
+            find(:all, :conditions => conditions).each { |object| object.destroy }
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 31
+  comment: >2
+    # Destroys the objects for all the records that match the +condition+ by
+    instantiating each object and calling
+
+    # the destroy method. Example:
+
+    #   Person.destroy_all "last_login < '2004-04-04'"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 31
+  ra_comment_id: 31
+  visibility: 1
+  name: destroy_all
+  ra_container_id: 21
+  parameters: "(conditions = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 31
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 32
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 499
+          def delete_all(conditions = nil)
+            sql = "DELETE FROM #{table_name} "
+            add_conditions!(sql, conditions)
+            connection.delete(sql, "#{name} Delete all")
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 32
+  comment: >2
+    # Deletes all the records that match the +condition+ without instantiating the
+    objects first (and hence not
+
+    # calling the destroy method). Example:
+
+    #   Post.delete_all "person_id = 5 AND (category = 'Something' OR category =
+    'Else')"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 32
+  ra_comment_id: 32
+  visibility: 1
+  name: delete_all
+  ra_container_id: 21
+  parameters: "(conditions = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 32
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 33
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 507
+          def count(conditions = nil, joins = nil)
+            sql  = "SELECT COUNT(*) FROM #{table_name} "
+            sql << " #{joins} " if joins
+            add_conditions!(sql, conditions)
+            count_by_sql(sql)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 33
+  comment: >2
+    # Returns the number of records that meet the +conditions+. Zero is returned if
+    no records match. Example:
+
+    #   Product.count "sales > 1"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 33
+  ra_comment_id: 33
+  visibility: 1
+  name: count
+  ra_container_id: 21
+  parameters: "(conditions = nil, joins = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 33
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 34
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 516
+          def count_by_sql(sql)
+            sql = sanitize_conditions(sql)
+            connection.select_value(sql, "#{name} Count").to_i
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 34
+  comment: >2
+    # Returns the result of an SQL statement that should only include a COUNT(*) in
+    the SELECT part.
+
+    #   Product.count_by_sql "SELECT COUNT(*) FROM sales s, customers c WHERE
+    s.customer_id = c.id"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 34
+  ra_comment_id: 34
+  visibility: 1
+  name: count_by_sql
+  ra_container_id: 21
+  parameters: "(sql)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 34
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 35
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 526
+          def increment_counter(counter_name, id)
+            update_all "#{counter_name} = #{counter_name} + 1", "#{primary_key} = #{quote(id)}"
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 35
+  comment: >2
+    # Increments the specified counter by one. So
+    <tt>DiscussionBoard.increment_counter("post_count",
+
+    # discussion_board_id)</tt> would increment the "post_count" counter on the
+    board responding to discussion_board_id.
+
+    # This is used for caching aggregate values, so that they don't need to be
+    computed every time. Especially important
+
+    # for looping over a collection where each element require a number of aggregate
+    values. Like the DiscussionBoard
+
+    # that needs to list both the number of posts and comments.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 35
+  ra_comment_id: 35
+  visibility: 1
+  name: increment_counter
+  ra_container_id: 21
+  parameters: "(counter_name, id)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 35
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 36
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 531
+          def decrement_counter(counter_name, id)
+            update_all "#{counter_name} = #{counter_name} - 1", "#{primary_key} = #{quote(id)}"
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 36
+  comment: "# Works like increment_counter, but decrements instead.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 36
+  ra_comment_id: 36
+  visibility: 1
+  name: decrement_counter
+  ra_container_id: 21
+  parameters: "(counter_name, id)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 36
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 37
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 550
+          def attr_protected(*attributes)
+            write_inheritable_array("attr_protected", attributes - (protected_attributes || []))
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 37
+  comment: >2
+    # Attributes named in this macro are protected from mass-assignment, such as
+    <tt>new(attributes)</tt> and
+
+    # <tt>attributes=(attributes)</tt>. Their assignment will simply be ignored.
+    Instead, you can use the direct writer
+
+    # methods to do assignment. This is meant to protect sensitive attributes from
+    being overwritten by URL/form hackers. Example:
+
+    #
+
+    #   class Customer < ActiveRecord::Base
+
+    #     attr_protected :credit_rating
+
+    #   end
+
+    #
+
+    #   customer = Customer.new("name" => David, "credit_rating" => "Excellent")
+
+    #   customer.credit_rating # => nil
+
+    #   customer.attributes = { "description" => "Jolly fellow", "credit_rating" =>
+    "Superb" }
+
+    #   customer.credit_rating # => nil
+
+    #
+
+    #   customer.credit_rating = "Average"
+
+    #   customer.credit_rating # => "Average"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 37
+  ra_comment_id: 37
+  visibility: 1
+  name: attr_protected
+  ra_container_id: 21
+  parameters: "(*attributes)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 37
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 38
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 563
+          def attr_accessible(*attributes)
+            write_inheritable_array("attr_accessible", attributes - (accessible_attributes || []))
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 38
+  comment: >2
+    # If this macro is used, only those attributes named in it will be accessible
+    for mass-assignment, such as
+
+    # <tt>new(attributes)</tt> and <tt>attributes=(attributes)</tt>. This is the
+    more conservative choice for mass-assignment
+
+    # protection. If you'd rather start from an all-open default and restrict
+    attributes as needed, have a look at
+
+    # attr_protected.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 38
+  ra_comment_id: 38
+  visibility: 1
+  name: attr_accessible
+  ra_container_id: 21
+  parameters: "(*attributes)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 38
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 39
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 575
+          def serialize(attr_name, class_name = Object)
+            serialized_attributes[attr_name.to_s] = class_name
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 39
+  comment: >2
+    # Specifies that the attribute by the name of +attr_name+ should be serialized
+    before saving to the database and unserialized
+
+    # after loading from the database. The serialization is done through YAML. If
+    +class_name+ is specified, the serialized
+
+    # object must be of that class on retrieval or +SerializationTypeMismatch+ will
+    be raised.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 39
+  ra_comment_id: 39
+  visibility: 1
+  name: serialize
+  ra_container_id: 21
+  parameters: "(attr_name, class_name = Object)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 39
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 40
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 580
+          def serialized_attributes
+            read_inheritable_attribute("attr_serialized") or write_inheritable_attribute("attr_serialized", {})
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 40
+  comment: "# Returns a hash of all the attributes that have been specified for
+serialization as keys and their class restriction as values.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 40
+  ra_comment_id: 40
+  visibility: 1
+  name: serialized_attributes
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 40
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 41
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 598
+          def table_name
+            reset_table_name
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 41
+  comment: >2
+    # Guesses the table name (in forced lower-case) based on the name of the class
+    in the inheritance hierarchy descending
+
+    # directly from ActiveRecord. So if the hierarchy looks like: Reply < Message <
+    ActiveRecord, then Message is used
+
+    # to guess the table name from even when called on Reply. The rules used to do
+    the guess are handled by the Inflector class
+
+    # in Active Support, which knows almost all common English inflections (report a
+    bug if your inflection isn't covered).
+
+    #
+
+    # Additionally, the class-level table_name_prefix is prepended to the table_name
+    and the table_name_suffix is appended.
+
+    # So if you have "myapp_" as a prefix, the table name guess for an Account class
+    becomes "myapp_accounts".
+
+    #
+
+    # You can also overwrite this class method to allow for unguessable links, such
+    as a Mouse class with a link to a
+
+    # "mice" table. Example:
+
+    #
+
+    #   class Mouse < ActiveRecord::Base
+
+    #      set_table_name "mice"
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 41
+  ra_comment_id: 41
+  visibility: 1
+  name: table_name
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 41
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 42
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 602
+          def reset_table_name
+            name = "#{table_name_prefix}#{undecorated_table_name(class_name_of_active_record_descendant(self))}#{table_name_suffix}"
+            set_table_name name
+            name
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 42
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 42
+  ra_comment_id: 42
+  visibility: 1
+  name: reset_table_name
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 42
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 43
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 610
+          def primary_key
+            reset_primary_key
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 43
+  comment: >2
+    # Defines the primary key field -- can be overridden in subclasses. Overwriting
+    will negate any effect of the
+
+    # primary_key_prefix_type setting, though.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 43
+  ra_comment_id: 43
+  visibility: 1
+  name: primary_key
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 43
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 44
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 614
+          def reset_primary_key
+            key = 'id'
+            case primary_key_prefix_type
+              when :table_name
+                key = Inflector.foreign_key(class_name_of_active_record_descendant(self), false)
+              when :table_name_with_underscore
+                key = Inflector.foreign_key(class_name_of_active_record_descendant(self))
+            end
+            set_primary_key(key)
+            key
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 44
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 44
+  ra_comment_id: 44
+  visibility: 1
+  name: reset_primary_key
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 44
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 45
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 627
+          def inheritance_column
+            "type"
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 45
+  comment: "# Defines the column name for use with single table inheritance -- can be
+overridden in subclasses.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 45
+  ra_comment_id: 45
+  visibility: 1
+  name: inheritance_column
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 45
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 46
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 633
+          def sequence_name
+            reset_sequence_name
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 46
+  comment: >2
+    # Lazy-set the sequence name to the connection's default.  This method
+
+    # is only ever called once since set_sequence_name overrides it.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 46
+  ra_comment_id: 46
+  visibility: 1
+  name: sequence_name
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 46
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 47
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 637
+          def reset_sequence_name
+            default = connection.default_sequence_name(table_name, primary_key)
+            set_sequence_name(default)
+            default
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 47
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 47
+  ra_comment_id: 47
+  visibility: 1
+  name: reset_sequence_name
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 47
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 48
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 651
+          def set_table_name( value=nil, &block )
+            define_attr_method :table_name, value, &block
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 48
+  comment: >2
+    # Sets the table name to use to the given value, or (if the value
+
+    # is nil or false) to the value returned by the given block.
+
+    #
+
+    # Example:
+
+    #
+
+    #   class Project < ActiveRecord::Base
+
+    #     set_table_name "project"
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 48
+  ra_comment_id: 48
+  visibility: 1
+  name: set_table_name
+  ra_container_id: 21
+  parameters: "( value=nil, &block )"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 48
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 49
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 665
+          def set_primary_key( value=nil, &block )
+            define_attr_method :primary_key, value, &block
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 49
+  comment: >2
+    # Sets the name of the primary key column to use to the given value,
+
+    # or (if the value is nil or false) to the value returned by the given
+
+    # block.
+
+    #
+
+    # Example:
+
+    #
+
+    #   class Project < ActiveRecord::Base
+
+    #     set_primary_key "sysid"
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 49
+  ra_comment_id: 49
+  visibility: 1
+  name: set_primary_key
+  ra_container_id: 21
+  parameters: "( value=nil, &block )"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 49
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 50
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 681
+          def set_inheritance_column( value=nil, &block )
+            define_attr_method :inheritance_column, value, &block
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 50
+  comment: >2
+    # Sets the name of the inheritance column to use to the given value,
+
+    # or (if the value # is nil or false) to the value returned by the
+
+    # given block.
+
+    #
+
+    # Example:
+
+    #
+
+    #   class Project < ActiveRecord::Base
+
+    #     set_inheritance_column do
+
+    #       original_inheritance_column + "_id"
+
+    #     end
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 50
+  ra_comment_id: 50
+  visibility: 1
+  name: set_inheritance_column
+  ra_container_id: 21
+  parameters: "( value=nil, &block )"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 50
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 51
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 702
+          def set_sequence_name( value=nil, &block )
+            define_attr_method :sequence_name, value, &block
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 51
+  comment: >2
+    # Sets the name of the sequence to use when generating ids to the given
+
+    # value, or (if the value is nil or false) to the value returned by the
+
+    # given block. This is required for Oracle and is useful for any
+
+    # database which relies on sequences for primary key generation.
+
+    #
+
+    # If a sequence name is not explicitly set when using Oracle or Firebird,
+
+    # it will default to the commonly used pattern of: #{table_name}_seq
+
+    #
+
+    # If a sequence name is not explicitly set when using PostgreSQL, it
+
+    # will discover the sequence corresponding to your primary key for you.
+
+    #
+
+    # Example:
+
+    #
+
+    #   class Project < ActiveRecord::Base
+
+    #     set_sequence_name "projectseq"   # default would have been "project_seq"
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 51
+  ra_comment_id: 51
+  visibility: 1
+  name: set_sequence_name
+  ra_container_id: 21
+  parameters: "( value=nil, &block )"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 51
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 52
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 716
+          def table_exists?
+            if connection.respond_to?(:tables)
+              connection.tables.include? table_name
+            else
+              # if the connection adapter hasn't implemented tables, there are two crude tests that can be
+              # used - see if getting column info raises an error, or if the number of columns returned is zero
+              begin
+                reset_column_information
+                columns.size > 0
+              rescue ActiveRecord::StatementInvalid
+                false
+              end          
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 52
+  comment: "# Indicates whether the table associated with this class exists
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 52
+  ra_comment_id: 52
+  visibility: 1
+  name: "table_exists?"
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 52
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 53
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 732
+          def columns
+            unless @columns
+              @columns = connection.columns(table_name, "#{name} Columns")
+              @columns.each {|column| column.primary = column.name == primary_key}
+            end
+            @columns
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 53
+  comment: "# Returns an array of column objects for the table associated with this class.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 53
+  ra_comment_id: 53
+  visibility: 1
+  name: columns
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 53
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 54
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 741
+          def columns_hash
+            @columns_hash ||= columns.inject({}) { |hash, column| hash[column.name] = column; hash }
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 54
+  comment: "# Returns an array of column objects for the table associated with this class.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 54
+  ra_comment_id: 54
+  visibility: 1
+  name: columns_hash
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 54
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 55
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 745
+          def column_names
+            @column_names ||= columns.map { |column| column.name }
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 55
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 55
+  ra_comment_id: 55
+  visibility: 1
+  name: column_names
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 55
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 56
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 751
+          def content_columns
+            @content_columns ||= columns.reject { |c| c.primary || c.name =~ /(_id|_count)$/ || c.name == inheritance_column }
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 56
+  comment: >2
+    # Returns an array of column objects where the primary id, all columns ending in
+    "_id" or "_count",
+
+    # and columns used for single table inheritance have been removed.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 56
+  ra_comment_id: 56
+  visibility: 1
+  name: content_columns
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 56
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 57
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 758
+          def column_methods_hash
+            @dynamic_methods_hash ||= column_names.inject(Hash.new(false)) do |methods, attr|
+              attr_name = attr.to_s
+              methods[attr.to_sym]       = attr_name
+              methods["#{attr}=".to_sym] = attr_name
+              methods["#{attr}?".to_sym] = attr_name
+              methods["#{attr}_before_type_cast".to_sym] = attr_name
+              methods
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 57
+  comment: >2
+    # Returns a hash of all the methods added to query each of the columns in the
+    table with the name of the method as the key
+
+    # and true as the value. This makes it possible to do O(1) lookups in
+    respond_to? to check if a given method for attribute
+
+    # is available.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 57
+  ra_comment_id: 57
+  visibility: 1
+  name: column_methods_hash
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 57
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 58
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 770
+          def read_methods
+            @read_methods ||= Set.new
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 58
+  comment: "# Contains the names of the generated reader methods.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 58
+  ra_comment_id: 58
+  visibility: 1
+  name: read_methods
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 58
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 59
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 775
+          def reset_column_information
+            read_methods.each { |name| undef_method(name) }
+            @column_names = @columns = @columns_hash = @content_columns = @dynamic_methods_hash = @read_methods = nil
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 59
+  comment: "# Resets all the cached information about columns, which will cause them to be
+reloaded on the next request.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 59
+  ra_comment_id: 59
+  visibility: 1
+  name: reset_column_information
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 59
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 60
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 817
+          def benchmark(title, log_level = Logger::DEBUG, use_silence = true)
+            if logger && logger.level == log_level
+              result = nil
+              seconds = Benchmark.realtime { result = use_silence ? silence { yield } : yield }
+              logger.add(log_level, "#{title} (#{'%.5f' % seconds})")
+              result
+            else
+              yield
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 60
+  comment: >2
+    # Log and benchmark multiple statements in a single block. Example:
+
+    #
+
+    #   Project.benchmark("Creating project") do
+
+    #     project = Project.create("name" => "stuff")
+
+    #     project.create_manager("name" => "David")
+
+    #     project.milestones << Milestone.find(:all)
+
+    #   end
+
+    #
+
+    # The benchmark is only recorded if the current level of the logger matches the
+    <tt>log_level</tt>, which makes it
+
+    # easy to include benchmarking statements in production software that will
+    remain inexpensive because the benchmark
+
+    # will only be conducted if the log level is low enough.
+
+    #
+
+    # The logging of the multiple statements is turned off unless
+    <tt>use_silence</tt> is set to false.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 60
+  ra_comment_id: 60
+  visibility: 1
+  name: benchmark
+  ra_container_id: 21
+  parameters: "(title, log_level = Logger::DEBUG, use_silence = true)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: ''
+  ra_source_code_id: 60
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 61
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 829
+          def silence
+            old_logger_level, logger.level = logger.level, Logger::ERROR if logger
+            yield
+          ensure
+            logger.level = old_logger_level if logger
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 61
+  comment: "# Silences the logger for the duration of the block.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 61
+  ra_comment_id: 61
+  visibility: 1
+  name: silence
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: ''
+  ra_source_code_id: 61
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 62
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 847
+          def with_scope(method_scoping = {})
+            # Dup first and second level of hash (method and params).
+            method_scoping = method_scoping.inject({}) do |hash, (method, params)|
+              hash[method] = params.dup
+              hash
+            end
+
+            method_scoping.assert_valid_keys [:find, :create]
+            if f = method_scoping[:find]
+              f.assert_valid_keys [:conditions, :joins, :offset, :limit, :readonly]
+              f[:readonly] = true if !f[:joins].blank? && !f.has_key?(:readonly)
+            end
+
+            raise ArgumentError, "Nested scopes are not yet supported: #{scoped_methods.inspect}" unless scoped_methods.nil?
+
+            self.scoped_methods = method_scoping
+            yield
+          ensure 
+            self.scoped_methods = nil
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 62
+  comment: >2
+    # Scope parameters to method calls within the block.  Takes a hash of
+    method_name => parameters hash.
+
+    # method_name may be :find or :create.
+
+    # :find parameters may include the <tt>:conditions</tt>, <tt>:joins</tt>,
+
+    # <tt>:offset</tt>, <tt>:limit</tt>, and <tt>:readonly</tt> options.
+
+    # :create parameters are an attributes hash.
+
+    #
+
+    #   Article.with_scope(:find => { :conditions => "blog_id = 1" }, :create => {
+    :blog_id => 1 }) do
+
+    #     Article.find(1) # => SELECT * from articles WHERE blog_id = 1 AND id = 1
+
+    #     a = Article.create(1)
+
+    #     a.blog_id == 1
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 62
+  ra_comment_id: 62
+  visibility: 1
+  name: with_scope
+  ra_container_id: 21
+  parameters: "(method_scoping = {})"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: ''
+  ra_source_code_id: 62
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 63
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 869
+          def ===(object)
+            object.is_a?(self)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 63
+  comment: "# Overwrite the default class equality method to provide support for association
+proxies.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 63
+  ra_comment_id: 63
+  visibility: 1
+  name: "==="
+  ra_container_id: 21
+  parameters: "(object)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 63
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 64
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 874
+          def threaded_connections
+            allow_concurrency
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 64
+  comment: "# Deprecated 
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 64
+  ra_comment_id: 64
+  visibility: 1
+  name: threaded_connections
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 64
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 65
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 879
+          def threaded_connections=(value)
+            self.allow_concurrency = value
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 65
+  comment: "# Deprecated 
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 65
+  ra_comment_id: 65
+  visibility: 1
+  name: threaded_connections=
+  ra_container_id: 21
+  parameters: "(value)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 65
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 66
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 887
+            def instantiate(record)
+              object = 
+                if subclass_name = record[inheritance_column]
+                  if subclass_name.empty?
+                    allocate
+                  else
+                    require_association_class(subclass_name)
+                    begin
+                      compute_type(subclass_name).allocate
+                    rescue NameError
+                      raise SubclassNotFound,
+                        "The single-table inheritance mechanism failed to locate the subclass: '#{record[inheritance_column]}'. " +
+                        "This error is raised because the column '#{inheritance_column}' is reserved for storing the class in case of inheritance. " +
+                        "Please rename this column if you didn't intend it to be used for storing the inheritance class " +
+                        "or overwrite #{self.to_s}.inheritance_column to use another column for that information."
+                    end
+                  end
+                else
+                  allocate
+                end
+
+              object.instance_variable_set("@attributes", record)
+              object
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 66
+  comment: >2
+    # Finder methods must instantiate through this method to work with the
+    single-table inheritance model
+
+    # that makes it possible to create objects of different types from the same
+    table.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 66
+  ra_comment_id: 66
+  visibility: 2
+  name: instantiate
+  ra_container_id: 21
+  parameters: "(record)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 66
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 67
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 914
+            def type_name_with_module(type_name)
+              self.name =~ /::/ ? self.name.scan(/(.*)::/).first.first + "::" + type_name : type_name
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 67
+  comment: >2
+    # Returns the name of the type of the record using the current module as a
+    prefix. So descendents of
+
+    # MyApp::Business::Account would appear as "MyApp::Business::AccountSubclass".
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 67
+  ra_comment_id: 67
+  visibility: 2
+  name: type_name_with_module
+  ra_container_id: 21
+  parameters: "(type_name)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 67
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 68
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 918
+            def construct_finder_sql(options)
+              sql  = "SELECT #{options[:select] || '*'} FROM #{table_name} "
+              add_joins!(sql, options)
+              add_conditions!(sql, options[:conditions])
+              sql << " GROUP BY #{options[:group]} " if options[:group]
+              sql << " ORDER BY #{options[:order]} " if options[:order]
+              add_limit!(sql, options)
+              sql
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 68
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 68
+  ra_comment_id: 68
+  visibility: 2
+  name: construct_finder_sql
+  ra_container_id: 21
+  parameters: "(options)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 68
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 69
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 928
+            def add_limit!(sql, options)
+              options[:limit]  ||= scope(:find, :limit)
+              options[:offset] ||= scope(:find, :offset)
+              connection.add_limit_offset!(sql, options)
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 69
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 69
+  ra_comment_id: 69
+  visibility: 2
+  name: add_limit!
+  ra_container_id: 21
+  parameters: "(sql, options)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 69
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 70
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 934
+            def add_joins!(sql, options)
+              join = scope(:find, :joins) || options[:joins]
+              sql << " #{join} " if join
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 70
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 70
+  ra_comment_id: 70
+  visibility: 2
+  name: add_joins!
+  ra_container_id: 21
+  parameters: "(sql, options)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 70
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 71
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 940
+            def add_conditions!(sql, conditions)          
+              segments = [scope(:find, :conditions)]
+              segments << sanitize_sql(conditions) unless conditions.nil?
+              segments << type_condition unless descends_from_active_record?        
+              segments.compact!
+              sql << "WHERE (#{segments.join(") AND (")}) " unless segments.empty?
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 71
+  comment: "# Adds a sanitized version of +conditions+ to the +sql+ string. Note that the
+passed-in +sql+ string is changed.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 71
+  ra_comment_id: 71
+  visibility: 2
+  name: add_conditions!
+  ra_container_id: 21
+  parameters: "(sql, conditions)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 71
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 72
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 948
+            def type_condition
+              quoted_inheritance_column = connection.quote_column_name(inheritance_column)
+              type_condition = subclasses.inject("#{table_name}.#{quoted_inheritance_column} = '#{name.demodulize}' ") do |condition, subclass|
+                condition << "OR #{table_name}.#{quoted_inheritance_column} = '#{subclass.name.demodulize}' "
+              end
+
+              " (#{type_condition}) "
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 72
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 72
+  ra_comment_id: 72
+  visibility: 2
+  name: type_condition
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 72
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 73
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 958
+            def undecorated_table_name(class_name = class_name_of_active_record_descendant(self))
+              table_name = Inflector.underscore(Inflector.demodulize(class_name))
+              table_name = Inflector.pluralize(table_name) if pluralize_table_names
+              table_name
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 73
+  comment: "# Guesses the table name, but does not decorate it with prefix and suffix
+information.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 73
+  ra_comment_id: 73
+  visibility: 2
+  name: undecorated_table_name
+  ra_container_id: 21
+  parameters: "(class_name = class_name_of_active_record_descendant(self))"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 73
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 74
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 970
+            def method_missing(method_id, *arguments)
+              if match = /find_(all_by|by)_([_a-zA-Z]\w*)/.match(method_id.to_s)
+                finder = determine_finder(match)
+
+                attribute_names = extract_attribute_names_from_match(match)
+                super unless all_attributes_exists?(attribute_names)
+
+                conditions = construct_conditions_from_arguments(attribute_names, arguments)
+
+                if arguments[attribute_names.length].is_a?(Hash)
+                  find(finder, { :conditions => conditions }.update(arguments[attribute_names.length]))
+                else
+                  send("find_#{finder}", conditions, *arguments[attribute_names.length..-1]) # deprecated API
+                end
+              elsif match = /find_or_create_by_([_a-zA-Z]\w*)/.match(method_id.to_s)
+                attribute_names = extract_attribute_names_from_match(match)
+                super unless all_attributes_exists?(attribute_names)
+
+                find(:first, :conditions => construct_conditions_from_arguments(attribute_names, arguments)) || 
+                  create(construct_attributes_from_arguments(attribute_names, arguments))
+              else
+                super
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 74
+  comment: >2
+    # Enables dynamic finders like find_by_user_name(user_name) and
+    find_by_user_name_and_password(user_name, password) that are turned into
+
+    # find(:first, :conditions => ["user_name = ?", user_name]) and  find(:first,
+    :conditions => ["user_name = ? AND password = ?", user_name, password])
+
+    # respectively. Also works for find(:all), but using find_all_by_amount(50) that
+    are turned into find(:all, :conditions => ["amount = ?", 50]).
+
+    #
+
+    # It's even possible to use all the additional parameters to find. For example,
+    the full interface for find_all_by_amount
+
+    # is actually find_all_by_amount(amount, options).
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 74
+  ra_comment_id: 74
+  visibility: 2
+  name: method_missing
+  ra_container_id: 21
+  parameters: "(method_id, *arguments)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 74
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 75
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 995
+            def determine_finder(match)
+              match.captures.first == 'all_by' ? :all : :first
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 75
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 75
+  ra_comment_id: 75
+  visibility: 2
+  name: determine_finder
+  ra_container_id: 21
+  parameters: "(match)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 75
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 76
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 999
+            def extract_attribute_names_from_match(match)
+              match.captures.last.split('_and_')
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 76
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 76
+  ra_comment_id: 76
+  visibility: 2
+  name: extract_attribute_names_from_match
+  ra_container_id: 21
+  parameters: "(match)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 76
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 77
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1003
+            def construct_conditions_from_arguments(attribute_names, arguments)
+              conditions = []
+              attribute_names.each_with_index { |name, idx| conditions << "#{table_name}.#{connection.quote_column_name(name)} #{attribute_condition(arguments[idx])} " }
+              [ conditions.join(" AND "), *arguments[0...attribute_names.length] ]
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 77
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 77
+  ra_comment_id: 77
+  visibility: 2
+  name: construct_conditions_from_arguments
+  ra_container_id: 21
+  parameters: "(attribute_names, arguments)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 77
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 78
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1009
+            def construct_attributes_from_arguments(attribute_names, arguments)
+              attributes = {}
+              attribute_names.each_with_index { |name, idx| attributes[name] = arguments[idx] }
+              attributes
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 78
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 78
+  ra_comment_id: 78
+  visibility: 2
+  name: construct_attributes_from_arguments
+  ra_container_id: 21
+  parameters: "(attribute_names, arguments)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 78
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 79
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1015
+            def all_attributes_exists?(attribute_names)
+              attribute_names.all? { |name| column_methods_hash.include?(name.to_sym) }
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 79
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 79
+  ra_comment_id: 79
+  visibility: 2
+  name: "all_attributes_exists?"
+  ra_container_id: 21
+  parameters: "(attribute_names)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 79
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 80
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1019
+            def attribute_condition(argument)
+              case argument
+                when nil   then "IS ?"
+                when Array then "IN (?)"
+                else            "= ?"
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 80
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 80
+  ra_comment_id: 80
+  visibility: 2
+  name: attribute_condition
+  ra_container_id: 21
+  parameters: "(argument)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 80
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 81
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1045
+            def define_attr_method(name, value=nil, &block)
+              sing = class << self; self; end
+              sing.send :alias_method, "original_#{name}", name
+              if block_given?
+                sing.send :define_method, name, &block
+              else
+                # use eval instead of a block to work around a memory leak in dev
+                # mode in fcgi
+                sing.class_eval "def #{name}; #{value.to_s.inspect}; end"
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 81
+  comment: >2
+    # Defines an "attribute" method (like #inheritance_column or
+
+    # #table_name). A new (class) method will be created with the
+
+    # given name. If a value is specified, the new method will
+
+    # return that value (as a string). Otherwise, the given block
+
+    # will be used to compute the value of the method.
+
+    #
+
+    # The original method will be aliased, with the new name being
+
+    # prefixed with "original_". This allows the new method to
+
+    # access the original value.
+
+    #
+
+    # Example:
+
+    #
+
+    #   class A < ActiveRecord::Base
+
+    #     define_attr_method :primary_key, "sysid"
+
+    #     define_attr_method( :inheritance_column ) do
+
+    #       original_inheritance_column + "_id"
+
+    #     end
+
+    #   end
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 81
+  ra_comment_id: 81
+  visibility: 2
+  name: define_attr_method
+  ra_container_id: 21
+  parameters: "(name, value=nil, &block)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 81
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 82
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1058
+            def subclasses
+              @@subclasses[self] ||= []
+              @@subclasses[self] + extra = @@subclasses[self].inject([]) {|list, subclass| list + subclass.subclasses }
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 82
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 82
+  ra_comment_id: 82
+  visibility: 3
+  name: subclasses
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 82
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 83
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1064
+            def scoped?(method, key = nil)
+              scoped_methods and scoped_methods.has_key?(method) and (key.nil? or scope(method).has_key?(key))
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 83
+  comment: "# Test whether the given method and optional key are scoped.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 83
+  ra_comment_id: 83
+  visibility: 3
+  name: "scoped?"
+  ra_container_id: 21
+  parameters: "(method, key = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 83
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 84
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1069
+            def scope(method, key = nil)
+              if scoped_methods and scope = scoped_methods[method]
+                key ? scope[key] : scope
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 84
+  comment: "# Retrieve the scope for the given method and optional key.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 84
+  ra_comment_id: 84
+  visibility: 3
+  name: scope
+  ra_container_id: 21
+  parameters: "(method, key = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 84
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 85
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1075
+            def scoped_methods
+              if allow_concurrency
+                Thread.current[:scoped_methods] ||= {}
+                Thread.current[:scoped_methods][self] ||= nil
+              else
+                @scoped_methods ||= nil
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 85
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 85
+  ra_comment_id: 85
+  visibility: 3
+  name: scoped_methods
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 85
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 86
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1084
+            def scoped_methods=(value)
+              if allow_concurrency
+                Thread.current[:scoped_methods] ||= {}
+                Thread.current[:scoped_methods][self] = value
+              else
+                @scoped_methods = value
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 86
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 86
+  ra_comment_id: 86
+  visibility: 3
+  name: scoped_methods=
+  ra_container_id: 21
+  parameters: "(value)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 86
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 87
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1095
+            def compute_type(type_name)
+              type_name_with_module(type_name).split("::").inject(Object) do |final_type, part|
+                final_type.const_get(part)
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 87
+  comment: >2
+    # Returns the class type of the record using the current module as a prefix. So
+    descendents of
+
+    # MyApp::Business::Account would appear as MyApp::Business::AccountSubclass.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 87
+  ra_comment_id: 87
+  visibility: 3
+  name: compute_type
+  ra_container_id: 21
+  parameters: "(type_name)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 87
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 88
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1102
+            def class_name_of_active_record_descendant(klass)
+              if klass.superclass == Base
+                klass.name
+              elsif klass.superclass.nil?
+                raise ActiveRecordError, "#{name} doesn't belong in a hierarchy descending from ActiveRecord"
+              else
+                class_name_of_active_record_descendant(klass.superclass)
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 88
+  comment: "# Returns the name of the class descending directly from ActiveRecord in the
+inheritance hierarchy.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 88
+  ra_comment_id: 88
+  visibility: 3
+  name: class_name_of_active_record_descendant
+  ra_container_id: 21
+  parameters: "(klass)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 88
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 89
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1115
+            def sanitize_sql(ary)
+              return ary unless ary.is_a?(Array)
+
+              statement, *values = ary
+              if values.first.is_a?(Hash) and statement =~ /:\w+/
+                replace_named_bind_variables(statement, values.first)
+              elsif statement.include?('?')
+                replace_bind_variables(statement, values)
+              else
+                statement % values.collect { |value| connection.quote_string(value.to_s) }
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 89
+  comment: >2
+    # Accepts an array or string.  The string is returned untouched, but the array
+    has each value
+
+    # sanitized and interpolated into the sql statement.
+
+    #   ["name='%s' and group_id='%s'", "foo'bar", 4]  returns  "name='foo''bar' and
+    group_id='4'"
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 89
+  ra_comment_id: 89
+  visibility: 3
+  name: sanitize_sql
+  ra_container_id: 21
+  parameters: "(ary)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 89
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 90
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1130
+            def replace_bind_variables(statement, values)
+              raise_if_bind_arity_mismatch(statement, statement.count('?'), values.size)
+              bound = values.dup
+              statement.gsub('?') { quote_bound_value(bound.shift) }
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 90
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 90
+  ra_comment_id: 90
+  visibility: 3
+  name: replace_bind_variables
+  ra_container_id: 21
+  parameters: "(statement, values)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 90
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 91
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1136
+            def replace_named_bind_variables(statement, bind_vars)
+              raise_if_bind_arity_mismatch(statement, statement.scan(/:(\w+)/).uniq.size, bind_vars.size)
+              statement.gsub(/:(\w+)/) do
+                match = $1.to_sym
+                if bind_vars.include?(match)
+                  quote_bound_value(bind_vars[match])
+                else
+                  raise PreparedStatementInvalid, "missing value for :#{match} in #{statement}"
+                end
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 91
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 91
+  ra_comment_id: 91
+  visibility: 3
+  name: replace_named_bind_variables
+  ra_container_id: 21
+  parameters: "(statement, bind_vars)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 91
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 92
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1148
+            def quote_bound_value(value)
+              if (value.respond_to?(:map) && !value.is_a?(String))
+                value.map { |v| connection.quote(v) }.join(',')
+              else
+                connection.quote(value)
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 92
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 92
+  ra_comment_id: 92
+  visibility: 3
+  name: quote_bound_value
+  ra_container_id: 21
+  parameters: "(value)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 92
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 93
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1156
+            def raise_if_bind_arity_mismatch(statement, expected, provided)
+              unless expected == provided
+                raise PreparedStatementInvalid, "wrong number of bind variables (#{provided} for #{expected}) in: #{statement}"
+              end
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 93
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 93
+  ra_comment_id: 93
+  visibility: 3
+  name: raise_if_bind_arity_mismatch
+  ra_container_id: 21
+  parameters: "(statement, expected, provided)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 93
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 94
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1162
+            def extract_options_from_args!(args)
+              options = args.last.is_a?(Hash) ? args.pop : {}
+              validate_find_options(options)
+              options
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 94
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 94
+  ra_comment_id: 94
+  visibility: 3
+  name: extract_options_from_args!
+  ra_container_id: 21
+  parameters: "(args)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 94
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 95
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1168
+            def validate_find_options(options)
+              options.assert_valid_keys [:conditions, :include, :joins, :limit, :offset, :order, :select, :readonly, :group]
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 95
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 95
+  ra_comment_id: 95
+  visibility: 3
+  name: validate_find_options
+  ra_container_id: 21
+  parameters: "(options)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 95
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 96
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1172
+            def encode_quoted_value(value)
+              quoted_value = connection.quote(value)
+              quoted_value = "'#{quoted_value[1..-2].gsub(/\'/, "\\\\'")}'" if quoted_value.include?("\\\'") # (for ruby mode) " 
+              quoted_value 
+            end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 96
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 96
+  ra_comment_id: 96
+  visibility: 3
+  name: encode_quoted_value
+  ra_container_id: 21
+  parameters: "(value)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 96
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 97
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1184
+          def initialize(attributes = nil)
+            @attributes = attributes_from_column_definition
+            @new_record = true
+            ensure_proper_type
+            self.attributes = attributes unless attributes.nil?
+            yield self if block_given?
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 97
+  comment: >2
+    # New objects can be instantiated as either empty (pass no construction
+    parameter) or pre-set with
+
+    # attributes but not yet saved (pass a hash with key names matching the
+    associated table column names).
+
+    # In both instances, valid attribute keys are determined by the column names of
+    the associated table --
+
+    # hence you can't have attributes that aren't part of the table columns.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 97
+  ra_comment_id: 97
+  visibility: 1
+  name: new
+  ra_container_id: 21
+  parameters: "(attributes = nil)"
+  singleton: 1
+  force_documentation: 0
+  block_parameters: "self if block_given?"
+  ra_source_code_id: 97
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 98
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1194
+          def id
+            attr_name = self.class.primary_key
+            column = column_for_attribute(attr_name)
+            define_read_method(:id, attr_name, column) if self.class.generate_read_methods
+            read_attribute(attr_name)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 98
+  comment: >2
+    # A model instance's primary key is always available as model.id
+
+    # whether you name it the default 'id' or set it to something else.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 98
+  ra_comment_id: 98
+  visibility: 1
+  name: id
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 98
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 99
+  source_code: ''
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 99
+  comment: "Alias for #id"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 99
+  ra_comment_id: 99
+  visibility: 1
+  name: to_param
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 99
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 100
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1213
+          def id=(value)
+            write_attribute(self.class.primary_key, value)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 100
+  comment: "# Sets the primary ID.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 100
+  ra_comment_id: 100
+  visibility: 1
+  name: id=
+  ra_container_id: 21
+  parameters: "(value)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 100
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 101
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1218
+          def new_record?
+            @new_record
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 101
+  comment: "# Returns true if this object hasn't been saved yet -- that is, a record for the
+object doesn't exist yet.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 101
+  ra_comment_id: 101
+  visibility: 1
+  name: "new_record?"
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 101
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 102
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1224
+          def save
+            raise ActiveRecord::ReadOnlyRecord if readonly?
+            create_or_update
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 102
+  comment: >2
+    # * No record exists: Creates a new record with values matching those of the
+    object attributes.
+
+    # * A record does exist: Updates the record with values matching those of the
+    object attributes.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 102
+  ra_comment_id: 102
+  visibility: 1
+  name: save
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 102
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 103
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1231
+          def destroy
+            unless new_record?
+              connection.delete "DELETE FROM \#{self.class.table_name}\nWHERE \#{self.class.primary_key} = \#{quoted_id}\n", "#{self.class.name} Destroy"
+            end
+
+            freeze
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 103
+  comment: >2
+    # Deletes the record in the database and freezes this instance to reflect that
+    no changes should
+
+    # be made (since they can't be persisted).
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 103
+  ra_comment_id: 103
+  visibility: 1
+  name: destroy
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 103
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 104
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1248
+          def clone
+            attrs = self.attributes_before_type_cast
+            attrs.delete(self.class.primary_key)
+            self.class.new do |record|
+              record.send :instance_variable_set, '@attributes', attrs
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 104
+  comment: >2
+    # Returns a clone of the record that hasn't been assigned an id yet and
+
+    # is treated as a new record.  Note that this is a "shallow" clone:
+
+    # it copies the object's attributes only, not its associations.
+
+    # The extent of a "deep" clone is application-specific and is therefore
+
+    # left to the application to implement according to its need.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 104
+  ra_comment_id: 104
+  visibility: 1
+  name: clone
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 104
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 105
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1259
+          def update_attribute(name, value)
+            send(name.to_s + '=', value)
+            save
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 105
+  comment: >2
+    # Updates a single attribute and saves the record. This is especially useful for
+    boolean flags on existing records.
+
+    # Note: This method is overwritten by the Validation module that'll make sure
+    that updates made with this method
+
+    # doesn't get subjected to validation checks. Hence, attributes can be updated
+    even if the full object isn't valid.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 105
+  ra_comment_id: 105
+  visibility: 1
+  name: update_attribute
+  ra_container_id: 21
+  parameters: "(name, value)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 105
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 106
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1266
+          def update_attributes(attributes)
+            self.attributes = attributes
+            save
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 106
+  comment: >2
+    # Updates all the attributes from the passed-in Hash and saves the record. If
+    the object is invalid, the saving will
+
+    # fail and false will be returned.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 106
+  ra_comment_id: 106
+  visibility: 1
+  name: update_attributes
+  ra_container_id: 21
+  parameters: "(attributes)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 106
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 107
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1272
+          def increment(attribute)
+            self[attribute] ||= 0
+            self[attribute] += 1
+            self
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 107
+  comment: "# Initializes the +attribute+ to zero if nil and adds one. Only makes sense for
+number-based attributes. Returns self.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 107
+  ra_comment_id: 107
+  visibility: 1
+  name: increment
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 107
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 108
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1279
+          def increment!(attribute)
+            increment(attribute).update_attribute(attribute, self[attribute])
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 108
+  comment: "# Increments the +attribute+ and saves the record.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 108
+  ra_comment_id: 108
+  visibility: 1
+  name: increment!
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 108
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 109
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1284
+          def decrement(attribute)
+            self[attribute] ||= 0
+            self[attribute] -= 1
+            self
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 109
+  comment: "# Initializes the +attribute+ to zero if nil and subtracts one. Only makes sense
+for number-based attributes. Returns self.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 109
+  ra_comment_id: 109
+  visibility: 1
+  name: decrement
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 109
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 110
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1291
+          def decrement!(attribute)
+            decrement(attribute).update_attribute(attribute, self[attribute])
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 110
+  comment: "# Decrements the +attribute+ and saves the record.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 110
+  ra_comment_id: 110
+  visibility: 1
+  name: decrement!
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 110
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 111
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1296
+          def toggle(attribute)
+            self[attribute] = !send("#{attribute}?")
+            self
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 111
+  comment: "# Turns an +attribute+ that's currently true into false and vice versa. Returns
+self.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 111
+  ra_comment_id: 111
+  visibility: 1
+  name: toggle
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 111
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 112
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1302
+          def toggle!(attribute)
+            toggle(attribute).update_attribute(attribute, self[attribute])
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 112
+  comment: "# Toggles the +attribute+ and saves the record.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 112
+  ra_comment_id: 112
+  visibility: 1
+  name: toggle!
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 112
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 113
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1307
+          def reload
+            clear_aggregation_cache
+            clear_association_cache
+            @attributes.update(self.class.find(self.id).instance_variable_get('@attributes'))
+            self
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 113
+  comment: "# Reloads the attributes of this object from the database.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 113
+  ra_comment_id: 113
+  visibility: 1
+  name: reload
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 113
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 114
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1317
+          def [](attr_name)
+            read_attribute(attr_name)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 114
+  comment: >2
+    # Returns the value of the attribute identified by <tt>attr_name</tt> after it
+    has been typecast (for example,
+
+    # "2004-12-12" in a data column is cast to a date object, like Date.new(2004,
+    12, 12)).
+
+    # (Alias for the protected read_attribute method).
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 114
+  ra_comment_id: 114
+  visibility: 1
+  name: "[]"
+  ra_container_id: 21
+  parameters: "(attr_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 114
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 115
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1323
+          def []=(attr_name, value)
+            write_attribute(attr_name, value)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 115
+  comment: >2
+    # Updates the attribute identified by <tt>attr_name</tt> with the specified
+    +value+.
+
+    # (Alias for the protected write_attribute method).
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 115
+  ra_comment_id: 115
+  visibility: 1
+  name: "[]="
+  ra_container_id: 21
+  parameters: "(attr_name, value)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 115
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 116
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1332
+          def attributes=(attributes)
+            return if attributes.nil?
+            attributes.stringify_keys!
+
+            multi_parameter_attributes = []
+            remove_attributes_protected_from_mass_assignment(attributes).each do |k, v|
+              k.include?("(") ? multi_parameter_attributes << [ k, v ] : send(k + "=", v)
+            end
+            assign_multiparameter_attributes(multi_parameter_attributes)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 116
+  comment: >2
+    # Allows you to set all the attributes at once by passing in a hash with keys
+
+    # matching the attribute names (which again matches the column names). Sensitive
+    attributes can be protected
+
+    # from this form of mass-assignment by using the +attr_protected+ macro. Or you
+    can alternatively
+
+    # specify which attributes *can* be accessed in with the +attr_accessible+
+    macro. Then all the
+
+    # attributes not included in that won't be allowed to be mass-assigned.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 116
+  ra_comment_id: 116
+  visibility: 1
+  name: attributes=
+  ra_container_id: 21
+  parameters: "(attributes)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 116
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 117
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1344
+          def attributes
+            clone_attributes :read_attribute
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 117
+  comment: "# Returns a hash of all the attributes with their names as keys and clones of
+their objects as values.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 117
+  ra_comment_id: 117
+  visibility: 1
+  name: attributes
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 117
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 118
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1349
+          def attributes_before_type_cast
+            clone_attributes :read_attribute_before_type_cast
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 118
+  comment: "# Returns a hash of cloned attributes before typecasting and deserialization.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 118
+  ra_comment_id: 118
+  visibility: 1
+  name: attributes_before_type_cast
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 118
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 119
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1355
+          def attribute_present?(attribute)
+            value = read_attribute(attribute)
+            !value.blank? or value == 0
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 119
+  comment: >2
+    # Returns true if the specified +attribute+ has been set by the user or by a
+    database load and is neither
+
+    # nil nor empty? (the latter only applies to objects that respond to empty?,
+    most notably Strings).
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 119
+  ra_comment_id: 119
+  visibility: 1
+  name: "attribute_present?"
+  ra_container_id: 21
+  parameters: "(attribute)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 119
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 120
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1361
+          def has_attribute?(attr_name)
+            @attributes.has_key?(attr_name.to_s)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 120
+  comment: "# Returns true if the given attribute is in the attributes hash
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 120
+  ra_comment_id: 120
+  visibility: 1
+  name: "has_attribute?"
+  ra_container_id: 21
+  parameters: "(attr_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 120
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 121
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1366
+          def attribute_names
+            @attributes.keys.sort
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 121
+  comment: "# Returns an array of names for the attributes available on this object sorted
+alphabetically.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 121
+  ra_comment_id: 121
+  visibility: 1
+  name: attribute_names
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 121
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 122
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1371
+          def column_for_attribute(name)
+            self.class.columns_hash[name.to_s]
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 122
+  comment: "# Returns the column object for the named attribute.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 122
+  ra_comment_id: 122
+  visibility: 1
+  name: column_for_attribute
+  ra_container_id: 21
+  parameters: "(name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 122
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 123
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1376
+          def ==(comparison_object)
+            comparison_object.equal?(self) ||
+              (comparison_object.instance_of?(self.class) && 
+                comparison_object.id == id && 
+                !comparison_object.new_record?)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 123
+  comment: "# Returns true if the +comparison_object+ is the same object, or is of the same
+type and has the same id.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 123
+  ra_comment_id: 123
+  visibility: 1
+  name: "=="
+  ra_container_id: 21
+  parameters: "(comparison_object)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 123
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 124
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1384
+          def eql?(comparison_object)
+            self == (comparison_object)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 124
+  comment: "# Delegates to ==
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 124
+  ra_comment_id: 124
+  visibility: 1
+  name: "eql?"
+  ra_container_id: 21
+  parameters: "(comparison_object)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 124
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 125
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1390
+          def hash
+            id.hash
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 125
+  comment: >2
+    # Delegates to id in order to allow two records of the same type and id to work
+    with something like:
+
+    #   [ Person.find(1), Person.find(2), Person.find(3) ] & [ Person.find(1),
+    Person.find(4) ] # => [ Person.find(1) ]
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 125
+  ra_comment_id: 125
+  visibility: 1
+  name: hash
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 125
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 126
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1399
+          def respond_to?(method, include_priv = false)
+            if attr_name = self.class.column_methods_hash[method.to_sym]
+              return true if @attributes.include?(attr_name) || attr_name == self.class.primary_key
+              return false if self.class.read_methods.include?(attr_name)
+            elsif @attributes.include?(method_name = method.to_s)
+              return true
+            elsif md = /(=|\?|_before_type_cast)$/.match(method_name)
+              return true if @attributes.include?(md.pre_match)
+            end
+            # super must be called at the end of the method, because the inherited respond_to?
+            # would return true for generated readers, even if the attribute wasn't present
+            super
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 126
+  comment: >2
+    # A Person object with a name attribute can ask person.respond_to?("name"),
+    person.respond_to?("name="), and
+
+    # person.respond_to?("name?") which will all return true.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 126
+  ra_comment_id: 126
+  visibility: 1
+  name: "respond_to?"
+  ra_container_id: 21
+  parameters: "(method, include_priv = false)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 126
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 127
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1414
+          def freeze
+            @attributes.freeze; self
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 127
+  comment: "# Just freeze the attributes hash, such that associations are still accessible
+even on destroyed records.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 127
+  ra_comment_id: 127
+  visibility: 1
+  name: freeze
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 127
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 128
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1418
+          def frozen?
+            @attributes.frozen?
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 128
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 128
+  ra_comment_id: 128
+  visibility: 1
+  name: "frozen?"
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 128
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 129
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1422
+          def readonly?
+            @readonly == true
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 129
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 129
+  ra_comment_id: 129
+  visibility: 1
+  name: "readonly?"
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 129
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 130
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1426
+          def readonly!
+            @readonly = true
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 130
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 130
+  ra_comment_id: 130
+  visibility: 1
+  name: readonly!
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 130
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 131
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1431
+          def create_or_update
+            if new_record? then create else update end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 131
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 131
+  ra_comment_id: 131
+  visibility: 2
+  name: create_or_update
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 131
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 132
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1436
+          def update
+            connection.update(
+              "UPDATE #{self.class.table_name} " +
+              "SET #{quoted_comma_pair_list(connection, attributes_with_quotes(false))} " +
+              "WHERE #{self.class.primary_key} = #{quote(id)}",
+              "#{self.class.name} Update"
+            )
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 132
+  comment: "# Updates the associated record with values matching those of the instance
+attributes.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 132
+  ra_comment_id: 132
+  visibility: 2
+  name: update
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 132
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 133
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1446
+          def create
+            if self.id.nil? and connection.prefetch_primary_key?(self.class.table_name)
+              self.id = connection.next_sequence_value(self.class.sequence_name)
+            end
+
+            self.id = connection.insert(
+              "INSERT INTO #{self.class.table_name} " +
+              "(#{quoted_column_names.join(', ')}) " +
+              "VALUES(#{attributes_with_quotes.values.join(', ')})",
+              "#{self.class.name} Create",
+              self.class.primary_key, self.id, self.class.sequence_name
+            )
+
+            @new_record = false
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 133
+  comment: "# Creates a new record with values matching those of the instance attributes.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 133
+  ra_comment_id: 133
+  visibility: 2
+  name: create
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 133
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 134
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1466
+          def ensure_proper_type
+            unless self.class.descends_from_active_record?
+              write_attribute(self.class.inheritance_column, Inflector.demodulize(self.class.name))
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 134
+  comment: >2
+    # Sets the attribute used for single table inheritance to this class name if
+    this is not the ActiveRecord descendent.
+
+    # Considering the hierarchy Reply < Message < ActiveRecord, this makes it
+    possible to do Reply.new without having to
+
+    # set Reply[Reply.inheritance_column] = "Reply" yourself. No such attribute
+    would be set for objects of the
+
+    # Message class in that example.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 134
+  ra_comment_id: 134
+  visibility: 2
+  name: ensure_proper_type
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 134
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 135
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1480
+          def method_missing(method_id, *args, &block)
+            method_name = method_id.to_s
+            if @attributes.include?(method_name)
+              define_read_methods if self.class.read_methods.empty? && self.class.generate_read_methods
+              read_attribute(method_name)
+            elsif self.class.primary_key.to_s == method_name
+              id
+            elsif md = /(=|\?|_before_type_cast)$/.match(method_name)
+              attribute_name, method_type = md.pre_match, md.to_s
+              if @attributes.include?(attribute_name)
+                case method_type
+                  when '='
+                    write_attribute(attribute_name, args.first)
+                  when '?'
+                    query_attribute(attribute_name)
+                  when '_before_type_cast'
+                    read_attribute_before_type_cast(attribute_name)
+                end
+              else
+                super
+              end
+            else
+              super
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 135
+  comment: >2
+    # Allows access to the object attributes, which are held in the @attributes
+    hash, as were
+
+    # they first-class methods. So a Person class with a name attribute can use
+    Person#name and
+
+    # Person#name= and never directly use the attributes hash -- except for multiple
+    assigns with
+
+    # ActiveRecord#attributes=. A Milestone class can also ask Milestone#completed?
+    to test that
+
+    # the completed attribute is not nil or 0.
+
+    #
+
+    # It's also possible to instantiate related objects, so a Client class belonging
+    to the clients
+
+    # table with a master_id foreign key can instantiate master through
+    Client#master.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 135
+  ra_comment_id: 135
+  visibility: 2
+  name: method_missing
+  ra_container_id: 21
+  parameters: "(method_id, *args, &block)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 135
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 136
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1508
+          def read_attribute(attr_name)
+            attr_name = attr_name.to_s
+            if !(value = @attributes[attr_name]).nil?
+              if column = column_for_attribute(attr_name)
+                if unserializable_attribute?(attr_name, column)
+                  unserialize_attribute(attr_name)
+                else
+                  column.type_cast(value)
+                end
+              else
+                value
+              end
+            else
+              nil
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 136
+  comment: >2
+    # Returns the value of the attribute identified by <tt>attr_name</tt> after it
+    has been typecast (for example,
+
+    # "2004-12-12" in a data column is cast to a date object, like Date.new(2004,
+    12, 12)).
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 136
+  ra_comment_id: 136
+  visibility: 2
+  name: read_attribute
+  ra_container_id: 21
+  parameters: "(attr_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 136
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 137
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1525
+          def read_attribute_before_type_cast(attr_name)
+            @attributes[attr_name]
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 137
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 137
+  ra_comment_id: 137
+  visibility: 2
+  name: read_attribute_before_type_cast
+  ra_container_id: 21
+  parameters: "(attr_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 137
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 138
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1532
+          def define_read_methods
+            self.class.columns_hash.each do |name, column|
+              unless self.class.serialized_attributes[name] || respond_to_without_attributes?(name)
+                define_read_method(name.to_sym, name, column)
+              end
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 138
+  comment: >2
+    # Called on first read access to any given column and generates reader
+
+    # methods for all columns in the columns_hash if
+
+    # ActiveRecord::Base.generate_read_methods is set to true.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 138
+  ra_comment_id: 138
+  visibility: 2
+  name: define_read_methods
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 138
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 139
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1541
+          def define_read_method(symbol, attr_name, column)
+            cast_code = column.type_cast_code('v') if column
+            access_code = cast_code ? "(v=@attributes['#{attr_name}']) && #{cast_code}" : "@attributes['#{attr_name}']"
+
+            unless attr_name.to_s == self.class.primary_key.to_s
+              access_code = access_code.insert(0, "raise NoMethodError, 'missing attribute: #{attr_name}', caller unless @attributes.has_key?('#{attr_name}'); ")
+              self.class.read_methods << attr_name
+            end
+
+            begin
+              self.class.class_eval("def #{symbol}; #{access_code}; end")
+            rescue SyntaxError => err
+              self.class.read_methods.delete(attr_name)
+              if logger
+                logger.warn "Exception occured during reader method compilation."
+                logger.warn "Maybe #{attr_name} is not a valid Ruby identifier?"
+                logger.warn "#{err.message}"
+              end
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 139
+  comment: "# Define an attribute reader method.  Cope with nil column.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 139
+  ra_comment_id: 139
+  visibility: 2
+  name: define_read_method
+  ra_container_id: 21
+  parameters: "(symbol, attr_name, column)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 139
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 140
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1563
+          def unserializable_attribute?(attr_name, column)
+            column.text? && self.class.serialized_attributes[attr_name]
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 140
+  comment: "# Returns true if the attribute is of a text column and marked for
+serialization.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 140
+  ra_comment_id: 140
+  visibility: 2
+  name: "unserializable_attribute?"
+  ra_container_id: 21
+  parameters: "(attr_name, column)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 140
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 141
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1568
+          def unserialize_attribute(attr_name)
+            unserialized_object = object_from_yaml(@attributes[attr_name])
+
+            if unserialized_object.is_a?(self.class.serialized_attributes[attr_name])
+              @attributes[attr_name] = unserialized_object
+            else
+              raise SerializationTypeMismatch,
+                "#{attr_name} was supposed to be a #{self.class.serialized_attributes[attr_name]}, but was a #{unserialized_object.class.to_s}"
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 141
+  comment: "# Returns the unserialized object of the attribute.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 141
+  ra_comment_id: 141
+  visibility: 2
+  name: unserialize_attribute
+  ra_container_id: 21
+  parameters: "(attr_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 141
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 142
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1581
+          def write_attribute(attr_name, value)
+            attr_name = attr_name.to_s
+            if (column = column_for_attribute(attr_name)) && column.number?
+              @attributes[attr_name] = convert_number_column_value(value)
+            else
+              @attributes[attr_name] = value
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 142
+  comment: >2
+    # Updates the attribute identified by <tt>attr_name</tt> with the specified
+    +value+. Empty strings for fixnum and float
+
+    # columns are turned into nil.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 142
+  ra_comment_id: 142
+  visibility: 2
+  name: write_attribute
+  ra_container_id: 21
+  parameters: "(attr_name, value)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 142
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 143
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1590
+          def convert_number_column_value(value)
+            case value
+              when FalseClass: 0
+              when TrueClass:  1
+              when '':         nil
+              else value
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 143
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 143
+  ra_comment_id: 143
+  visibility: 2
+  name: convert_number_column_value
+  ra_container_id: 21
+  parameters: "(value)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 143
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 144
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1599
+          def query_attribute(attr_name)
+            attribute = @attributes[attr_name]
+            if attribute.kind_of?(Fixnum) && attribute == 0
+              false
+            elsif attribute.kind_of?(String) && attribute == "0"
+              false
+            elsif attribute.kind_of?(String) && attribute.empty?
+              false
+            elsif attribute.nil?
+              false
+            elsif attribute == false
+              false
+            elsif attribute == "f"
+              false
+            elsif attribute == "false"
+              false
+            else
+              true
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 144
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 144
+  ra_comment_id: 144
+  visibility: 2
+  name: query_attribute
+  ra_container_id: 21
+  parameters: "(attr_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 144
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 145
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1620
+          def remove_attributes_protected_from_mass_assignment(attributes)
+            if self.class.accessible_attributes.nil? && self.class.protected_attributes.nil?
+              attributes.reject { |key, value| attributes_protected_by_default.include?(key.gsub(/\(.+/, "")) }
+            elsif self.class.protected_attributes.nil?
+              attributes.reject { |key, value| !self.class.accessible_attributes.include?(key.gsub(/\(.+/, "").intern) || attributes_protected_by_default.include?(key.gsub(/\(.+/, "")) }
+            elsif self.class.accessible_attributes.nil?
+              attributes.reject { |key, value| self.class.protected_attributes.include?(key.gsub(/\(.+/,"").intern) || attributes_protected_by_default.include?(key.gsub(/\(.+/, "")) }
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 145
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 145
+  ra_comment_id: 145
+  visibility: 2
+  name: remove_attributes_protected_from_mass_assignment
+  ra_container_id: 21
+  parameters: "(attributes)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 145
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 146
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1631
+          def attributes_protected_by_default
+            default = [ self.class.primary_key, self.class.inheritance_column ]
+            default << 'id' unless self.class.primary_key.eql? 'id'
+            default
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 146
+  comment: "# The primary key and inheritance column can never be set by mass-assignment for
+security reasons.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 146
+  ra_comment_id: 146
+  visibility: 2
+  name: attributes_protected_by_default
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 146
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 147
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1639
+          def attributes_with_quotes(include_primary_key = true)
+            attributes.inject({}) do |quoted, (name, value)|
+              if column = column_for_attribute(name)
+                quoted[name] = quote(value, column) unless !include_primary_key && column.primary
+              end
+              quoted
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 147
+  comment: >2
+    # Returns copy of the attributes hash where all the values have been safely
+    quoted for use in
+
+    # an SQL statement.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 147
+  ra_comment_id: 147
+  visibility: 2
+  name: attributes_with_quotes
+  ra_container_id: 21
+  parameters: "(include_primary_key = true)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 147
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 148
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1649
+          def quote(value, column = nil)
+            self.class.connection.quote(value, column)
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 148
+  comment: "# Quote strings appropriately for SQL statements.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 148
+  ra_comment_id: 148
+  visibility: 2
+  name: quote
+  ra_container_id: 21
+  parameters: "(value, column = nil)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 148
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 149
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1655
+          def interpolate_sql(sql, record = nil)
+            instance_eval("%@#{sql.gsub('@', '\@')}@")
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 149
+  comment: >2
+    # Interpolate custom sql string in instance context.
+
+    # Optional record argument is meant for custom insert_sql.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 149
+  ra_comment_id: 149
+  visibility: 2
+  name: interpolate_sql
+  ra_container_id: 21
+  parameters: "(sql, record = nil)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 149
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 150
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1663
+          def attributes_from_column_definition
+            self.class.columns.inject({}) do |attributes, column|
+              attributes[column.name] = column.default unless column.name == self.class.primary_key
+              attributes
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 150
+  comment: >2
+    # Initializes the attributes array with keys matching the columns from the
+    linked table and
+
+    # the values matching the corresponding default value of that column, so
+
+    # that a new instance, or one populated from a passed-in Hash, still has all the
+    attributes
+
+    # that instances loaded from the database would.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 150
+  ra_comment_id: 150
+  visibility: 2
+  name: attributes_from_column_definition
+  ra_container_id: 21
+  parameters: "()"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 150
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 151
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1676
+          def assign_multiparameter_attributes(pairs)
+            execute_callstack_for_multiparameter_attributes(
+              extract_callstack_for_multiparameter_attributes(pairs)
+            )
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 151
+  comment: >2
+    # Instantiates objects for all attribute classes that needs more than one
+    constructor parameter. This is done
+
+    # by calling new on the column type or aggregation type (through composed_of)
+    object with these parameters.
+
+    # So having the pairs written_on(1) = "2004", written_on(2) = "6", written_on(3)
+    = "24", will instantiate
+
+    # written_on (a date type) with Date.new("2004", "6", "24"). You can also
+    specify a typecast character in the
+
+    # parentheses to have the parameters typecasted before they're used in the
+    constructor. Use i for Fixnum, f for Float,
+
+    # s for String, and a for Array. If all the values for a given attribute is
+    empty, the attribute will be set to nil.
+
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 151
+  ra_comment_id: 151
+  visibility: 2
+  name: assign_multiparameter_attributes
+  ra_container_id: 21
+  parameters: "(pairs)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 151
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 152
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1683
+          def execute_callstack_for_multiparameter_attributes(callstack)
+            errors = []
+            callstack.each do |name, values|
+              klass = (self.class.reflect_on_aggregation(name) || column_for_attribute(name)).klass
+              if values.empty?
+                send(name + "=", nil)
+              else
+                begin
+                  send(name + "=", Time == klass ? klass.local(*values) : klass.new(*values))
+                rescue => ex
+                  errors << AttributeAssignmentError.new("error on assignment #{values.inspect} to #{name}", ex, name)
+                end
+              end
+            end
+            unless errors.empty?
+              raise MultiparameterAssignmentErrors.new(errors), "#{errors.size} error(s) on assignment of multiparameter attributes"
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 152
+  comment: "# Includes an ugly hack for Time.local instead of Time.new because the latter is
+reserved by Time itself.
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 152
+  ra_comment_id: 152
+  visibility: 2
+  name: execute_callstack_for_multiparameter_attributes
+  ra_container_id: 21
+  parameters: "(callstack)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 152
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 153
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1702
+          def extract_callstack_for_multiparameter_attributes(pairs)
+            attributes = { }
+
+            for pair in pairs
+              multiparameter_name, value = pair
+              attribute_name = multiparameter_name.split("(").first
+              attributes[attribute_name] = [] unless attributes.include?(attribute_name)
+
+              unless value.empty?
+                attributes[attribute_name] <<
+                  [ find_parameter_position(multiparameter_name), type_cast_attribute_value(multiparameter_name, value) ]
+              end
+            end
+
+            attributes.each { |name, values| attributes[name] = values.sort_by{ |v| v.first }.collect { |v| v.last } }
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 153
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 153
+  ra_comment_id: 153
+  visibility: 2
+  name: extract_callstack_for_multiparameter_attributes
+  ra_container_id: 21
+  parameters: "(pairs)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 153
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 154
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1719
+          def type_cast_attribute_value(multiparameter_name, value)
+            multiparameter_name =~ /\([0-9]*([a-z])\)/ ? value.send("to_" + $1) : value
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 154
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 154
+  ra_comment_id: 154
+  visibility: 2
+  name: type_cast_attribute_value
+  ra_container_id: 21
+  parameters: "(multiparameter_name, value)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 154
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 155
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1723
+          def find_parameter_position(multiparameter_name)
+            multiparameter_name.scan(/\(([0-9]*).*\)/).first.first
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 155
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 155
+  ra_comment_id: 155
+  visibility: 2
+  name: find_parameter_position
+  ra_container_id: 21
+  parameters: "(multiparameter_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 155
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 156
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1728
+          def comma_pair_list(hash)
+            hash.inject([]) { |list, pair| list << "#{pair.first} = #{pair.last}" }.join(", ")
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 156
+  comment: "# Returns a comma-separated pair list, like \"key1 = val1, key2 = val2\".
+
+"
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 156
+  ra_comment_id: 156
+  visibility: 2
+  name: comma_pair_list
+  ra_container_id: 21
+  parameters: "(hash)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 156
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 157
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1732
+          def quoted_column_names(attributes = attributes_with_quotes)
+            attributes.keys.collect do |column_name|
+              self.class.connection.quote_column_name(column_name)
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 157
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 157
+  ra_comment_id: 157
+  visibility: 2
+  name: quoted_column_names
+  ra_container_id: 21
+  parameters: "(attributes = attributes_with_quotes)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 157
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 158
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1738
+          def quote_columns(quoter, hash)
+            hash.inject({}) do |quoted, (name, value)|
+              quoted[quoter.quote_column_name(name)] = value
+              quoted
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 158
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 158
+  ra_comment_id: 158
+  visibility: 2
+  name: quote_columns
+  ra_container_id: 21
+  parameters: "(quoter, hash)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 158
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 159
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1745
+          def quoted_comma_pair_list(quoter, hash)
+            comma_pair_list(quote_columns(quoter, hash))
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 159
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 159
+  ra_comment_id: 159
+  visibility: 2
+  name: quoted_comma_pair_list
+  ra_container_id: 21
+  parameters: "(quoter, hash)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 159
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 160
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1749
+          def object_from_yaml(string)
+            return string unless string.is_a?(String)
+            YAML::load(string) rescue string
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 160
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 160
+  ra_comment_id: 160
+  visibility: 2
+  name: object_from_yaml
+  ra_container_id: 21
+  parameters: "(string)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 160
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 161
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1754
+          def clone_attributes(reader_method = :read_attribute, attributes = {})
+            self.attribute_names.inject(attributes) do |attributes, name|
+              attributes[name] = clone_attribute_value(reader_method, name)
+              attributes
+            end
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 161
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 161
+  ra_comment_id: 161
+  visibility: 2
+  name: clone_attributes
+  ra_container_id: 21
+  parameters: "(reader_method = :read_attribute, attributes = {})"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 161
+new_record: true
+--- !ruby/object:RaSourceCode 
+attributes: 
+  id: 162
+  source_code: |2-
+    # File testdoc-1.0.0/base.rb, line 1761
+          def clone_attribute_value(reader_method, attribute_name)
+            value = send(reader_method, attribute_name)
+            value.clone
+          rescue TypeError, NoMethodError
+            value
+          end
+new_record: true
+--- !ruby/object:RaComment 
+attributes: 
+  id: 162
+  comment: ''
+new_record: true
+--- !ruby/object:RaMethod 
+attributes: 
+  id: 162
+  ra_comment_id: 162
+  visibility: 2
+  name: clone_attribute_value
+  ra_container_id: 21
+  parameters: "(reader_method, attribute_name)"
+  singleton: 0
+  force_documentation: 0
+  block_parameters: 
+  ra_source_code_id: 162
+new_record: true	
+--- !ruby/object:RaAlias 
+attributes: 
+  id: 163
+  name: set_table_name
+  ra_container_id: 21
+  type: RaAlias
+  value: table_name=
+  comment: ''
+new_record: true	
+--- !ruby/object:RaAlias 
+attributes: 
+  id: 164
+  name: set_primary_key
+  ra_container_id: 21
+  type: RaAlias
+  value: primary_key=
+  comment: ''
+new_record: true	
+--- !ruby/object:RaAlias 
+attributes: 
+  id: 165
+  name: set_inheritance_column
+  ra_container_id: 21
+  type: RaAlias
+  value: inheritance_column=
+  comment: ''
+new_record: true	
+--- !ruby/object:RaAlias 
+attributes: 
+  id: 166
+  name: set_sequence_name
+  ra_container_id: 21
+  type: RaAlias
+  value: sequence_name=
+  comment: ''
+new_record: true	
+--- !ruby/object:RaAlias 
+attributes: 
+  id: 167
+  name: sanitize_sql
+  ra_container_id: 21
+  type: RaAlias
+  value: sanitize_conditions
+  comment: ''
+new_record: true	
+--- !ruby/object:RaAlias 
+attributes: 
+  id: 168
+  name: respond_to?
+  ra_container_id: 21
+  type: RaAlias
+  value: respond_to_without_attributes?
+  comment: "# For checking respond_to? without searching the attributes (which is faster).
+
+"
+new_record: true
+--- !ruby/object:RaRequire 
+attributes: 
+  id: 4
+  name: yaml
+  ra_container_id: 3
+  type: RaRequire
+  comment: 
+new_record: true
+--- !ruby/object:RaRequire 
+attributes: 
+  id: 5
+  name: set
+  ra_container_id: 3
+  type: RaRequire
+  comment: 
+new_record: true
+--- !ruby/object:RaRequire 
+attributes: 
+  id: 6
+  name: active_record/deprecated_finders
+  ra_container_id: 3
+  type: RaRequire
+  comment: 
+new_record: true

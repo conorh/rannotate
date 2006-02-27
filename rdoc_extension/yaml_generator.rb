@@ -1,8 +1,7 @@
 require 'yaml'
 
-# This class processes the results of the rdoc parsing and outputs sql INSERT 
-# statements into a file. The file name must be specified on the commandline
-# using the --opname option of RDoc ex. --opname=outfile.txt 
+# This class processes the results of the rdoc parsing and outputs YAML formatted 
+# classes that can then be imported into the database using the Rannotate web app.
 #
 # How does it work?
 # Rdoc calls the generate method of this class from inside of rdoc.rb. By the 
@@ -10,17 +9,15 @@ require 'yaml'
 # and has put them in a tree structure. The details of this tree structure 
 # are in the file code_objects.rb. 
 #
-# generate gets passed an array of 'toplevel' objects which are files
+# generate(files) gets passed an array of 'toplevel' objects which are files
 # we process these toplevel objects recursivley extracting all of the code 
 # objects they contain: classes, modules, methods, attributes etc..
 #
 # Example usage 
-# rdoc --fmt=yaml --opname=outfile.txt activerecord-1.1.13
+# rdoc --fmt=yaml --opname=activerecord-1.1.13 activerecord-1.1.13
 
 module Generators
 
-  # This generator takes the output of the rdoc parser
-  # and turns it into a bunch of INSERT sql statements for a database
   class YAMLGenerator                 
 
     TYPE = {:file => 1, :class => 2, :module => 3 }
@@ -332,9 +329,8 @@ module Generators
    
 end
 
-# The classes below emulate the ActiveRecord
-# models used by Rannotate
-# We emulate them so that we can output them to YAML
+# The classes below emulate the ActiveRecord models used by Rannotate
+# We emulate them so that we can output them to YAML and easily import them in the Rails App
 # TODO: Investigate importing the active record models instead of creating these mock objects
 
 class RaFile

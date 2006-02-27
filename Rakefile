@@ -12,7 +12,7 @@ require 'tasks/rails'
 task "ranapi" do
   require 'rdoc/rdoc'
   params = []
-  params << "--fmt=yaml" << "-o doc"
+  params << "--fmt=yaml"
   params << "--opname=rails-1.0.0"
   dirs = []
   dirs << 'vendor/rails/railties/CHANGELOG'

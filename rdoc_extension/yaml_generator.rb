@@ -60,7 +60,7 @@ module Generators
     end
 
     # Rdoc passes in TopLevel objects from the code_objects.rb tree (all files)
-    def generate(files)
+    def generate(files)   
       @f = File.new(@output_file + ".out", File::CREAT|File::TRUNC|File::RDWR) 
       
       @output = String.new
@@ -79,7 +79,8 @@ module Generators
     private
 
     # process a file from the code_object.rb tree
-    def process_file(file)       
+    def process_file(file)
+      putc('.')
       id = create_file(file)           
           
       # Process all of the objects that this file contains

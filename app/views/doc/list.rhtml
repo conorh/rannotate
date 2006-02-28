@@ -1,12 +1,55 @@
-<!-- div.main -->
-<div id="main">
-
 <% if(@library != nil) %>
 List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
 <% end %>
 
+<center>
+<table width="95%">
+<tr valign="top">
+<% 
+   rows_per_col = ((@list.length + 26) / 3).to_i + 1
+   count = 0
+   alphabet = 'A'
+   alphabet_count = 0
+%>
+<td>
+<strong><%= alphabet %></strong><br/>
 <% for entry in @list %>
+<%   # Check if we should display the next letter of the alphabet %>
+<%   entry.container? ? name = entry.full_name : name = entry.name %>
+<%   while(name[0,1].upcase != alphabet && alphabet_count < 25)  
+       alphabet.succ!
+       alphabet_count += 1
+       count += 1
+%>
+<strong><%= alphabet %></strong><br/>
+<%     # if we crossed a column boundary then output a new column %>
+<%     if(count != @list.length && count % rows_per_col == 0) %>
+</td>
+<td>
+<%     end
+     end %>
 <%= link_to_doc(entry) %><br/>
-<% end %>
-</div>
-<!-- /div.main -->
+<% count = count + 1
+     # if we crossed a column boundary then output a new column 
+     if(count != @list.length && count % rows_per_col == 0) %>
+</td>
+<td>
+<%   end 
+   end 
+   # Display any remaining letters of the alphabet 
+   while(alphabet_count < 25) 
+     alphabet.succ!
+     alphabet_count += 1
+     count += 1
+%>
+<strong><%= alphabet %></strong><br/>
+<%   # if we crossed a column boundary then output a new column 
+     if(count != @list.length && count % rows_per_col == 0) %>
+</td>
+<td>
+<%   end
+   end %>
+</td>
+</tr>
+</table>
+</center>

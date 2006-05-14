@@ -13,7 +13,7 @@
 
 <% if(version[:added].length > 0 || version[:removed].length > 0 || version[:changed].length > 0) %>
 <%if(version[:added].length > 0) %>
-<strong>Added</strong><br/>
+<br/><br/><strong>Added</strong><br/>
 <% version[:added].each do |type_name, obj_hash| %>
   - <%= type_name.pluralize %><br/>
   <% obj_hash.each do |obj| %>
@@ -23,7 +23,7 @@
  end %>
  
 <%if(version[:removed].length > 0) %>
-<strong>Removed</strong><br/>
+<br/><strong>Removed</strong><br/>
 <% version[:removed].each do |type_name, obj_hash| %>
   - <%= type_name.pluralize %><br/>
   <% obj_hash.each do |obj| %>
@@ -33,7 +33,7 @@
  end %> 
  
 <%if(version[:changed].length > 0) %>
-<strong>Changed</strong><br/>
+<br/><strong>Changed</strong><br/>
 <% version[:changed].each do |type_name, obj_hash| %>
   - <%= type_name.pluralize %><br/>
   <% obj_hash.each do |obj| %>
@@ -41,9 +41,11 @@
   <% end %>
 <% end
  end %>
+<p>
 <% elsif(count == @versions.length)%>
 <p>
 <b>First Version</b>
+<p>
 <% else %>
 <p>
 <b>No changes from previous version</b>

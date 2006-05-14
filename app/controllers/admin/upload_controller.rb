@@ -43,12 +43,14 @@ class Admin::UploadController < ApplicationController
 		end	
 		
 		ActiveRecord::Base.connection.transaction do									
-			# Create a new library object		
+			# Create a new library object	
 			@library = RaLibrary.new({:name => match[1], :major => match[2], :minor => match[3], :release => match[4]})		
 			@library.current = false
-			@library.save
-		
-			if(@library.valid?)		
+			@library.date = DateTime.now
+			
+			if(@library.find_lib == nil)
+			  @library.calc_version			  			  
+			  @library.save!
 			  # ok now we need to see if the library version that we uploaded is the most recent version of this library			
 			  higher_version = RaLibrary.find(:first, :conditions => ["name = ? AND version > ?", @library.name, @library.version])
 			  if(higher_version == nil)
@@ -57,12 +59,12 @@ class Admin::UploadController < ApplicationController
 				if(currents)
 					currents.each do |c|
 						c.current = false
-						c.save
+						c.save!
 					end
 				end
 				# now set the status of this library to be most recent and save it
 				@library.current = true
-				@library.save
+				@library.save!
 			  end						
 									
 			  # measure the time it takes to do the DB inserts
@@ -88,7 +90,7 @@ class Admin::UploadController < ApplicationController
 				  id = doc.id
 				  get_ids(doc, lookup)
 				  doc.id = nil	
-				  lookup[id] = insert_object(doc)
+				  lookup[id] = insert_object(doc)				  
 				  count = count + 1
 			  }		
 			  ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=1' )		 

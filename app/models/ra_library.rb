@@ -18,18 +18,30 @@ class RaLibrary < ActiveRecord::Base
 	# Calculates an integer representation of the major/minor/release version
 	def RaLibrary.calc_version_int(major, minor, release)				
 		return (major.to_i * 10000) + (minor.to_i * 100) + (release.to_i * 1)
-	end			
+	end
+	
+	def calc_version
+	   self.version = RaLibrary.calc_version_int(major.to_i, minor.to_i, release.to_i)	
+	end
+	
+	def validate
+		self.version = RaLibrary.calc_version_int(major.to_i, minor.to_i, release.to_i)		
+	end
+	
+	def find_lib
+	    return RaLibrary.find(:first, :conditions => ["name = ? AND major = ? AND minor = ? AND release = ?", name, major, minor, release]) 
+	end
 		
 	def validate_on_create
-		self.version = RaLibrary.calc_version_int(major.to_i, minor.to_i, release.to_i)	
-	
-		if RaLibrary.find(:first, :conditions => ["name = ? AND major = ? AND minor = ? and release = ?", name, major, minor, release])
+		self.version = RaLibrary.calc_version_int(major.to_i, minor.to_i, release.to_i)
+			
+		if find_lib
 			errors.add_to_base("A library with this name and version already exists")				
 		end
 							
 		if(!errors.empty?)
 			return false
-		end			
+		end
 	end
 
 end

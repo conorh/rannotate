@@ -1,6 +1,6 @@
 <div class="header_space"></div>
 <table width="100%" class="body_table">
-<tr><td colspan="3">
+<tr><td>
 <h2><%= @type.capitalize %>
 <% if(@library != nil) %>
  for library '<%= @library %>' version <%= @version %><br/>
@@ -15,14 +15,7 @@
 <td align="left">
 <% for entry in @list %>
 <%= link_to_doc(entry) %><br/>
-<%   count = count + 1
-     # if we crossed a column boundary then output a new column 
-     if(count != @list.length && count % rows_per_col == 0) %>
-</td>
-<td align="left">
-<%   end 
-   end 
-%>
+<% end %>
 </td>
 </tr>
 </table>

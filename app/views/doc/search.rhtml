@@ -5,6 +5,7 @@
 <% else %>
 
 <h2>Search Results - <%= pluralize(@results_count, "hit") %> for search '<%= h(@search_text) %>'</h2>
+<div style="font-size: 80%">
 <% # get results for each type in order 
 @display.each do |type|
   object_array = @search_results[type] 
@@ -15,9 +16,12 @@
 			<%= link_to_doc(object) %><br/>
 		<% 
 		end
-	end		
+	end %>
+	<br/>
+	<%		
 end 
 end # end if(@error)
 %>
+</div>
 </td></tr>
 </table>

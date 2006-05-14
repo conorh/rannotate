@@ -1,13 +1,13 @@
 <div class="header_space"></div>
 <table width="100%" class="body_table">
-<tr><td colspan="3">
+<tr><td colspan="3 class="main_td">
 <h2><%= @type.capitalize %>
 <% if(@library != nil) %>
  for library '<%= @library %>' version <%= @version %><br/>
 <% end %>
 </h2>
 </td></tr>
-<tr valign="top">
+<tr valign="top" style="font-size: 70%">
 <% 
    rows_per_col = ((@list.length + 26) / 2).to_i + 1
    count = 0

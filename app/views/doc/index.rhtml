@@ -3,11 +3,11 @@
 <tr><td align="left">
 <% if(@home == nil) %>
 <h2>Welcome!</h2>
-  This rdoc generated documentation is running a rannotate server which means that you can add notes to all parts of the documentation
-  and can even search the documentation!
+  This RDoc generated documentation is running on a Rannotate server.
   <p>
 <h2>View newest comments</h2>
 To view the newest comments added to this documentation <%= link_to('click here', {:controller => 'notes', :action => 'list_new'}) %>
+</br> or check out the <%= link_to('RSS feed', {:controller => 'notes', :action => 'rss'}) %>
 <p>
 <h2>More information</h2>
 For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>

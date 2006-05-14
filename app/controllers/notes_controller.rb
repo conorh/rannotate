@@ -4,14 +4,14 @@ class NotesController < ApplicationController
   # Display a list of notes
   def list
     @category = params[:category]
-    @name = params[:name]    
+    @name = params[:name]
     @content_url = params[:return_url]
     
     @notes = Note.find(:all, :conditions => ["category = ? AND name = ?", @category, @name], :order=> "created_at ASC")	
     
     if(params[:no_layout])
       render :layout=>false
-    end	
+    end
   end
   
   # Show all immediate children of this note. This only works for classes right now. Because...
@@ -29,17 +29,24 @@ class NotesController < ApplicationController
   # Display a list of notes for the entire site.. up to 30
   def list_new
     @category = params[:category]
-    @name = params[:name]    
+    @name = params[:name]
     @content_url = params[:return_url]
     
-    @notes = Note.find(:all, :limit => 50, :order=> "created_at DESC")    	 								
+    @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")						
   end
-
+  
+  def rss
+    @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")  
+    render  :layout =>  false    
+  end  
+  
   def new
     @note = Note.new
-    @note.category = params[:category]
-    @note.name = params[:name]
-    @note.content_url = params[:content_url]
+    params[:id]
+    params[:type]
+    @note.category = ""
+    @note.name = ""
+    @note.content_url = ""
   end
 
   def preview		

@@ -54,6 +54,6 @@ class Admin::NotesController < ApplicationController
 		
 	def delete_entries
 			Note.delete(@params['ids_for_delete'])		
-	end
+	end	
 
 end

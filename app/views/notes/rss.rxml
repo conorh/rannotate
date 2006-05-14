@@ -1,0 +1,20 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0"){
+  xml.channel{
+    xml.title("rails.outertrack.com")
+    xml.link("http://rails.outertrack.com/notes/rss")
+    xml.description("recently added user notes")
+    xml.language('en-us')
+      for note in @notes
+        xml.item do
+          xml.title(note.name)
+          xml.category("Note")
+          xml.description("New note added to " + note.name)
+          xml.tag!("content:encoded") { xml.cdata!(note.text) }
+          xml.pubDate(CGI.rfc1123_date note.created_at)
+          xml.link(note.content_url)
+          xml.guid("http://rails.outertrack.com/notes/" + note.id.to_s)
+        end
+      end
+  }
+}

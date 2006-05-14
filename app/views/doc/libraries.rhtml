@@ -4,11 +4,12 @@
 <% @libraries.each do |name,ver_array| %>
 <h2>Library - <%= name.capitalize %></h2>
 <% ver_array.each do |ver| %>
-ver <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
+<%= ver.current ? "* " : "" %>ver <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'classes', {:action => 'list', :type => 'classes', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'methods', {:action => 'list', :type => 'methods', :library => name, :version => ver.ver_string} %>]<br/>
 <% end %>
-<br/><br/>
+<br/>
 <% end %>
+* - This is the default library and version that is displayed when you are browsing the site.
 </td></tr>
 </table>

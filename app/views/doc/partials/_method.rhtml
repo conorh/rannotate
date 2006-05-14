@@ -1,31 +1,26 @@
 <% for visibility in @ra_visibilities %>
 
 <% if(@ra_methods[visibility]) %>
-<div class="sectiontitle">
-<strong><%= visibility %> Methods</strong>
-</div>
-
+<div class="section_title" onClick="<%= show_or_hide(visibility) %>"><%= visibility %> Methods</div>
+<div id="<%= visibility %>">
 <% for method in @ra_methods[visibility] %>
 
 <div class="method">
-  <div class="title">
-  	<a name="meth_<%= method.name %>"></a>
-  	<b><%= link_to_method(method.name, @container_type) %></b><%= method.parameters %>
+  <h2>
+  <a name="<%= method.name %>"></a>
+  	<b><%= link_to_method(method.name, @container_type) %></b> <%= method.parameters %>
+  </h2>
+  <div class="description">   
+  <%= markup(method.ra_comment.comment) %>
   </div>
-  <div class="description">
-    <p>
-     <%= markup(method.ra_comment.comment) %>
-     </p>
-  </div>
-  
-  <div class="sourcecode">
-    [ <%= show_source_link(method.id, method.ra_source_code_id) %> ]
-    [ <%= show_notes_link('method_' + method.name) %> ]
-    <div id="method_source_<%= method.id %>" style="display: none"><pre>source</pre></div>
-    <div id="notes_method_<%= method.name %>" style="display: none"></div>
-  </div>
+  [ <%= show_source_link(method.id, method.ra_source_code_id) %> ]
+  [ <%= show_notes_link('method_' + method.name) %> ]
+  <span id="notes_method_<%= method.name %>_add" style="display: none;">[ <%= get_add_note_link('method_' + method.name) %> ]</span>
+  <div id="method_source_<%= method.id %>" style="display: none; margin-top: 5px;"></div>
+  <div id="notes_method_<%= method.name %>" style="display: none; margin-top: 5px;"></div>	  
 </div>
 
 <% end %>
 <% end %>
+</div>
 <% end %>

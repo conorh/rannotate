@@ -15,7 +15,9 @@ task "ranapi" do
   params << "--fmt=yaml"
   params << "--opname=rails-1.0.0"
   dirs = []
+  dirs << 'vendor/rails/railties/README'  
   dirs << 'vendor/rails/railties/CHANGELOG'
+  dirs << 'vendor/rails/railties/MIT-LICENSE'
   dirs << 'vendor/rails/activerecord/README' 
   dirs << 'vendor/rails/activerecord/CHANGELOG'
   dirs << 'vendor/rails/activerecord/lib/'

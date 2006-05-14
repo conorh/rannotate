@@ -1,9 +1,14 @@
+<div class="header_space"></div>
+<table class="body_table">
+<tr><td align="left">
 <% @libraries.each do |name,ver_array| %>
-<%= name %><br/>
+<h2>Library - <%= name %></h2>
 <% ver_array.each do |ver| %>
-* <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
+ver <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'classes', {:action => 'list', :type => 'classes', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'methods', {:action => 'list', :type => 'methods', :library => name, :version => ver.ver_string} %>]<br/>
 <% end %>
 <br/><br/>
 <% end %>
+</td></tr>
+</table>

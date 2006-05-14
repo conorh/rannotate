@@ -14,7 +14,7 @@ module DocHelper
 			return syntax.convert(code)    
     end
 
-		# show a link to display the source code for a method
+	# show a link to display the source code for a method
     def show_source_link(method_id, source_id)
       # construct a javascript function that either hides the source div if it's showing already,
       # or gets the source via an Ajax call and shows it
@@ -29,29 +29,39 @@ module DocHelper
   	  return html
     end
 
-		# show the number of notes in a category for a container and show a link to display the notes
+    def show_or_hide(section)
+      return "Element.visible('#{section}') ? Element.hide('#{section}') : Element.show('#{section}')"
+    end
+
+	# show the number of notes in a category for a container and show a link to display the notes
     def show_notes_link(category)
       # in the doc_controller we count up the notes, so output them here
       if(@note_count[category])
         count = @note_count[category].to_i
-      else
-        count = 0
-      end
-            
-      # construct a javascript function that either hides the notes div if it's showing already,
-      # or gets the notes via an Ajax call and shows it
-      element = "notes_" + category
-      function = "Element.visible('#{element}') ? Element.hide('#{element}') : " +
+        
+        # construct a javascript function that either hides the notes div if it's showing already,
+        # or gets the notes via an Ajax call and shows it
+        element = "notes_" + category
+        element_add = element + "_add"
+        function = "Element.visible('#{element}') ? Element.hide('#{element}') : " +
                   remote_function(
                     :update => 'notes_' + category, 
                     :url => { :action => 'notes', :name=>@container_name, :category=>category, :content_url=> @container_url },
-                    :complete => "Element.show('#{element}')")
+                    :complete => "Element.show('#{element}'); Element.show('#{element_add}');")
       
-      html = link_to_function(pluralize(count, "note"), function)
-  	  return html
+        html = "<b>" + link_to_function(pluralize(count, "note"), function) + "</b>"      
+      else
+        html = get_add_note_link(category)       
+      end
+       
+      return html     
+    end
+    
+    def get_add_note_link(category)
+        return link_to('Add New Note', {:controller => 'notes', :action => 'new', :category => category, :name => @container_name, :content_url => @container_url})
     end
 
-		# render the notes for the class
+	# render the notes for the class
     def render_notes(container_type, container_name, current_url)
       render_component(:controller => 'notes', :action=>'list', 
         :params=> {:no_layout => true, :category=>container_type, :name=>container_name, :return_url=>current_url }

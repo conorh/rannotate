@@ -5,6 +5,7 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "notes", :force => true do |t|
+      t.column "ra_library_id", :integer
       t.column "category", :string, :limit => 20 
       t.column "name", :string, :limit => 100
       t.column "container_version", :integer

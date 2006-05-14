@@ -1,10 +1,17 @@
-<b><%= @method.name %></b><%= @method.parameters %> <% if(@version) then %>Version <%= @version %><% end %>
+<div class="header_space"></div>
+<table class="body_table" style="font-size: 80%">
+<tr><td align="left">
+<h2><%= @container_name %>::<%= @method.name %></b> <%= @method.parameters %> <% if(@version) then %>Ver: <%= @version %><% end %></h2>
 <div class="description">
 <p><%= markup(@method.ra_comment.comment) %></p>
 </div>
   
-<div class="sourcecode">
+<div class="section_title">Sourcecode</div>
 <%= render :partial => 'doc/partials/source_code' %>
-</div>
-
-<%= render_notes(@container_name, 'method_' + @method.name, '#') %>
+<div class="section_title">
+<span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :name => @container_name, :category => 'method_' + @method.name, :content_url => @container_url}) %></span>
+User Added Notes
+		</div>
+<%= render_notes('method_' + @method.name, @container_name, '#') %>
+</td></tr>
+</table>

@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   cache_sweeper :note_sweeper, :only => [:create]
 	
-	# Display a list of notes
+  # Display a list of notes
   def list
     @category = params[:category]
     @name = params[:name]    
@@ -32,7 +32,7 @@ class NotesController < ApplicationController
     @name = params[:name]    
     @content_url = params[:return_url]
     
-		@notes = Note.find(:all, :limit => 50, :order=> "created_at DESC")    	 								
+    @notes = Note.find(:all, :limit => 50, :order=> "created_at DESC")    	 								
   end
 
   def new
@@ -62,9 +62,8 @@ class NotesController < ApplicationController
       expire_page(:controller => "doc", :action => 'files', :name => @note.name)
       expire_page(:controller => "doc", :action => 'modules', :name => @note.name)
       expire_page(:controller => "doc", :action => 'classes', :name => @note.name)    
-    
-    	expire_page :action => "list"
-    	render :action => 'success'
+      expire_page :action => "list"
+      render :action => 'success'
     end
   end
 	

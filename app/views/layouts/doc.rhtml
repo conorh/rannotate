@@ -1,49 +1,29 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />		
-		<title>Your App</title>
+		<title>Rannotated RDoc</title>
 		<%= stylesheet_link_tag "docs.css" %>
 		<%= javascript_include_tag "prototype", "scriptaculous" %>
 	</head>
-	<body>		
-	  <div id="container">
-	  	  
-    	<!-- div.header -->
-    	<div id="header">
-		  <span style="float: right;">
-		  <%= form_tag :action => 'search' %>		  
-		  <%= link_to "Files", :action => "list", :type => "files"  %>
-		  <%= link_to "Classes", :action => "list", :type => "classes" %>
-		  <%= link_to "Methods", :action => "list", :type => "methods" %>
-		  <%= link_to "Libraries", :action => "libraries" %>
-		  <input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
-		  <%= end_form_tag %>
-		  </span>
-		      	
-    	  <h1><a href="/" title="sidetime">Project name</a></h1>
-    	  
-    	  <!-- div.nav -->	
-    	  <div id="nav">
-    	    <ul id="tabs">
-
-    	    </ul>
-    	    <br clear="all" />
-    	  </div> 
-    	  <!-- /div.nav --> 
-    	  
-    	</div>
-    	<!-- /div.header -->    	
-      
-
-        <!-- div.content -->
-        <div id="content">      
-		   <%= @content_for_layout %>    	  
-    	   <br clear="all" />
-        </div>
-        <!-- /div.content -->    	
-  	</div>
-  	
-	</body>
+	<body>
+<TABLE width="100%" class="title_table">        
+  <TR class="title_tr">
+    <TD align="left" class="title_td">
+		      <a href="/" class="title_main_link">Rails API Documentation</a>
+		      <br/><span class="title_subtext"><b>Version:</b> 1.1.2 <b>Updated:</b>	 Sat March 12th 3:30pm EST</span>
+   </td>
+   <td align="right" valign="middle" class="title_td">
+		      <%= form_tag :action => 'search' %>		
+		      [<%= link_to "Files", :action => "list", :type => "files"  %>]
+		      [<%= link_to "Classes", :action => "list", :type => "classes" %>]
+		      [<%= link_to "Methods", :action => "list", :type => "methods" %>]
+		      [<%= link_to "Libraries", :action => "libraries" %>]
+		      <input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
+		      <%= end_form_tag %> 
+   </td>
+	  </tr>
+<tr>
+</table>
+<%= @content_for_layout %>  
+</body>
 </html>

@@ -1,141 +1,150 @@
-
-* html {
-  margin: 0;
-  padding: 0;
+HTML {
+  PADDING: 0px; MARGIN: 0px;
+}
+BODY {
+  PADDING: 0px; MARGIN: 0px; FONT: 1em "Lucida Grande", Helvetica, sans-serif; 
+}
+A {
+	  COLOR: #213449
+}
+TABLE {
+  PADDING: 0px; MARGIN: 0px; BORDER: 0px; BORDER-COLLAPSE: collapse;
+}
+TD, TR {
+  PADDING: 0px; MARGIN: 0px;
+}
+FORM {
+  DISPLAY: inline;
+}
+FORM INPUT {
+  	FONT-SIZE: 80%;
+}
+H1,H2,H3,H4,H5,H6 {
+  	MARGIN: 0 0 0 0px;
+	}
+	IMG {
+  	BORDER: 0px;
+}
+	
+	.comment H1, H2 {
+	  	MARGIN: 0px 0px 5px; FONT-SIZE: 120%; COLOR: #555; BORDER-BOTTOM: #ccc 1px dotted;  
+	}
+.comment PRE {
+  padding: 0.5em;
+  border: 1px dotted black;
+  background: #CBE6F3;
+}
+.comment TT {
+}
+	
+.title_table {
+  FONT-SIZE: 80%; BACKGROUND-COLOR: #213449; padding: 5px; vertical-align:middle;
+}
+.title_td {
+  PADDING: 7px;
+}
+.title_tr {
+  BACKGROUND-COLOR: #213449; color: #ffff66;
+}
+.title_tr A {
+  COLOR: #ffff66;
+}
+.title_main_link {
+  FONT-SIZE: 140%; COLOR: #fff; TEXT-DECORATION: none;  font-weight: bold;
+}
+.title_subtext {
+  FONT-SIZE: 80%;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font: 1em/1.4em "Lucida Grande", Helvetica, sans-serif;
+.header_space {
+  PADDING-TOP: 8px;
+}
+.body_table {
+  width: 96%;
+  margin-left:10px;
+  align: center;
+}
+.sidebar_td {
+  PADDING: 5px; FONT-SIZE: 70%; BACKGROUND-COLOR: #fafaea; LINE-HEIGHT: 1.3em; BORDER-RIGHT: black 1px solid; VERTICAL-ALIGN: top;
+}
+.container_body_td {
+  PADDING: 5px; VERTICAL-ALIGN: top; FONT-SIZE: 80%;
+}
+.container_header {
+  FONT-SIZE: 170%;  font-weight: bold; 
 }
 
-body * {
-  margin: 0;
-  padding: 0;
+.section_title {
+  	MARGIN: 10 0 10 0px; FONT-SIZE: 120%; FONT-WEIGHT: bold; COLOR: #ffff66;
+  padding: 0.3em;
+  border: 1px dotted black;
+  background: #213449;	
 }
-
-#container {
-  font-size: 80%;
-}
-
-#header {
-  height: 35px;
-  background: url(../images/hdr-bg.gif) bottom left repeat-x;
-}
-
-#main {
-  margin-left: 32%;
-}
-
-#sidebar {
-  width: 30%;
-  padding: 4px;
-  font-size: 80%;
-  float: left;
-  line-height: 1.3em;
-  background: url(../images/sbar-bg.gif) top right repeat-y;
-  overflow: hidden;
-}
-
-a {
-  color: #213449;
-}
-
-a:hover {
-  background: #c00;
-  color: #fff;
-}
-
-
-
-/*
- *=HEADER
- */
-
-#header a {
-  color: #fff;
-  text-decoration: none;
+.note_link a {
+  float: right;
+  font-size: 100%;
   font-weight: normal;
-  font-size: 90%;
-  margin: 0 0 0 20px;
+  COLOR: #ffff66;
 }
 
-#header a:hover {
-  background: transparent;
+.method {
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
 }
 
-#header h1 {
-  padding-top: 2px;
+.description pre {
+  padding: 0.4em;
+  border: 1px dotted black;
+  background: #CBE6F3;
 }
 
-/*
- *=SIDEBAR
- */
+.description p, .sourcecode p {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+.usernotes {
+}
+.action {
+}
+.note {
+ background-color: #CBE6F3;
+ padding: 5px;
+}
+.note_header {
+ background-color: #AAD7FB;
+ padding: 5px;
+}
+.note_text {
+ background-color: #CBE6F3;
+ padding: 3px;
+ margin-top:2px;
+}
+
+.sourcecode {
+  padding: 0.5em;
+  border: 1px dotted black;
+  background: #fafaea; 
+}
 
 .slist {
-  color: #777;
-  list-style: square;
-  margin: 0 0 0 10px;
-  padding: 0 0 0 10px;
+  PADDING: 0px; MARGIN: 0px 0px 0px 10px; COLOR: #777; LIST-STYLE-TYPE: square
+}
+.slist A {
+  PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 0px; PADDING-BOTTOM: 1px; PADDING-TOP: 1px
 }
 
-.slist a {
-  display: block;
-  padding: 1px 0;
+.clearfix:unknown {
+  	CLEAR: both; DISPLAY: block; VISIBILITY: hidden; HEIGHT: 0px; content: "."
 }
-
-/*
- *=UTILITY
- */
-
-h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 10px 0;
+.clearfix {	
 }
-
-h1 { font-size: 140%; }
-h2 { font-size: 120%; color: #555; border-bottom: 1px dotted #ccc; }
-img { border: 0; }
-
-.clearfix:after {
-    content: "."; 
-    display: block; 
-    height: 0; 
-    clear: both; 
-    visibility: hidden;
+HTML .clearfix {
+  	HEIGHT: 1%
 }
-
-.clearfix {display: inline-table;}
-
-/* Hides from IE-mac \*/
-* html .clearfix {height: 1%;}
-.clearfix {display: block;}
-/* End hide from IE-mac */
-
-
-
-/*
- *=SOURCE CODE
- */
-
-.dyn-source {
-  background: #FFE;
-  color: #000;
-  border: 1px dotted black;
-  margin: 0.5em 2em 0.5em 2em;
-  padding: 0.5em;
-}
-
-.dyn-source .comment {
-color: #005; font-style: italic;
-}
-
-.dyn-source .keyword {
-color: #A00; font-weight: bold;
-}
-
-pre,tt {
-	font-size: 10pt;
+.clearfix {
+  	DISPLAY: block
 }
 
 .ruby .normal {}

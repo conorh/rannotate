@@ -32,7 +32,7 @@ module ApplicationHelper
 		object.container? ? link_to_container(object) : link_to_container_child(object)
 	end
 	
-	# If this is a container type object (class, method, file) then link to it directly
+  # If this is a container type object (class, method, file) then link to it directly
   def link_to_container(ra_container)
     action = ra_container.class.type_string.pluralize
     

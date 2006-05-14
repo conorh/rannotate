@@ -1,13 +1,11 @@
 class Admin::UploadController < ApplicationController
 	before_filter :login_required
 
-	def index	
-	
+	def index		
 	end
 	
-	# show a list of all libraries in the system 
-	def list
-		
+	# show a list of all libraries in the system
+	def list		
 	end
 	
 	# delete a library and all of its contents
@@ -25,6 +23,8 @@ class Admin::UploadController < ApplicationController
 	end
 	
 	def import
+	    init_classes()
+		    
 		@connection = ActiveRecord::Base.connection
 		
 		# Lookup hash used to map ids in the YAML file to database IDs
@@ -49,11 +49,10 @@ class Admin::UploadController < ApplicationController
 			@library.save
 		
 			if(@library.valid?)		
-		
 			  # ok now we need to see if the library version that we uploaded is the most recent version of this library			
 			  higher_version = RaLibrary.find(:first, :conditions => ["name = ? AND version > ?", @library.name, @library.version])
 			  if(higher_version == nil)
-				# if our version is the most recent remove the current status from all the current entryes
+				# if our version is the most recent remove the current status from all the current entries
 				currents = RaLibrary.find(:all, :conditions => ["name = ? AND current = ?", @library.name, true])
 				if(currents)
 					currents.each do |c|
@@ -151,4 +150,26 @@ private
 				doc.ra_container_id = lookup[doc.ra_container_id]
 		end
 	end
+	
+    # if none of these classes has been previously used then the 
+    # YAML load will fail because it will not find the class to be able to
+    # instantiate it, not sure why this happens, but this here fixes that issue
+    # by creating an instance of each class needed	
+	def init_classes()
+	    c = RaCodeObject.new
+	    c = RaInFile.new
+	    c = RaFile.new
+	    c = RaSourceCode.new
+	    c = RaComment.new
+	    c = RaMethod.new
+	    c = RaContainer.new
+	    c = RaLibrary.new
+	    c = RaAttribute.new
+	    c = RaClass.new
+	    c = RaConstant.new
+	    c = RaInclude.new
+	    c = RaRequire.new	
+	    c = RaModule.new
+	    c = RaAlias.new  	
+	end	
 end

@@ -2,13 +2,13 @@ development:
   adapter: mysql
   database: rannotate
   host: 
-  username: rails
-  password: rails
+  username: root
+  password: 
   port: 
   sslcert: 
   sslcapath: 
   sslcipher: 
-  socket: /var/run/mysqld/mysqld.sock
+  socket: localhost
   sslkey: 
   schema_order: 
   dbfile: 

@@ -1,7 +1,8 @@
-<div class="sectiontitle">
+<div class="section_title">
   <span class="note_link"><%= show_notes_link('constants') %></span>
-  <strong>Constants</strong>
+  <div onClick="<%= show_or_hide("constants") %>">Constants</div>
 </div>
+<div id="constants">
 <table>
 <% for constant in @ra_code_objects[RaConstant] %>
   <tr valign='top'>
@@ -17,4 +18,5 @@
   <% end %>
 <% end %>
 </table>
-<div id="notes_constants" style="display:none"></div>
+<div id="notes_constants" style="display:none; margin-top: 5px;"></div>
+</div>

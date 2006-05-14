@@ -14,7 +14,10 @@ end
 --- !ruby/object:RaComment 
 attributes: 
   id: <%= comment_id %>
-  comment: <%= file.comment.to_yaml()[4..-1].gsub(/^  /,'    ') %>
+  comment: 
+  
+<%= file.comment.to_yaml() %>
+
 new_record: true
 --- !ruby/object:RaFile
 attributes:

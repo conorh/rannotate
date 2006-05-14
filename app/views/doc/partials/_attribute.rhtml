@@ -1,7 +1,8 @@
 <div class="sectiontitle">
 <span class="note_link"><%= show_notes_link('attributes') %></span> 
-<strong>Attributes</strong></div>
-
+<div onClick="<%= show_or_hide("attributes") %>">Attributes</div>
+</div>
+<div id="attributes">
 <table border='0' cellpadding='5'>
 	<% for attribute in @ra_code_objects[RaAttribute] %>  
   <tr valign='top'>
@@ -11,4 +12,5 @@
   </tr>
   	<% end %>  
 </table>
-<div id="notes_attributes" style="display:none"></div>
+<div id="notes_attributes" style="display:none; margin-top: 5px;"></div>
+</div>

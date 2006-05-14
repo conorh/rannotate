@@ -1,33 +1,15 @@
+<div class="header_space"></div>
 <% if @error %>
 	<%= @error %>
 <% else %>
-
-<!-- div.sbar -->
-<div id="sidebar">
-<%= render :partial => 'doc/partials/container_sidebar' %>
-</div>
-<!-- /div.sbar -->
-    	  
-<!-- div.main -->
-<div id="main">
-
-<table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
-  <td><span class="file-title-prefix">
-    History - <%= @ra_container.class.type_string.capitalize %></span>
-    <%= @container_name %></span>
-    <br/> 
-    [ <a href="<%= @container_url %>"><span class="file-title">Back to contents</a> ]
-  </td>
-  <% if(@ra_container.class == RaClass) %>
-  <td align="right">
-  Parent: <%= link_to_container_by_name('class', @ra_container.superclass) %>
-  </td>
-  <% end %>
-  </tr>
-</table>
-
-<%= render_component(:controller => 'history', :action => 'container', :params => {:type => @ra_container.class.to_s, :name => @container_name}) %>
-
-</div>
-<!-- /div.main -->
+<table class="body_table">
+<tr><td align="left" class="main_td">
+  <span class="container_header">History - <%= @ra_container.class.type_string.capitalize %> <%= @container_name %></span>
+  <br/> 
+  [ <a href="<%= @container_url %>"><span class="file-title">Back to contents</a> ]
+  <br/>
+  <%= render_component(:controller => 'history', :action => 'container', :params => {:type => @ra_container.class.to_s, :name => @container_name}) %>
 <% end %>
+</td>
+</tr>
+</table>

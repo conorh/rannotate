@@ -1,28 +1,23 @@
-<!-- div.main -->
-<div id="main">
-
-<table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
-<tr>
-  <td class="file-title">
-  <span class="file-title-prefix">Rannotated Documentation</span>
-  </td>
-</tr>
-</table>
-<table width="95%" align="center">
-<tr><td>
-<p>&nbsp;
-<p>&nbsp;
-<p>This rdoc generated documentation is running a rannotate server which means that you can add notes to all
-parts of the documentation - files, classes and methods. These notes will appear in the bottom frame.
-<p>&nbsp;
-<p>To view the newest comments added to this documentation <%= link_to('click here', {:controller => 'notes', :action => 'list_new'}) %>
-<p>&nbsp;
-<p>For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>
-<p>&nbsp;
-<p>&nbsp;
-</tr></td>
-</table>
+<div class="header_space"></div>
+<table class="body_table">
+<tr><td align="left">
+<h2>Welcome!</h2>
+  This rdoc generated documentation is running a rannotate server which means that you can add notes to all parts of the documentation
+  and can even search the documentation!
+  <p>
+<h2>View newest comments</h2>
+To view the newest comments added to this documentation <%= link_to('click here', {:controller => 'notes', :action => 'list_new'}) %>
+<p>
+<h2>More information</h2>
+For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>
+<p>
+<a name="notes"></a>
+<div style="font-size: 80%">
+<div class="section_title">
+<span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :category => 'index', :name => 'index', :content_url => url_for(:action => 'index') }) %></span>
+User Added Notes
+		</div>
 <%= render_notes "index", "index", url_for(:action => 'index') %>
-
 </div>
-<!-- /div.main -->
+</td></tr>
+</table>

@@ -1,17 +1,16 @@
-<!-- div.main -->
-<div id="main">
-<br/>
-
+<div class="header_space"></div>
+<table class="body_table">
+<tr><td align="left" class="main_td">
 <% if(@error) %>Error: <%= @error %>
 <% else %>
 
-[<%= pluralize(@results_count, "hit") %>] for search '<%= h(@search_text) %>'
+<h2>Search Results - <%= pluralize(@results_count, "hit") %> for search '<%= h(@search_text) %>'</h2>
 <% # get results for each type in order 
 @display.each do |type|
   object_array = @search_results[type] 
   unless object_array.nil? then
   	%>
-		<h4><%=pluralize(object_array.length, type.type_string.capitalize)%></h4>
+		<h2><%= type.type_string.capitalize.pluralize %> (<%=object_array.length%>)</h2>
 		<% object_array.each do |object| %>
 			<%= link_to_doc(object) %><br/>
 		<% 
@@ -20,6 +19,5 @@
 end 
 end # end if(@error)
 %>
-
-</div>
-<!-- /div.main -->
+</td></tr>
+</table>

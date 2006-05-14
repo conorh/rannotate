@@ -26,7 +26,7 @@ rdoc generator directory which is:
 Step 3: Setup config\database.yml for your DB and run 'rake migrate'
 
 Step 4: Generate some rdoc for your application using:
-	rdoc --fmt=yaml -opname=appname-0.2.3 directory
+	rdoc --fmt=yaml --opname=appname-0.2.3 directory
 
 Step 5: Start webrick for rannotate
 

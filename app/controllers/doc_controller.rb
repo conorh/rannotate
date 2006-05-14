@@ -5,17 +5,10 @@ class DocController < ApplicationController
 
   # display the index page with an optional home page
   def index
-  	# if a class/name is specified then set that for the main frame link  
-    unless params[:type].nil? and params[:name].nil?
-      @start_page = url_for(:action => params[:type], :name => params[:name])
-    end
-    
     # if no main page is specified then look for a home page to display (id == 1)  
-   	unless @start_page.nil?
-    	main_page = RaFile.find(:first, :conditions=>['id=1'])
-    	unless main_page.nil?
-      	@start_page = url_for(:action => 'files', :name => main_page.full_name)
-      end
+    main_page = RaFile.find_by_id(0)
+    if(main_page != nil)
+      redirect_to :action => 'files', :name => main_page.full_name, :sidebar=>'hide'
     end
   end
 
@@ -110,7 +103,7 @@ class DocController < ApplicationController
     # Get what should be displayed in the left sidebar
     case type
       when 'files'
-        @list = RaContainer.find_all_highest_version([RaFile.to_s], library, version)   
+        @list = RaContainer.find_all_highest_version([RaFile.to_s], library, version)           
       when 'methods'
         @list = RaMethod.find_all_highest_version()
       else
@@ -119,6 +112,10 @@ class DocController < ApplicationController
     @version = version
     @library = library
     @type = type
+    
+    if(type == 'files')
+      render :action => 'list_files'
+    end
   end
   
   # Get a container (file,class, module) and everything necessary to display it's documentation

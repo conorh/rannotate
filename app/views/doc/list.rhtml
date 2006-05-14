@@ -1,9 +1,12 @@
+<div class="header_space"></div>
+<table width="100%" class="body_table">
+<tr><td colspan="3">
+<h2><%= @type.capitalize %>
 <% if(@library != nil) %>
-List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
+ for library '<%= @library %>' version <%= @version %><br/>
 <% end %>
-
-<center>
-<table width="95%">
+</h2>
+</td></tr>
 <tr valign="top">
 <% 
    rows_per_col = ((@list.length + 26) / 3).to_i + 1
@@ -11,12 +14,12 @@ List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
    alphabet = 'A'
    alphabet_count = 0
 %>
-<td>
+<td align="left">
 <strong><%= alphabet %></strong><br/>
 <% for entry in @list %>
 <%   # Check if we should display the next letter of the alphabet %>
-<%   entry.container? ? name = entry.full_name : name = entry.name %>
-<%   while(name[0,1].upcase != alphabet && alphabet_count < 25)  
+<%   entry.container? ? char = entry.full_name[0,1].upcase : char = entry.name[0,1].upcase %>
+<%   while(char >= 'A' && char <= 'Z' && char != alphabet && alphabet_count < 25)  
        alphabet.succ!
        alphabet_count += 1
        count += 1
@@ -25,7 +28,7 @@ List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
 <%     # if we crossed a column boundary then output a new column %>
 <%     if(count != @list.length && count % rows_per_col == 0) %>
 </td>
-<td>
+<td align="left">
 <%     end
      end %>
 <%= link_to_doc(entry) %><br/>
@@ -33,7 +36,7 @@ List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
      # if we crossed a column boundary then output a new column 
      if(count != @list.length && count % rows_per_col == 0) %>
 </td>
-<td>
+<td align="left">
 <%   end 
    end 
    # Display any remaining letters of the alphabet 
@@ -46,10 +49,9 @@ List of <%= @type %> for library '<%= @library %>' version <%= @version %><br/>
 <%   # if we crossed a column boundary then output a new column 
      if(count != @list.length && count % rows_per_col == 0) %>
 </td>
-<td>
+<td align="left">
 <%   end
    end %>
 </td>
 </tr>
 </table>
-</center>

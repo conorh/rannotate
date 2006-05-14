@@ -1,7 +1,6 @@
 module NotesHelper
 
-	require 'syntax'
-	require 'syntax/convertors/html'	
+	require 'syntax/convertors/html'
 
 	# Remove the parent class/module name from a method name (ex. Something.blah -> blah)
 	def strip_parent(name)
@@ -23,7 +22,7 @@ module NotesHelper
 	
 	# Syntax highlight the input
 	# Transform line breaks into HTML
-	#	If summary input parameter is set then limit text to 40 characters and replace newlines with spaces
+	# If summary input parameter is set then limit text to 40 characters and replace newlines with spaces
 	def fix_note_for_display(note, summary = nil)
 		text = String.new(note)
 		

@@ -1,9 +1,12 @@
-<div class="sectiontitle">
+<div class="section_title">
 <span class="note_link"><%= show_notes_link('requires') %></span>
-<strong>Required Files</strong></div>
+<div onClick="<%= show_or_hide('required') %>">Required Files</div>
+</div>
+<div id="required">
 <ul>
 <% for require in @ra_code_objects[RaRequire] %>
 <li><%= require.name %></li>
 <% end %>
 </ul>
 <div id="notes_requires" style="display:none"></div>
+</div>

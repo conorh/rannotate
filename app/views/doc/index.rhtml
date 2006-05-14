@@ -1,6 +1,7 @@
 <div class="header_space"></div>
 <table class="body_table">
 <tr><td align="left">
+<% if(@home == nil) %>
 <h2>Welcome!</h2>
   This rdoc generated documentation is running a rannotate server which means that you can add notes to all parts of the documentation
   and can even search the documentation!
@@ -11,6 +12,11 @@ To view the newest comments added to this documentation <%= link_to('click here'
 <h2>More information</h2>
 For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>
 <p>
+<% else %>
+<% if(@home.ra_comment.comment.length > 0) %>
+<div class="comment" id="comment"><%= markup(@home.ra_comment.comment) %></div>
+<% end %>
+<% end %>
 <a name="notes"></a>
 <div style="font-size: 80%">
 <div class="section_title">

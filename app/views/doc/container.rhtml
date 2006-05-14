@@ -5,8 +5,8 @@
   <TR>
     <TD class="sidebar_td" width="200px">	
       <%= render :partial => 'doc/partials/container_sidebar' %>
-    </TD>    
-    <TD class="container_body_td"> 
+    </TD>
+    <TD class="container_body_td">   
     <span class="container_header"><%= @ra_container.class.type_string.capitalize %> <%= @container_name %></span> <% if(@version) then %>Version <%= @version %><% end %>
     <br/>
     [ <a href="#notes"><%= pluralize(get_count(@note_count, @container_type), "Note") %></a> ]

@@ -7,8 +7,8 @@ class DocController < ApplicationController
   def index
     # if no main page is specified then look for a home page to display (id == 1)  
     main_page = RaFile.find_by_id(0)
-    if(main_page != nil)
-      redirect_to :action => 'files', :name => main_page.full_name, :sidebar=>'hide'
+    if(main_page != nil)              
+      @home = main_page
     end
   end
 

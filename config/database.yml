@@ -30,15 +30,7 @@ test:
 
 production:
   adapter: mysql
-  database: rannotate_production
-  host: 
-  username: root
-  password: 
-  port: 
-  sslcert: 
-  sslcapath: 
-  sslcipher: 
-  socket: /path/to/your/mysql.sock
-  sslkey: 
-  schema_order: 
-  dbfile: 
+  database: rannotate_prod
+  username: rails
+  password: rails
+  socket: /var/lib/mysql/mysql.sock

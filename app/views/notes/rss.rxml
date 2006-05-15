@@ -7,13 +7,13 @@ xml.rss(:version=>"2.0"){
     xml.language('en-us')
       for note in @notes
         xml.item do
-          xml.title(note.container_name)
+          xml.title("New note for - " + note.get_display)
           xml.category("Note")
           xml.tag!("description") { xml.cdata!(note.text) }        
          # xml.description("New note added to " + note.container_name)
          # xml.tag!("content:encoded") { xml.cdata!(note.text) }
           xml.pubDate(CGI.rfc1123_date(note.created_at))
-          xml.link(note.content_url)
+          xml.link("http://rails.outertrack.com" + get_return_url(note))
           xml.guid("http://rails.outertrack.com/notes/" + note.id.to_s)
         end
       end

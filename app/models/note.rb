@@ -77,8 +77,7 @@ class Note < ActiveRecord::Base
 			return Note.find(:all, find_params)
 		else
 			return Note.find(:all)
-		end
-																
+		end																
 	end	
 
 	def get_display
@@ -92,7 +91,8 @@ class Note < ActiveRecord::Base
 	   when RaConstant.to_s then return "Constants section of " + container_name
 	   when RaInclude.to_s then return "Includes section of " + container_name
 	   when RaRequire.to_s then return "Requires section of " + container_name
-	   when RaAlias.to_s then return "Aliases sectionof " + container_name
+	   when RaAlias.to_s then return "Aliases section of " + container_name
+	   when "index" then return "Index page"
       end
       
       return container_name + " - " + note_group

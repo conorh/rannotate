@@ -34,6 +34,7 @@ module NotesHelper
 	    when RaInclude.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'includes', :expand => 'includes') 
 	    when RaRequire.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'requires', :expand => 'requires') 
 	    when RaAlias.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'aliases', :expand => 'aliases')
+        when "index" then return url_for(:controller => 'doc', :action => "index")
       end
       
       return url_for(:controller => 'doc', :action => "index")	 	  	

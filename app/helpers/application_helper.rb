@@ -72,4 +72,10 @@ module ApplicationHelper
     end    
     link_to(method_name, link_params)  
   end
+  
+  # get the current library version
+  def get_current_version()
+    return RaLibrary.find(:first, :conditions => ["current = ?", true])
+  end
+  
 end

@@ -1,5 +1,9 @@
 class HistoryController < ApplicationController
 
+  session :off
+
+  caches_page :diff_libraries, :container
+
   # show the file, class, module differences beteween two versions of a library
   def diff_libraries  	
   	# Get the two versions of the library

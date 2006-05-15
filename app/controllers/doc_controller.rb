@@ -1,15 +1,17 @@
 class DocController < ApplicationController
+  session :off
 
   # cache the main actions for this controller
   caches_page :list, :files, :modules, :classes
 
   # display the index page with an optional home page
-  def index
-    # if no main page is specified then look for a home page to display (id == 1)  
-    main_page = RaFile.find_by_id(0)
-    if(main_page != nil)              
-      @home = main_page
-    end
+  def index    
+    if(RANNOTATE_HOME_PAGE != nil)
+      main_page = RaContainer.find_highest_version(RANNOTATE_HOME_PAGE, 'RaFile')      
+      if(main_page != nil)             
+        @home = main_page
+      end
+    end     
   end
 
   # display a file
@@ -19,7 +21,7 @@ class DocController < ApplicationController
 	    render :action => 'method'   	  	
   	else  
 	    get_container(RaFile.to_s) 
-	    render :action => 'container'       
+	    render :action => 'container'	          
 	end
   end
 
@@ -52,6 +54,8 @@ class DocController < ApplicationController
     @ra_container = RaContainer.find_highest_version(@container_name, type, @version)
     @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, @params[:method]])  	
     @source_code = RaSourceCode.find(@method.ra_source_code_id).source_code
+    @page_title = RANNOTATE_SITE_NAME + " " + @container_name + "-" + @method.name
+    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name, :method => nil)  
   end
   
   # display a list of entries
@@ -61,7 +65,7 @@ class DocController < ApplicationController
   
   # Used by AJAX to display inline notes
   def notes 
-    render_notes(params[:container_name], params[:note_group])      
+    render_notes(params[:container_name], params[:note_group])     
   end   
   
   # Used by AJAX to display inline source code
@@ -123,11 +127,13 @@ class DocController < ApplicationController
     @container_name = @params[:name]
     @version = @params[:version] # this can be nil if the most recent version is requested
     @expand = @params[:expand]
-    @ra_container = RaContainer.find_highest_version(@container_name, cont_type, @version)    
+    @ra_container = RaContainer.find_highest_version(@container_name, cont_type, @version)   
     unless(@ra_container)
     	@error = "Could not find: " + @container_name
     	return
     end
+    
+    @page_title = RANNOTATE_SITE_NAME + " " + @container_name      
                 
     # Get all the methods in this container (and join with their comments)
     methods = RaMethod.find(:all, :include => :ra_comment, :conditions => ["ra_container_id = ?", @ra_container.id], :order => "name ASC")

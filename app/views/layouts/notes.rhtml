@@ -1,31 +1,33 @@
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />		
-		<title>Rannotated RDoc</title>
+		<title><%= @page_title ? @page_title : RANNOTATE_SITE_NAME %></title>
 		<%= stylesheet_link_tag "docs.css" %>
 		<%= javascript_include_tag "prototype", "scriptaculous" %>
 	</head>
 	<body>
-<TABLE width="100%" class="title_table">      
-  <TR class="title_tr">
-    <TD align="left" class="title_td">
-		      <a href="/" class="title_main_link">Rails API Documentation</a>
-		      <br/><span class="title_subtext"><b>Version:</b> 1.1.2 <b>Updated:</b>	 Sat March 12th 3:30pm EST</span>
-   </td>
-   <td align="right" valign="middle" class="title_td">
-		      <%= form_tag :action => 'search' %>		
-		      [<%= link_to "Files", :action => "list", :type => "files"  %>]
-		      [<%= link_to "Classes", :action => "list", :type => "classes" %>]
-		      [<%= link_to "Methods", :action => "list", :type => "methods" %>]
-		      [<%= link_to "Libraries", :action => "libraries" %>]
-		      <input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
-		      <%= end_form_tag %> 
-   </td>
-	  </tr>
-<tr>
-</table>
-<div style="padding-left: 8px; padding-top: 8px; font-size: 80%">
-<%= @content_for_layout %> 
+	
+	<div id="wrap">
+<div id="header">
+  <span class="header_search_links"> 
+		    <%= form_tag :action => 'search' %>		
+		    [<%= link_to "Files", :controller => 'doc', :action => 'list', :type => 'files'  %>]
+		    [<%= link_to "Classes", :controller => 'doc', :action => 'list', :type => 'classes' %>]
+		    [<%= link_to "Methods", :controller => 'doc', :action => 'list', :type => 'methods' %>]
+		    [<%= link_to "Libraries", :controller => 'doc', :action => 'libraries' %>]
+		    <input type="text" name="name" size="20"/>&nbsp;<%= submit_tag 'search' %>
+		    <%= end_form_tag %> 
+		  </span>
+  <%= link_to(RANNOTATE_SITE_NAME, {:controller => 'doc', :action => 'index'},{:class=>'header_link'}) %><br/>
+		  <% cur_lib_ver = get_current_version() %>
+		  <span class="header_subtext">
+		    <b>Version:</b> <%= cur_lib_ver.ver_string %> 
+		    <b>Updated:</b>	<%= cur_lib_ver.date.strftime("%b %d %H:%M %Y") %>
+		  </span>
+</div>
+<div style="padding: 20px; background-color: #fff; font-size: 80%;">
+<%= @content_for_layout %>
+</div>
 </div>
 </body>
 </html>

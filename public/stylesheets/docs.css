@@ -2,7 +2,7 @@ HTML {
   PADDING: 0px; MARGIN: 0px;
 }
 BODY {
-  PADDING: 0px; MARGIN: 0px; FONT: 1em "Lucida Grande", Helvetica, sans-serif; 
+  PADDING: 0px; MARGIN: 0px; FONT: 1em "Lucida Grande", Helvetica, sans-serif;
 }
 A {
 	  COLOR: #213449
@@ -25,61 +25,95 @@ H1,H2,H3,H4,H5,H6 {
 	IMG {
   	BORDER: 0px;
 }
+
+		#wrap {
+  margin:0 0 0 0;
+  background: #fafaea; 
+		}
+		
+	#header {
+  width: 100%;
+  	font-size: 80%;  
+  background-color: #213449;
+  padding: 5px;
+  color: #ffff66; 
+  vertical-align:middle;   
+	}
 	
+.header_link {
+  font-size: 140%;
+  color: #ffff66;  
+  text-decoration: none;
+  font-weight: bold;
+}
+.header_search_links {
+  float: right;
+  margin-right: 10px;
+  color: #ffff66;   
+}
+.header_search_links a {
+  color: #ffff66;   
+}
+.header_subtext {
+  font-size: 80%;
+}
+.header_space {
+  padding-top: 8px;
+}
+
+#sidebar {
+  position: absolute;
+  left: 0px;
+  width: 190px;
+  margin: 0px;
+  padding: 10px 10px 0px 5px;
+  font-size: 70%;
+}
+
+#sidebar_slim {
+  position: absolute;
+  left: 0px;
+  width: 150px;
+  margin: 0px;
+  padding: 10px 0px 0px 8px;
+  font-size: 70%;    
+}
+
+#body_content {
+  border-left: 1px solid black;
+  margin-left: 200px;
+  padding: 10px 10px 200px 5px;
+  background: #fff;
+  font-size: 80%;   
+}
+
+#body_content_wide {
+  border-left: 1px solid black;
+  margin-left: 160px;
+  padding: 10px 10px 200px 5px;
+  background: #fff;
+  font-size: 80%;   
+}
+
+.container_header {
+  font-size: 170%;  font-weight: bold; 
+}
+
+.section_title {
+  	margin: 10 0 10 0px; font-size: 120%; font-weight: bold; color: #ffff66;
+  padding: 0.3em;
+  background: #213449;	
+}
+
 	.comment H1, H2 {
-	  	MARGIN: 0px 0px 5px; FONT-SIZE: 120%; COLOR: #555; BORDER-BOTTOM: #ccc 1px dotted;  
+	  	margin: 0px 0px 5px; font-size: 120%; color: #555; border-bottom: #ccc 1px dotted;  
 	}
 .comment PRE {
   padding: 0.5em;
   border: 1px dotted black;
   background: #CBE6F3;
 }
-.comment TT {
-}
-	
-.title_table {
-  FONT-SIZE: 80%; BACKGROUND-COLOR: #213449; padding: 5px; vertical-align:middle;
-}
-.title_td {
-  PADDING: 7px;
-}
-.title_tr {
-  BACKGROUND-COLOR: #213449; color: #ffff66;
-}
-.title_tr A {
-  COLOR: #ffff66;
-}
-.title_main_link {
-  FONT-SIZE: 140%; COLOR: #fff; TEXT-DECORATION: none;  font-weight: bold;
-}
-.title_subtext {
-  FONT-SIZE: 80%;
-}
 
-.header_space {
-  PADDING-TOP: 8px;
-}
-.body_table {
-  width: 96%;
-  margin-left:20px;
-  align: center;
-}
-.sidebar_td {
-  PADDING: 5px; FONT-SIZE: 70%; BACKGROUND-COLOR: #fafaea; LINE-HEIGHT: 1.3em; BORDER-RIGHT: black 1px solid; VERTICAL-ALIGN: top;
-}
-.container_body_td {
-  PADDING: 5px; VERTICAL-ALIGN: top; FONT-SIZE: 80%;
-}
-.container_header {
-  FONT-SIZE: 170%;  font-weight: bold; 
-}
-
-.section_title {
-  	MARGIN: 10 0 10 0px; FONT-SIZE: 120%; FONT-WEIGHT: bold; COLOR: #ffff66;
-  padding: 0.3em;
-  border: 1px dotted black;
-  background: #213449;	
-}
 .note_link {
   display: inline;
   float: right;
@@ -109,10 +143,6 @@ H1,H2,H3,H4,H5,H6 {
   margin-bottom: 0.4em;
 }
 
-.usernotes {
-}
-.action {
-}
 .note {
  background-color: #CBE6F3;
  padding: 5px;
@@ -131,25 +161,6 @@ H1,H2,H3,H4,H5,H6 {
   padding: 0.5em;
   border: 1px dotted black;
   background: #fafaea; 
-}
-
-.slist {
-  PADDING: 0px; MARGIN: 0px 0px 0px 10px; COLOR: #777; LIST-STYLE-TYPE: square
-}
-.slist A {
-  PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 0px; PADDING-BOTTOM: 1px; PADDING-TOP: 1px
-}
-
-.clearfix:unknown {
-  	CLEAR: both; DISPLAY: block; VISIBILITY: hidden; HEIGHT: 0px; content: "."
-}
-.clearfix {	
-}
-HTML .clearfix {
-  	HEIGHT: 1%
-}
-.clearfix {
-  	DISPLAY: block
 }
 
 .ruby .normal {}

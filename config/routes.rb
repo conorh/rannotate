@@ -14,6 +14,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'class/:name/:method', :controller => 'doc', :action => 'classes', :method => nil
   map.connect 'file/:name/:method', :controller => 'doc', :action => 'files', :method => nil
   map.connect 'module/:name/:method', :controller => 'doc', :action => 'modules', :method => nil
+  map.connect 'list/:type', :controller => 'doc', :action => 'list'
+  
   
   map.connect '/:name', :controller => 'doc', :action => 'search'
   

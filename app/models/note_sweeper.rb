@@ -4,15 +4,15 @@ class NoteSweeper < ActionController::Caching::Sweeper
   observe Note
   
   def after_create(note)
-    expire_cache(note.name)
+    expire_cache(note.container_name)
   end
   
   def after_update(note)
-    expire_cache(note.name)
+    expire_cache(note.container_name)
   end
   
   def after_destroy(note)
-    expire_cache(note.name)
+    expire_cache(note.container_name)
   end
 
 private

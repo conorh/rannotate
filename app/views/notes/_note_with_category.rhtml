@@ -1,11 +1,13 @@
 <div class="note">
   <div class="note_header">
-  <strong>Location:</strong> <a href="<%= get_return_url(@note) %>" style="text-decoration: none;"><%= @note.get_display %></a> <strong>By:</strong> <%= mangle_email_for_display(@note.email) %><br />
+  <strong>Location:</strong> 
+  <a href="<%= get_return_url(@note) %>" style="text-decoration: none;"><%= @note.get_display %></a>
+  <strong>By:</strong> <%= mangle_email_for_display(@note.email) %><br />
   <span style="text-decoration: underline;"><%= @note.created_at.strftime("%d-%b-%Y %H:%M") %></span>
   </div>
   <div class="note_text">
-		<div class="ruby">
-		<%= fix_note_for_display(@note.text) %>
-		</div>
-</div><!-- text -->
+		   <div class="ruby">
+		     <%= fix_note_for_display(@note.text) %>
+   		</div>
+  </div><!-- text -->
 </div><!-- note -->

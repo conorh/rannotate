@@ -5,21 +5,58 @@ class Admin::UploadController < ApplicationController
 	end
 	
 	# show a list of all libraries in the system
-	def list		
+	def list
+	   all_libs = RaLibrary.find(:all, :order => "name ASC, version DESC")
+  	
+      #collect all of the libraries into a hash by library name, each
+  	  # entry in the hash contains a list of all the library versions
+  	  @libraries = Hash.new
+  	  all_libs.each do |l|
+  		unless @libraries[l.name] then @libraries[l.name] = Array.new end
+  		@libraries[l.name].push(l)
+  	  end  	  	   	 
 	end
 	
 	# delete a library and all of its contents
-	def delete
-		library_id = @params[:library_id]
-			
-		RaCodeObject.connection.delete("DELETE ra FROM ra_code_objects AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaInFile.connection.delete("DELETE ra FROM ra_in_files AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaSourceCode.connection.delete("DELETE rs FROM ra_source_codes AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_source_code_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_comment_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaMethod.connection.delete("DELETE ra FROM ra_methods AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rc.ra_comment_id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaContainer.connection.delete("DELETE rc FROM ra_containers AS rc, ra_libraries AS rl WHERE rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		RaLibrary.connection.delete("DELETE FROM ra_libraries WHERE id =" + library_id)	
+	def delete	    
+		library_ids = @params[:id]
+				
+		library_ids.each do |library_id, checked|
+		  if(checked != "1")
+		    next
+		  end
+		  
+		  library = RaLibrary.find(library_id)
+		  name = library.name
+		
+		  RaCodeObject.connection.delete("DELETE ra FROM ra_code_objects AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaInFile.connection.delete("DELETE ra FROM ra_in_files AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaSourceCode.connection.delete("DELETE rs FROM ra_source_codes AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_source_code_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_comment_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaMethod.connection.delete("DELETE ra FROM ra_methods AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rc.ra_comment_id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaContainer.connection.delete("DELETE rc FROM ra_containers AS rc, ra_libraries AS rl WHERE rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaLibrary.connection.delete("DELETE FROM ra_libraries WHERE id =" + library_id)	
+		  
+		  # make sure that the highest library version is still marked as the current version
+		  libraries = RaLibrary.find(:all, :conditions => ["name = ?", name])		  
+          max_lib = nil
+          max_ver = 0
+		  libraries.each do |lib|
+		    if(lib.version > max_ver)
+		      max_lib = lib
+		    end
+		    lib.current = false
+		    lib.save
+		  end	
+		  
+		  if(max_lib != nil)
+		    max_lib.current = true
+		    max_lib.save
+		  end	  		  		  
+		end	
+		
+		redirect_to :action => :list
 	end
 	
 	def import

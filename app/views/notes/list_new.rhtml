@@ -1,13 +1,5 @@
-<div id="usernotes">
- <div class="head">
-  <strong>
-  List of the newest notes added to the documentation
-  </strong> 
- </div>
+<strong>List of the newest notes added to the documentation</strong> 
  
 <% for @note in @notes %> 
 <%= render :partial => 'note_with_category' %>
 <% end %>
- 
-  </div><!-- head -->
- </div><!-- usernotes -->

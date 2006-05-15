@@ -1,15 +1,19 @@
-<div class="header_space"></div>
-<table class="body_table">
-<tr><td align="left">
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
+<div style="font-size: 110%">
 <% @libraries.each do |name,ver_array| %>
 <h2>Library - <%= name.capitalize %></h2>
 <% ver_array.each do |ver| %>
-<%= ver.current ? "* " : "" %>ver <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
+ver <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'classes', {:action => 'list', :type => 'classes', :library => name, :version => ver.ver_string} %>] 
-[<%= link_to 'methods', {:action => 'list', :type => 'methods', :library => name, :version => ver.ver_string} %>]<br/>
+[<%= link_to 'methods', {:action => 'list', :type => 'methods', :library => name, :version => ver.ver_string} %>]
+<%= ver.current ? "* " : "" %><br/>
 <% end %>
 <br/>
 <% end %>
-* - This is the default library and version that is displayed when you are browsing the site.
-</td></tr>
-</table>
+* - Default library and version that is displayed when you are browsing the site.
+</div>
+</div>

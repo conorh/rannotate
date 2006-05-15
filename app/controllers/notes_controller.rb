@@ -1,4 +1,5 @@
 class NotesController < ApplicationController
+    
   cache_sweeper :note_sweeper, :only => [:create]
 	
   # Display a list of notes
@@ -54,10 +55,6 @@ class NotesController < ApplicationController
     if !@note.save
       render :action => 'preview'
     else
-      expire_page(:controller => "doc", :action => 'files', :name => @note.container_name)
-      expire_page(:controller => "doc", :action => 'modules', :name => @note.container_name)
-      expire_page(:controller => "doc", :action => 'classes', :name => @note.container_name)    
-      expire_page :action => "list"
       render :action => 'success'
     end
   end

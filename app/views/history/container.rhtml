@@ -8,8 +8,8 @@
 <% count = count + 1 %>
 <% container = version[:container] %>
 <% link_params = {:controller => "doc", :action => container.class.type_string.pluralize, :name => container.full_name, :version => container.ra_library.ver_string } %>
-<h2>Version: <%= link_to container.ra_library.ver_string, link_params %></h2>
-<%= container.ra_library.date.to_s %>
+<h2>Version: <%= link_to container.ra_library.ver_string, link_params, :style => "text-decoration: none;" %></h2>
+<%= container.ra_library.date.strftime("%b %d %H:%M %Y") %>
 
 <% if(version[:added].length > 0 || version[:removed].length > 0 || version[:changed].length > 0) %>
 <%if(version[:added].length > 0) %>

@@ -1,18 +1,12 @@
 <h2>Preview New Note For: <%= @note.get_display %></h2>
 <% if(@note.errors.empty?) %>
-<div id="usernotes">
 <%= render :partial => 'note' %>
-</div><!-- usernotes -->
 <% end %>
 
 <%= start_form_tag :action => 'preview' %>
- 
- <table border="0" cellpadding="3" class="standard">
-  <%= render :partial => 'form' %>
- <% if(@note.errors.empty?) %>
+<%= render :partial => 'form' %>
+<% if(@note.errors.empty?) %>
   <%= submit_tag "Submit", :name => 'create' %>
- <% end %>
-  
-  <%= submit_tag "Preview Again" %>
- </table>  
+<% end %>  
+<%= submit_tag "Preview Again" %>
 <%= end_form_tag %>

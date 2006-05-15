@@ -1,31 +1,37 @@
-<div class="header_space"></div>
-<table class="body_table">
-<tr><td align="left">
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide">
+<div style="font-size: 120%">
 <% if(@home == nil) %>
+
 <h2>Welcome!</h2>
-  This RDoc generated documentation is running on a Rannotate server.
-  <p>
+This RDoc generated documentation is running on a Rannotate server.
+<p>
+
 <h2>View newest comments</h2>
 To view the newest comments added to this documentation <%= link_to('click here', {:controller => 'notes', :action => 'list_new'}) %>
 </br> or check out the <%= link_to('RSS feed', {:controller => 'notes', :action => 'rss'}) %>
 <p>
+
 <h2>More information</h2>
 For more information on rannotate see <a href="http://rannotate.rubyforge.org">Rannotate RubyForge Site</a>
 <p>
-<% else %>
-<% if(@home.ra_comment.comment.length > 0) %>
+
+<% else
+   if(@home.ra_comment.comment.length > 0) %>
 <div class="comment" id="comment"><%= markup(@home.ra_comment.comment) %></div>
-<% end %>
-<% end %>
+<% end 
+end %>
 <a name="notes"></a>
 <div style="font-size: 80%">
-<div class="section_title">
-<span class="note_link">		
-<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :type => 'index', :id => 0}) %>
-</span>
-User Added Notes
+  <div class="section_title">
+  <span class="note_link">		
+  <%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :type => 'index', :id => 0}) %>
+  </span>
+  User Added Notes
+		</div>
 		</div>
 <%= render_notes("index", "index") %>
 </div>
-</td></tr>
-</table>

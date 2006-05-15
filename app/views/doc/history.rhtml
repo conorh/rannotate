@@ -1,4 +1,8 @@
-<div class="header_space"></div>
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
 <% if @error %>
 	<%= @error %>
 <% else %>
@@ -10,6 +14,4 @@
   <br/>
   <%= render_component(:controller => 'history', :action => 'container', :params => {:type => @ra_container.class.to_s, :name => @container_name}) %>
 <% end %>
-</td>
-</tr>
-</table>
+</div>

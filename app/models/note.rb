@@ -27,7 +27,7 @@ class Note < ActiveRecord::Base
 				errors.add_to_base("Your IP subnet has been banned from posting due to abuse. Please contact the system administrator for more information")
 			end			
 	
-			timeLimit = 1.minute.ago
+			timeLimit = DELAY_BETWEEN_POSTS.ago
 			found = Note.find(:first, :conditions => ["created_at > ? AND ip_address = ?", timeLimit, ip_address])
 			if(found != nil)
 				errors.add_to_base("Your IP address has already posted in the last minute, please wait a minute or so before posting again.")				

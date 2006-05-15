@@ -14,10 +14,10 @@
   <%= markup(method.ra_comment.comment) %>
   </div>
   [ <%= show_source_link(method.id, method.ra_source_code_id) %> ]
-  [ <%= show_notes_link('method_' + method.name) %> ]
-  <span id="notes_method_<%= method.name %>_add" style="display: none;">[ <%= get_add_note_link('method_' + method.name) %> ]</span>
+  [ <%= show_notes_link(@ra_container.full_name, method.name, method.id, "RaMethod") %> ]
+  <span id="notes_<%= method.name %>_add" style="<%= check_display(method.name) %>">[ <%= get_add_note_link(method.id, "RaMethod") %> ]</span>
   <div id="method_source_<%= method.id %>" style="display: none; margin-top: 5px;"></div>
-  <div id="notes_method_<%= method.name %>" style="display: none; margin-top: 5px;"></div>	  
+  <div id="notes_<%= method.name %>" style="<%= check_display(method.name) %> margin-top: 5px;"><%= check_show_notes(method.name, method.name, @ra_container.full_name) %></div>	
 </div>
 
 <% end %>

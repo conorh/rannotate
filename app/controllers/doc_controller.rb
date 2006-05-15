@@ -61,7 +61,7 @@ class DocController < ApplicationController
   
   # Used by AJAX to display inline notes
   def notes 
-    render_notes(params[:category], params[:name], params[:content_url])      
+    render_notes(params[:container_name], params[:note_group])      
   end   
   
   # Used by AJAX to display inline source code
@@ -120,9 +120,9 @@ class DocController < ApplicationController
   
   # Get a container (file,class, module) and everything necessary to display it's documentation
   def get_container(cont_type)
-  	logger.level = Logger::DEBUG
     @container_name = @params[:name]
     @version = @params[:version] # this can be nil if the most recent version is requested
+    @expand = @params[:expand]
     @ra_container = RaContainer.find_highest_version(@container_name, cont_type, @version)    
     unless(@ra_container)
     	@error = "Could not find: " + @container_name
@@ -151,7 +151,7 @@ class DocController < ApplicationController
     
     # Divide up the code objects into the various types
     @ra_code_objects = {}
-    results.each do |obj| 
+    results.each do |obj|
       unless @ra_code_objects.has_key?(obj.class) then @ra_code_objects[obj.class] = [] end
       @ra_code_objects[obj.class].push(obj)
     end
@@ -164,10 +164,10 @@ class DocController < ApplicationController
     
     # Get a list of counts of the different categories of notes for this container
     # TODO: make this more active recordish
-    results = Note.connection.select_all("SELECT category, count(name) AS count FROM notes WHERE name = '" + @container_name + "' GROUP BY category");
+    results = Note.connection.select_all("SELECT note_group, count(container_name) AS count FROM notes WHERE container_name = '" + @container_name + "' GROUP BY note_group");
     @note_count = {}
     for result in results
-      @note_count[result['category']] = result['count']
+      @note_count[result['note_group']] = result['count']
     end
 
     @container_type = @ra_container.class.type_string                         
@@ -223,9 +223,9 @@ class DocController < ApplicationController
   end
   
   # Render the notes inline
-  def render_notes(container_type, container_name, current_url)
+  def render_notes(container_name, note_group)
     render_component(:controller => 'notes', :action => 'list', 
-      :params=> {:no_layout => true, :category=>container_type, :name=>container_name, :return_url=>current_url }
+      :params=> {:no_layout => true, :container_name=>container_name, :note_group=>note_group }
     )         
   end 
   

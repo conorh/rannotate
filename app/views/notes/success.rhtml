@@ -1,4 +1,4 @@
-<h2>Note Added To - <%= @note.category.capitalize %> <% @note.name %></h2>
+<h2>Note Added To - <%= @note.get_display %></h2>
 Your note was added succesfully.
 <p>
-<a href="<%= @note.content_url %>">Click here</a> to reload view the file again.
+<a href="<%= get_return_url(@note) %>">Click here</a> to reload view the file again.

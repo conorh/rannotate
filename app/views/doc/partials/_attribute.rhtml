@@ -1,9 +1,16 @@
 <div class="section_title">
-<span class="note_link"><%= show_notes_link('attributes') %></span> 
+
+<div class="note_link">
+<%= show_notes_link(@ra_container.full_name, "RaAttribute") %>
+<span id="notes_RaAttribute_add" style="<%= check_display("attributes") %>">&nbsp;<%= get_add_note_link(@ra_container.id, "RaAttribute") %>&nbsp;</span>
+</div>
+
 <div onClick="<%= show_or_hide("attributes") %>">Attributes</div>
 </div>
+
 <div id="attributes">
 <table border='0' cellpadding='5'>
+<a name="attributes"></a>
 	<% for attribute in @ra_code_objects[RaAttribute] %>  
   <tr valign='top'>
     <td class='attr-rw'>[<%= attribute.read_write %>]</td>
@@ -12,5 +19,9 @@
   </tr>
   	<% end %>  
 </table>
-<div id="notes_attributes" style="display:none; margin-top: 5px;"></div>
+
+<div id="notes_RaAttribute" style="<%= check_display("attributes") %> margin-top: 5px;">
+<%= check_show_notes("attributes", "RaAttribute", @ra_container.full_name) %>
+</div>
+
 </div>

@@ -3,54 +3,39 @@ class NotesController < ApplicationController
 	
   # Display a list of notes
   def list
-    @category = params[:category]
-    @name = params[:name]
-    @content_url = params[:return_url]
+    @container_name = params[:container_name]
+    @note_group = params[:note_group]
     
-    @notes = Note.find(:all, :conditions => ["category = ? AND name = ?", @category, @name], :order=> "created_at ASC")	
+    @notes = Note.find(:all, :conditions => ["container_name = ? AND note_group = ?", @container_name, @note_group], :order=> "created_at ASC")	
     
     if(params[:no_layout])
       render :layout=>false
     end
-  end
-  
-  # Show all immediate children of this note. This only works for classes right now. Because...
-  # A note is the immediate child of another note if the parent has the format 'somename' and the child the format 'somename.blah'
-  # currently only methods have this format
-  def overview
-    @category = params[:category]
-    @name = params[:name]    
-    @content_url = params[:return_url]
-    
-    searchName = @name + Note::METHOD_SEPARATOR + '%';
-    @notes = Note.find_by_sql(["SELECT DISTINCT name FROM notes WHERE category = ? AND name LIKE ?", @category, searchName]) 	
-  end
+  end 
   
   # Display a list of notes for the entire site.. up to 30
-  def list_new
-    @category = params[:category]
-    @name = params[:name]
-    @content_url = params[:return_url]
-    
+  def list_new    
     @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")						
   end
   
+  # Generate an RSS feed of the 20 newest notes
   def rss
     @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")  
-    render  :layout =>  false    
+    render :layout =>  false    
   end  
   
+  # Create a note
   def new
-    @note = Note.new
-    params[:id]
-    params[:type]
-    @note.category = ""
-    @note.name = ""
-    @note.content_url = ""
+    @note = Note.new(get_note_params(params[:id], params[:type]))
+    @note.ref_id = params[:id]
+    @note.ref_type = params[:type]
   end
-
-  def preview		
-    @note = Note.new(params[:note])
+  
+  # Preview a note
+  def preview
+    note_params = get_note_params(params[:note][:ref_id], params[:note][:ref_type])
+    
+    @note = Note.new(note_params.merge(params[:note]))
     @note.created_at = Time.now
     @note.skip_ban_validation = true
     @note.valid?
@@ -60,18 +45,63 @@ class NotesController < ApplicationController
 	end
   end
 
+  # Save the note to the DB
   def create  
-    @note = Note.new(params[:note])
+    note_params = get_note_params(params[:note][:ref_id], params[:note][:ref_type])
+    
+    @note = Note.new(note_params.merge(params[:note]))
     @note.ip_address = request.remote_ip;
     if !@note.save
       render :action => 'preview'
-    else        
-      expire_page(:controller => "doc", :action => 'files', :name => @note.name)
-      expire_page(:controller => "doc", :action => 'modules', :name => @note.name)
-      expire_page(:controller => "doc", :action => 'classes', :name => @note.name)    
+    else
+      expire_page(:controller => "doc", :action => 'files', :name => @note.container_name)
+      expire_page(:controller => "doc", :action => 'modules', :name => @note.container_name)
+      expire_page(:controller => "doc", :action => 'classes', :name => @note.container_name)    
       expire_page :action => "list"
       render :action => 'success'
     end
   end
+  
+private
+
+   # Given the id and type of the object that this note is being attached to
+   # get the necessary information to create the note
+   def get_note_params(id, type_string)
+     case type_string
+	   when RaModule.to_s then return get_container_params(id, type_string)
+	   when RaClass.to_s then return get_container_params(id, type_string) 
+	   when RaFile.to_s then return get_container_params(id, type_string)	                 
+	   when RaMethod.to_s then return get_method_params(id, type_string)
+	   when RaInFile.to_s then return get_codeobj_params(id, type_string)
+	   when RaAttribute.to_s then return get_codeobj_params(id, type_string)
+	   when RaConstant.to_s then return get_codeobj_params(id, type_string)
+	   when RaInclude.to_s then return get_codeobj_params(id, type_string)
+	   when RaRequire.to_s then return get_codeobj_params(id, type_string)
+	   when RaAlias.to_s then return get_codeobj_params(id, type_string)
+      end
+
+      return {}
+   end
+
+   def get_container_params(id, type_string)	
+	     type = RaContainer.find(id)
+	     return {:container_name => type.full_name, :ra_container_id => type.id, 
+	       :note_group => type_string, :note_type => type_string,
+	       :version => type.ra_library.ver_string }	
+   end
+   
+   def get_method_params(id, type_string)
+	     type = RaMethod.find(id)
+	     return {:container_name => type.ra_container.full_name, :ra_container_id => type.ra_container.id,
+	       :note_group => type.name, :note_type => type_string,
+	       :version => type.ra_container.ra_library.ver_string }  
+   end
+   
+   def get_codeobj_params(id, type_string)
+         type = RaContainer.find(id)
+	     return {:container_name => type.full_name, :ra_container_id => id,
+	       :note_group => type_string, :note_type => type_string,
+	       :version => type.ra_library.ver_string}      
+   end
 	
 end

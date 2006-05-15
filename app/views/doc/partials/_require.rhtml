@@ -1,12 +1,23 @@
 <div class="section_title">
-<span class="note_link"><%= show_notes_link('requires') %></span>
-<div onClick="<%= show_or_hide('required') %>">Required Files</div>
+
+<div class="note_link">
+<%= show_notes_link(@ra_container.full_name, "RaRequire") %>
+<span id="notes_RaRequire_add" style="<%= check_display("requires") %>">&nbsp;<%= get_add_note_link(@ra_container.id, "RaRequire") %>&nbsp;</span>
 </div>
-<div id="required">
+
+<div onClick="<%= show_or_hide('requires') %>">Required Files</div>
+</div>
+
+<div id="requires">
+<a name="requires"></a>
 <ul>
 <% for require in @ra_code_objects[RaRequire] %>
 <li><%= require.name %></li>
 <% end %>
 </ul>
-<div id="notes_requires" style="display:none"></div>
+
+<div id="notes_RaRequire" style="<%= check_display("requires") %> margin-top: 5px;">
+<%= check_show_notes("requires", "RaRequire", @ra_container.full_name) %>
+</div>
+
 </div>

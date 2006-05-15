@@ -20,6 +20,25 @@ module NotesHelper
 		return h(newEmail)
 	end
 	
+	def get_return_url(note)
+      container = RaContainer.type_to_route(note.ra_container.type.to_s)
+      
+      case note.note_type
+	    when RaModule.to_s then return url_for(:controller => 'doc', :action => "modules", :name => note.container_name, :anchor => 'usernotes')
+	    when RaClass.to_s then return url_for(:controller => 'doc', :action => "classes", :name => note.container_name, :anchor => 'usernotes')
+	    when RaFile.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'usernotes')	    	    
+	    when RaMethod.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => note.note_group, :expand => note.note_group) 
+	    when RaInFile.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'infiles', :expand => 'infiles') 
+	    when RaAttribute.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'attributes', :expand => 'attributes') 
+	    when RaConstant.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'constants', :expand => 'constants') 
+	    when RaInclude.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'includes', :expand => 'includes') 
+	    when RaRequire.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'requires', :expand => 'requires') 
+	    when RaAlias.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'aliases', :expand => 'aliases')
+      end
+      
+      return url_for(:controller => 'doc', :action => "index")	 	  	
+	end
+	
 	# Syntax highlight the input
 	# Transform line breaks into HTML
 	# If summary input parameter is set then limit text to 40 characters and replace newlines with spaces

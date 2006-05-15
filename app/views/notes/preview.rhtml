@@ -1,4 +1,4 @@
-<h2>Preview New Note For: <%= @note.category.capitalize %> <%= @note.name %></h2>
+<h2>Preview New Note For: <%= @note.get_display %></h2>
 <% if(@note.errors.empty?) %>
 <div id="usernotes">
 <%= render :partial => 'note' %>

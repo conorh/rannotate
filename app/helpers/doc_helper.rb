@@ -8,10 +8,10 @@ module DocHelper
       note_count[category] ? note_count[category] : 0
     end
 
-		# markup the source code using the syntax helper
+	# markup the source code using the syntax helper
     def markup_source_code(code)
-			syntax = Syntax::Convertors::HTML.for_syntax "ruby"
-			return syntax.convert(code)    
+	  syntax = Syntax::Convertors::HTML.for_syntax "ruby"
+	  return syntax.convert(code)    
     end
 
 	# show a link to display the source code for a method
@@ -29,42 +29,65 @@ module DocHelper
   	  return html
     end
 
+    # Write out javascript to show or hide a section
     def show_or_hide(section)
       return "Element.visible('#{section}') ? Element.hide('#{section}') : Element.show('#{section}')"
     end
 
 	# show the number of notes in a category for a container and show a link to display the notes
-    def show_notes_link(category)
+    def show_notes_link(container_name, note_group, ref_id = nil, ref_type = nil)
       # in the doc_controller we count up the notes, so output them here
-      if(@note_count[category])
-        count = @note_count[category].to_i
+      if(@note_count[note_group])
+        count = @note_count[note_group].to_i
         
         # construct a javascript function that either hides the notes div if it's showing already,
         # or gets the notes via an Ajax call and shows it
-        element = "notes_" + category
+        element = "notes_" + note_group
         element_add = element + "_add"
         function = "Element.visible('#{element}') ? Element.hide('#{element}') : " +
                   remote_function(
-                    :update => 'notes_' + category, 
-                    :url => { :action => 'notes', :name=>@container_name, :category=>category, :content_url=> @container_url },
+                    :update => 'notes_' + note_group, 
+                    :url => { :action => 'notes', :container_name=>container_name, :note_group=>note_group },
                     :complete => "Element.show('#{element}'); Element.show('#{element_add}');")
       
-        html = "<b>" + link_to_function(pluralize(count, "note"), function) + "</b>"      
+        html = "<b>" + link_to_function(pluralize(count, "note"), function) + "</b>"
       else
-        html = get_add_note_link(category)       
+        if(ref_id == nil)
+          html = get_add_note_link(@ra_container.id, note_group)
+        else
+          html = get_add_note_link(ref_id, ref_type)  
+        end
       end
-       
-      return html     
+            
+      return html    
     end
     
-    def get_add_note_link(category)
-        return link_to('Add New Note', {:controller => 'notes', :action => 'new', :category => category, :name => @container_name, :content_url => @container_url})
+    # Check to see if we should be displaying a set of notes on load of the page
+    def check_display(name)
+      if(@expand == name)
+        return "";
+      else
+        return "display: none;"
+      end
+    end    
+    
+    # Display the notes on load of the page if ncessary
+    def check_show_notes(name, note_group, container_name)
+      if(@expand == name)
+         return render_notes(container_name, note_group)  
+      end
+      return ""
+    end
+    
+    # Get a link to add notes
+    def get_add_note_link(id, type)
+        return link_to('Add New Note', {:controller => 'notes', :action => 'new', :type=>type, :id=>id })
     end
 
 	# render the notes for the class
-    def render_notes(container_type, container_name, current_url)
+    def render_notes(container_name, note_group)
       render_component(:controller => 'notes', :action=>'list', 
-        :params=> {:no_layout => true, :category=>container_type, :name=>container_name, :return_url=>current_url }
+        :params=> {:no_layout => true, :container_name=>container_name, :note_group=>note_group }
       ) 		    
     end
 

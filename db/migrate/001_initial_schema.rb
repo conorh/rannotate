@@ -5,10 +5,11 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "notes", :force => true do |t|
-      t.column "ra_library_id", :integer
-      t.column "category", :string, :limit => 20 
-      t.column "name", :string, :limit => 100
-      t.column "container_version", :integer
+      t.column "container_name", :string, :limit => 150
+      t.column "ra_container_id", :integer
+      t.column "note_group", :string, :limit => 100 # What group is this, attributes, constants, method name etc
+      t.column "note_type", :string, :limit => 20 # What type is this RaMethod, RaConstant etc..
+      t.column "version", :string, :limit => 20 # What version of the library does this note refer to ie. "1.0.0"
       t.column "email", :string, :limit => 60
       t.column "text", :text
       t.column "ip_address", :string, :limit => 16
@@ -16,7 +17,7 @@ class InitialSchema < ActiveRecord::Migration
       t.column "updated_at", :timestamp
     end
 
-    add_index "notes", ["category", "name"], :name => "ind_cat_name"
+    add_index "notes", ["container_name", "note_group"], :name => "ind_cont_group"
 
     create_table "ra_code_objects", :force => true do |t|
       t.column "ra_container_id", :integer

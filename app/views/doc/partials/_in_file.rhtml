@@ -1,10 +1,22 @@
 <div class="section_title">
-<span class="note_link"><%= show_notes_link('definedin') %></span>
+
+<div class="note_link">
+<%= show_notes_link(@ra_container.full_name, RaInFile.to_s) %>
+<span id="notes_RaInFile_add" style="<%= check_display("infiles") %>">&nbsp;<%= get_add_note_link(@ra_container.id, "RaInFile") %>&nbsp;</span>
+</div>
+
 <div onClick="<%= show_or_hide("infiles") %>">Files this <%= @ra_container.class.type_string %> is defined in</div>
 </div>
+
 <div id="infiles">
+<a name="infiles"></a>
+
 <% for file in @ra_in_files %>
 File: <%= link_to_container_by_name(RaFile.type_string, file.file_name) %><br/>
 <% end %>
-<div id="notes_definedin" style="display:none; margin-top: 5px;"></div>
+
+<div id="notes_RaInFile" style="<%= check_display("infiles") %> margin-top: 5px;">
+<%= check_show_notes("infiles", "RaInFile", @ra_container.full_name) %>
+</div>
+
 </div>

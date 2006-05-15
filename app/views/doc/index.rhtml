@@ -20,10 +20,12 @@ For more information on rannotate see <a href="http://rannotate.rubyforge.org">R
 <a name="notes"></a>
 <div style="font-size: 80%">
 <div class="section_title">
-<span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :category => 'index', :name => 'index', :content_url => url_for(:action => 'index') }) %></span>
+<span class="note_link">		
+<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :type => 'index', :id => 0}) %>
+</span>
 User Added Notes
 		</div>
-<%= render_notes "index", "index", url_for(:action => 'index') %>
+<%= render_notes("index", "index") %>
 </div>
 </td></tr>
 </table>

@@ -7,7 +7,6 @@
 	</head>
 	<body>
 	
-	<div id="wrap">
 <div id="header">
   <span class="header_search_links"> 
 		    <%= form_tag :action => 'search' %>		
@@ -25,9 +24,8 @@
 		    <b>Updated:</b>	<%= cur_lib_ver.date.strftime("%b %d %H:%M %Y") %>
 		  </span>
 </div>
-<div style="padding: 20px; background-color: #fff; font-size: 80%;">
+<div style="padding: 20px; font-size: 80%;">
 <%= @content_for_layout %>
-</div>
 </div>
 </body>
 </html>

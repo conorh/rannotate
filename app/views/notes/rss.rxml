@@ -9,8 +9,9 @@ xml.rss(:version=>"2.0"){
         xml.item do
           xml.title(note.container_name)
           xml.category("Note")
-          xml.description("New note added to " + note.container_name)
-          xml.tag!("content:encoded") { xml.cdata!(note.text) }
+          xml.tag!("description") { xml.cdata!(note.text) }        
+         # xml.description("New note added to " + note.container_name)
+         # xml.tag!("content:encoded") { xml.cdata!(note.text) }
           xml.pubDate(CGI.rfc1123_date(note.created_at))
           xml.link(note.content_url)
           xml.guid("http://rails.outertrack.com/notes/" + note.id.to_s)

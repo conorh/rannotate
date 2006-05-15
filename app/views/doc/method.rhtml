@@ -9,9 +9,9 @@
 <div class="section_title">Sourcecode</div>
 <%= render :partial => 'doc/partials/source_code' %>
 <div class="section_title">
-<span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :name => @container_name, :category => 'method_' + @method.name, :content_url => @container_url}) %></span>
+<span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :id => @method.id, :type => 'RaMethod'}) %></span>
 User Added Notes
 		</div>
-<%= render_notes('method_' + @method.name, @container_name, '#') %>
+<%= render_notes(@container_name, @method.name) %>
 </td></tr>
 </table>

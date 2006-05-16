@@ -11,11 +11,6 @@
   <span class="header_search_links"> 
 		  </span>
   <%= link_to(RANNOTATE_SITE_NAME + " Administration", {:controller => 'upload', :action => 'index'},{:class=>'header_link'}) %><br/>
-		  <% cur_lib_ver = get_current_version() %>
-		  <span class="header_subtext">
-		    <b>Version:</b> <%= cur_lib_ver.ver_string %> 
-		    <b>Updated:</b>	<%= cur_lib_ver.date.strftime("%b %d %H:%M %Y") %>
-		  </span>
 </div>
 
 <div id="sidebar_slim">

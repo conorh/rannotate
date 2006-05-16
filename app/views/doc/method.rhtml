@@ -5,7 +5,7 @@
 <div id="body_content_wide">
 
 <span class="container_header"><%= @method.name %><%= @method.parameters %></span> <% if(@version) then %>Ver: <%= @version %><% end %>
-<br/>From: <a href="<%= @container_url %>" style="text-decoration: none;"><%= @container_name %></a>
+<br/>From: <a href="<%= @container_url %>"><%= @container_name %></a>
 <% if(@version) then %>Version <%= @version %><% end %>
 
 <div class="description">

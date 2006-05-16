@@ -9,7 +9,7 @@
 	
 <div id="header">
   <span class="header_search_links"> 
-		    <%= form_tag :controller => 'doc', :action => 'search' %>		
+		    <%= form_tag :controller => 'doc', :action => 'search', :name => nil %>		
 		    [<%= link_to "Files", :controller => 'doc', :action => 'list', :type => 'files'  %>]
 		    [<%= link_to "Classes", :controller => 'doc', :action => 'list', :type => 'classes' %>]
 		    [<%= link_to "Methods", :controller => 'doc', :action => 'list', :type => 'methods' %>]

@@ -62,9 +62,16 @@ module ApplicationHelper
     	container_name = child.ra_container.full_name
     end
    
-    link_params = {:controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name }
+    link_params = {:controller => 'doc', :action => RaContainer.type_to_route(container_type), :name => container_name }
     if(@version)
       link_params[:version] = @version
+    end
+    
+    # if this is a method then link directly to the method instead of the parent class
+    if(child.class == RaMethod)
+      link_params[:method] = child.name
+    else
+      link_params[:anchor] = child.name
     end
     
     return link_to(child.name + " (" + container_name + ")", link_params)
@@ -72,10 +79,10 @@ module ApplicationHelper
   end
   
   def link_to_method(method_name, container_type)
-    link_params = {:action => container_type.pluralize, :method => method_name}
+    link_params = {:controller => 'doc', :action => container_type.pluralize, :method => method_name}
     if(@version)
       link_params[:version] = @version
-    end    
+    end
     link_to(method_name, link_params)  
   end
   

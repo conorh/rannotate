@@ -36,7 +36,7 @@ module ApplicationHelper
   def link_to_container(ra_container, max_length = 300)
     action = ra_container.class.type_string.pluralize
     
-    link_params = {:controller => "doc", :action => action, :name => ra_container.full_name }
+    link_params = {:controller => "doc", :action => action, :name => ra_container.full_name}
     if(@version)
       link_params[:version] = @version
     end
@@ -44,6 +44,7 @@ module ApplicationHelper
     link_name = ra_container.full_name
     if(link_name.length > max_length)
       link_name = link_name[0,max_length] + ".."
+      return link_to(link_name, link_params, :title => ra_container.full_name)      
     end
     
     return link_to(link_name, link_params)

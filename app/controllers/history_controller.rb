@@ -48,20 +48,20 @@ class HistoryController < ApplicationController
     	return
     end     
     
-    # Put all the versions into an array of hashtables
+    # Put all the versions of the container into an array of hashtables
     container_ids = Array.new
     container_versions.each do |v|
-        # each entry in the hashtable contains the container
-        # as well as arrays for all of the items that were added/removed/changed between versions
+        # each entry in the array contains a hashtable that has the container
+        # as well as hashes for all of the items that were added/removed/changed between versions
     	@versions.push({:container => v, :added => {}, :changed => {}, :removed => {}})
-    	# the hashtable is indexed by the container ids
+    	# collect up the ids of all the containers
     	container_ids.push(v.id)
    	end
     
     # Get all of the methods for all versions of this container    
     methods = RaMethod.find(:all, :conditions => ["ra_container_id IN (?)", container_ids], :order => "name ASC")
     
-    # Group the methods by container id
+    # Group the methods by container id in a hashtable
     methods_hash = Hash.new
     methods.each do |method|
     	if(method.visibility != RaContainer::VIS_PRIVATE)
@@ -98,7 +98,7 @@ protected
 			current_ver = versions[i][:container].id
 			pre_ver = versions[i-1][:container].id
 			
-			# if there is no entry in the type_has for these ids then do not continue
+			# if there is no entry in the type_hash for these ids then do not continue
 			# this could happen if for example all of the methods are removed between versions
 			unless type_hash[current_ver] == nil || type_hash[pre_ver] == nil
 			
@@ -135,7 +135,7 @@ protected
     	case new.class.to_s
     		when 'RaMethod'    		
     			if(new.parameters != old.parameters)
-    				result = new.name + new.parameters + " <strong>--></strong> " + old.name + old.parameters
+    				result = new.name + new.parameters + " --> " + old.name + old.parameters
     			end
     		when 'RaAlias'    			
     		when 'RaAttribute'

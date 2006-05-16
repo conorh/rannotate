@@ -8,17 +8,23 @@
 <br/>From: <a href="<%= @container_url %>"><%= @container_name %></a>
 <% if(@version) then %>Version <%= @version %><% end %>
 
-<div class="description">
+
+<div class="section_title" onClick="<%= show_or_hide("commentssec") %>">Comments</div>
+<div id="commentssec" class="description">
 <p><%= markup(@method.ra_comment.comment) %></p>
 </div>
   
-<div class="section_title">Sourcecode</div>
+<div class="section_title" onClick="<%= show_or_hide("sourcesec") %>">Sourcecode</div>
+<div id="sourcesec">
 <%= render :partial => 'doc/partials/source_code' %>
+</div>
 
-<div class="section_title">
+<div class="section_title" onClick="<%= show_or_hide("usercommentsec") %>">
 <span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :id => @method.id, :type => 'RaMethod'}) %></span>
 User Added Notes
 		</div>
+		<div id="usercommentsec">
 <%= render_notes(@container_name, @method.name) %>
+</div>
 
 </div>

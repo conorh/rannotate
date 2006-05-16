@@ -5,17 +5,19 @@ Enter values for the fields you would like to filter on
 <table>
 	<tr>
 		<td><strong>Id</strong></td>	
-		<td><strong>Name</strong></td>		
-		<td><strong>Category</strong></td>
+		<td><strong>Container</strong></td>		
+		<td><strong>Group</strong></td>
+				<td><strong>Type</strong></td>
 		<td><strong>Content</strong></td>		
 		<td><strong>E-mail</strong></td>		
 		<td><strong>IP Address</strong></td>	
 	</tr>
 	<tr>
 		<td><%= text_field(:note_filter,:id, :size=>4) %></td>	
-		<td><%= text_field(:note_filter,:name, :size=>12) %></td>	
-		<td><%= text_field(:note_filter,:category, :size=>12) %></td>
-		<td><%= text_field(:note_filter,:text, :size=>10) %></td>		
+		<td><%= text_field(:note_filter,:container_name, :size=>12) %></td>	
+		<td><%= text_field(:note_filter,:note_group, :size=>10) %></td>
+				<td><%= text_field(:note_filter,:note_type, :size=>10) %></td>
+		<td><%= text_field(:note_filter,:text, :size=>12) %></td>		
 		<td><%= text_field(:note_filter,:email, :size=>10) %></td>		
 		<td><%= text_field(:note_filter,:ip_address, :size=>11) %></td>	
 	</tr>	
@@ -30,11 +32,7 @@ Show summarized: <%= check_box(:note_filter, 'show_summarized') %>
 <%= submit_tag "Run Query", :name=>:form_action %> <%= submit_tag "Clear Query" %>  
 <p>
 
-<div id="usernotes">
- <div class="head">
-  <strong>Notes</strong>
- </div>
-</div> 
+<strong>Notes</strong> 
 
 <% unless(@notes.empty?) %>
 <input type="button" name="on" value="Check All" onClick="setCheckState(document.filter_form, 'ids_for_delete[]', true)">
@@ -42,11 +40,13 @@ Show summarized: <%= check_box(:note_filter, 'show_summarized') %>
 <input type="button" name="on" value="Select Range" onClick="checkRanges(document.filter_form, 'ids_for_delete[]')">
 <%= submit_tag "Delete Selected", :name=>:form_action %>
 
-<div id="usernotes">
 <% for @note in @notes %>
  <div class="note">
   <span style="float:right;"><%= link_to('Edit', :id => @note.id, :action => 'edit') %></span>    
-  <%= check_box_tag('ids_for_delete[]', @note.id) %> <strong>Name:</strong> <%= @note.name %> <strong>Category:</strong> <%= @note.category %> <strong>By:</strong> <%= mangle_email_for_display(@note.email) %>
+  <%= check_box_tag('ids_for_delete[]', @note.id) %> 
+  <strong>Container:</strong> <%= @note.container_name %> 
+  <strong>Group:</strong> <%= @note.note_group %> 
+  <strong>By:</strong> <%= mangle_email_for_display(@note.email) %>
   <strong>Posted:</strong> <a href="#"><%= @note.created_at.strftime("%d-%b-%Y %H:%M") %></a>
   <strong>From:</strong> <%= @note.ip_address %>
   <div class="text">
@@ -57,7 +57,6 @@ Show summarized: <%= check_box(:note_filter, 'show_summarized') %>
 </div><!-- note -->
  
 <% end %> 
-</div><!-- usernotes -->
 
 <p>
 <input type="button" name="on" value="Check All" onClick="setCheckState(document.filter_form, 'ids_for_delete[]', true)">
@@ -67,6 +66,3 @@ Show summarized: <%= check_box(:note_filter, 'show_summarized') %>
 <%= end_form_tag %>
 
 <% end %>
-
- </body>
- </html>

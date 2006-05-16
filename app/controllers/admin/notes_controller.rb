@@ -1,26 +1,26 @@
 class Admin::NotesController < ApplicationController
 	before_filter :login_required
-	
-	helper :notes	
+	helper :notes
+	layout 'admin/admin.rhtml'
 	
 	def index
-		@note_filter = NoteFilter.new(@params['note_filter'])
+	  @note_filter = NoteFilter.new(@params['note_filter'])
 
-		if(@request.post?)
-			case(@params['form_action'])
-				when 'Run Query'
-					if(show_filtered_results())
-						return
-					end
-				when 'Delete Selected'
-					delete_entries
-					if(show_filtered_results())
-						return
-					end
+      if(@request.post?)
+        case(@params['form_action'])
+		  when 'Run Query'
+			if(show_filtered_results())
+			  return
 			end
-		end
+		  when 'Delete Selected'
+			delete_entries
+			if(show_filtered_results())
+			  return
+			end
+          end
+	   end
 		
-		@notes = []
+       @notes = []
 	end
 	
 	def edit
@@ -45,15 +45,15 @@ class Admin::NotesController < ApplicationController
 	private
 	
 	def show_filtered_results
-		if(@params['note_filter'])
-			@notes = Note.find_with_filter(@params['note_filter'])
-			return true			
-		end	
-		return false
+	  if(@params['note_filter'])
+		@notes = Note.find_with_filter(@params['note_filter'])
+		  return true			
+	  end	
+	  return false
 	end	
 		
 	def delete_entries
-			Note.delete(@params['ids_for_delete'])		
+      Note.delete(@params['ids_for_delete'])		
 	end	
 
 end

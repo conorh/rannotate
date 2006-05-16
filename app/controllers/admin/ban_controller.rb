@@ -1,5 +1,6 @@
 class Admin::BanController < ApplicationController
 	before_filter :login_required  
+	layout 'admin/admin.rhtml'	
   
   def index
     list

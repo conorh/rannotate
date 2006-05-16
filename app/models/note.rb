@@ -46,7 +46,7 @@ class Note < ActiveRecord::Base
 
 		filter = RecordFilter.new
 	
-		text_fields = %w{id name category text email ip_address}
+		text_fields = %w{id container_name note_group note_type text email ip_address}
 		text_fields.each { |name|
 			filter.addLike(name, params[name])
 		}		
@@ -80,6 +80,7 @@ class Note < ActiveRecord::Base
 		end																
 	end	
 
+    # display a string that specifies what this note is commenting
 	def get_display
      case self.note_type
 	   when RaModule.to_s then return container_name

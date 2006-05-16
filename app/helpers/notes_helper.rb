@@ -21,7 +21,7 @@ module NotesHelper
 	end
 	
 	def get_return_url(note)
-      container = RaContainer.type_to_route(note.ra_container.type.to_s)
+      container = RaContainer.type_to_route(note.ra_container.class.to_s)
       
       case note.note_type
 	    when RaModule.to_s then return url_for(:controller => 'doc', :action => "modules", :name => note.container_name, :anchor => 'usernotes')

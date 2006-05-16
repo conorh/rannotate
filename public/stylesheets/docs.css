@@ -123,7 +123,7 @@ H1,H2,H3,H4,H5,H6 {
 .note_link a {
   font-size: 100%;
   font-weight: normal;
-  COLOR: #ffff66;
+  color: #ffff66;
 }
 
 .method {
@@ -161,6 +161,34 @@ H1,H2,H3,H4,H5,H6 {
   padding: 0.5em;
   border: 1px dotted black;
   background: #fafaea; 
+}
+
+.history_box_head {
+ font-size: 120%;
+ font-weight: bold;
+ padding-top: 10px;
+}
+.history_added {
+ padding: 0.5em; border: 1px dotted black;
+ background: #aed9c0;
+}
+.history_removed {
+ padding: 0.5em; border: 1px dotted black;
+ background: #e982a1;
+}
+.history_changed {
+ padding: 0.5em; border: 1px dotted black;
+ background: #CBE6F3;
+}
+.history_obj {
+ padding-left: 10px;
+ font-size: 120%;
+ font-family: monospace;
+}
+.history_subhead {
+ font-size: 100%;
+ font-weight: bold;
+ padding-top: 5px;
 }
 
 .ruby .normal {}

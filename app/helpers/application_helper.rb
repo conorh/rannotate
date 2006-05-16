@@ -33,7 +33,7 @@ module ApplicationHelper
 	end
 	
   # If this is a container type object (class, method, file) then link to it directly
-  def link_to_container(ra_container)
+  def link_to_container(ra_container, max_length = 300)
     action = ra_container.class.type_string.pluralize
     
     link_params = {:controller => "doc", :action => action, :name => ra_container.full_name }
@@ -41,7 +41,12 @@ module ApplicationHelper
       link_params[:version] = @version
     end
     
-    return link_to(ra_container.full_name, link_params)
+    link_name = ra_container.full_name
+    if(link_name.length > max_length)
+      link_name = link_name[0,max_length] + ".."
+    end
+    
+    return link_to(link_name, link_params)
   end
   
   # If this is a child of a container object (method, constant etc.) then link to it's container

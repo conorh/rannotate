@@ -10,11 +10,11 @@
 	<div id="wrap">
 <div id="header">
   <span class="header_search_links"> 
-		    <%= form_tag :action => 'search' %>		
-		    [<%= link_to "Files", :action => "list", :type => "files"  %>]
-		    [<%= link_to "Classes", :action => "list", :type => "classes" %>]
-		    [<%= link_to "Methods", :action => "list", :type => "methods" %>]
-		    [<%= link_to "Libraries", :action => "libraries" %>]
+		    <%= form_tag :controller => 'doc', :action => 'search' %>		
+		    [<%= link_to "Files", :controller => 'doc', :action => "list", :type => "files"  %>]
+		    [<%= link_to "Classes", :controller => 'doc', :action => "list", :type => "classes" %>]
+		    [<%= link_to "Methods", :controller => 'doc', :action => "list", :type => "methods" %>]
+		    [<%= link_to "Libraries", :controller => 'doc', :action => "libraries" %>]
 		    <input type="text" name="name" size="20"/>&nbsp;<%= submit_tag "search" %>
 		    <%= end_form_tag %> 
 		  </span>

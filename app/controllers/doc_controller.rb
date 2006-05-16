@@ -180,6 +180,10 @@ class DocController < ApplicationController
     @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name)                      
   end       
   
+#  def get_special_docs()
+#    container = RaContainer.find_highest_version("README OR CHANGELOG OR LICENSE")
+#  end
+  
   # execute a search and return the results
   # results are put in the @search_results class variable and @result_count contains the total result count
   # if something goes wrong then the class variable @error contains the error message
@@ -193,26 +197,30 @@ class DocController < ApplicationController
   	end
     
     # what type to include in output, and what order to display them in
-    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
-      	
-    name = '%' + search_text + '%'    
+    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute, RaFile]
+    
+    if(params[:exact] == nil)
+      name = '%' + search_text.downcase + '%'
+    else
+      name = search_text.downcase
+    end
     
     temp = RaContainer.find(:all, :limit => 100, 
-    	:conditions => ["lower(rc.full_name) like ? AND rc.type IN ('RaModule', 'RaClass') AND rl.id = rc.ra_library_id AND rl.current = ?", name, true], 
+    	:conditions => ["LOWER(rc.full_name) LIKE ? AND rl.id = rc.ra_library_id AND rl.current = ?", name, true], 
     	:select => 'rc.*',
     	:joins => "rc, ra_libraries AS rl",
-    	:order => 'rc.full_name ASC'
+    	:order => 'rc.full_name ASC'    	
     )
     
     temp.push(RaMethod.find(:all, :limit => 100, 
-    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true], 
+    	:conditions => ["LOWER(ram.name) LIKE ? AND ram.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true], 
     	:joins => 'ram, ra_containers AS rc, ra_libraries AS rl',
     	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
     	:order => 'ram.name ASC'
     	)
     )
     temp.push(RaCodeObject.find(:all, :limit => 100, 
-    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true],
+    	:conditions => ["LOWER(rco.name) LIKE ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true],
     	:joins => 'rco, ra_containers AS rc, ra_libraries AS rl',
     	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
     	:order => 'rco.name ASC'
@@ -220,19 +228,29 @@ class DocController < ApplicationController
     )
         
     temp.flatten!
+        
+    # Check to see if there is only one result, it is a container and we are only looking for an exact result
+    # if so then redirect to that container        
+    if(temp.length == 1)
+      obj = temp[0]
+      if(params[:exact] && obj.container?)    
+        redirect_to :action => obj.class.type_string.pluralize, :name => obj.full_name, :method => nil
+      end
+    end
+    
     # Create a hash of the results
-    temp.each do |obj| 
+    temp.each do |obj|
       unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
       @search_results[obj.class].push(obj)
-    end 
-    @results_count = temp.length 	
+    end
+    @results_count = temp.length        
   end
   
   # Render the notes inline
   def render_notes(container_name, note_group)
     render_component(:controller => 'notes', :action => 'list', 
       :params=> {:no_layout => true, :container_name=>container_name, :note_group=>note_group }
-    )         
+    )
   end 
   
   # Render the source inline

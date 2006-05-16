@@ -94,7 +94,7 @@ module DocHelper
 		# Markup the rdoc comments for display
     def markup(str, remove_para=false)
       return '' unless str
-      unless defined? @markup # only define the markup object once
+#      unless defined? @markup # only define the markup object once
         @markup = SM::SimpleMarkup.new
         
         # TODO: This does not work, previously it depended on us being able to check if something was defined before we would link it
@@ -103,24 +103,26 @@ module DocHelper
         # markers around those things to be hyperlinked
         
         # class names, variable names, file names, or instance variables
-        #@markup.add_special(/(
-        #                       \b([A-Z]\w*(::\w+)*[.\#]\w+)  #    A::B.meth
-        #                      | \b([A-Z]\w+(::\w+)*)       #    A::B..
-                       #      | \#\w+[!?=]?                #    #meth_name 
-                       #      | \b\w+([_\/\.]+\w+)+[!?=]?  #    meth_name
-        #                     )/x, 
-        #                    :CROSSREF)
+        
+#        @markup.add_special(/(
+#                             \b([A-Z]\w*(::\w+)*[.\#]\w+)  #    A::B.meth
+#                             | \b([A-Z]\w+(::\w+)*)       #    A::B..
+#                              \#\w+[!?=]?                #    #meth_name 
+#                             | \b\w+([_\/\.]+\w+)+[!?=]?  #    meth_name
+#                             )/x, 
+#                            :CROSSREF)
 
         # external hyperlinks
+        # @markup.add_special(/((link\.)\S+\w)/, :HYPERLINK)
         @markup.add_special(/((link:|https?:|mailto:|ftp:|www\.)\S+\w)/, :HYPERLINK)
 
         # and links of the form  <text>[<url>]
         @markup.add_special(/(((\{.*?\})|\b\S+?)\[\S+?\.\S+?\])/, :TIDYLINK)
-      end
+#      end
 
-      unless defined? @html_formatter
+#      unless defined? @html_formatter
         @html_formatter = Hyperlinker.new(self)
-      end
+#      end
 
       # Convert leading comment markers to spaces, but only if all non-blank lines have them
       if str =~ /^(?>\s*)[^\#]/
@@ -139,32 +141,31 @@ module DocHelper
 
 	# Subclass of the SM::ToHtml class that helps to create hyperlinks out of links
 	# in the documentation
-	class Hyperlinker < SM::ToHtml
+    class Hyperlinker < SM::ToHtml
+	
+    def initialize(dochelper)
+      @dochelper = dochelper
+      super()
+    end
 
-		def initialize(dochelper)
-			@dochelper = dochelper
-			super()
-		end
-
-		# We're invoked when any text matches the CROSSREF pattern
-	  # (defined in MarkUp). If we fine the corresponding reference,
+	# We're invoked when any text matches the CROSSREF pattern
+	# (defined in MarkUp). If we fine the corresponding reference,
   	# generate a hyperlink.
   	def handle_special_CROSSREF(special)
-    	name = special.text
-    	if name[0,1] == '#'
-      	name = name[1..-1]
+  	  name = special.text
+      if name[0,1] == '#'
+        name = name[1..-1]
       end
 
   	  if /([A-Z].*)[.\#](.*)/ =~ name
-	      ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => $1}, :target=>'sidebar')
-	    else
-  	    ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => name}, :target=>'sidebar')
-	    end
-
-			ref
+	    ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => $1})
+	  else
+  	    ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => name})
 	  end
+	  ref
+	end
 
-		# And we're invoked with a potential external hyperlink mailto:
+	  # And we're invoked with a potential external hyperlink mailto:
 	  # just gets inserted. http: links are checked to see if they
 	  # reference an image. If so, that image gets inserted using an
 	  # <img> tag. Otherwise a conventional <a href> is used.  We also
@@ -184,6 +185,7 @@ module DocHelper
       end
       label = $1
       url   = $2
+      
       gen_url(url, label)
     end
 
@@ -192,24 +194,28 @@ module DocHelper
     def gen_url(url, text)
       if url =~ /([A-Za-z]+):(.*)/
         type = $1
-        path = $2
+        url = path = $2
       else
         type = "http"
         path = url
         url  = "http://#{url}"
       end
 
-      if type == "link"
-        if path[0,1] == '#'     # is this meaningful?
-          url = path
-        else
-          url = path
-        end
-      end
-
-      if (type == "http" || type == "link") && 
-      	url =~ /\.(gif|png|jpg|jpeg|bmp)$/
+      if (type == "http" || type == "link") && url =~ /\.(gif|png|jpg|jpeg|bmp)$/
       	"<img src=\"#{url}\">"
+      elsif (type == 'link' && !(type =~ /http:/))
+        if(path[0,7] == "classes")
+          url = url[8,url.length - 8]        
+          url.sub!(/\.html.*/, '')        
+          url.gsub!(/\//, '::')
+          return @dochelper.link_to(url, {:controller => 'doc', :action => 'search', :name => url, :exact => 1})           
+        elsif(path[0,5] == "files")
+          url.sub!(/\.html/, '')
+          url.sub!(/files\//, '')
+          return @dochelper.link_to(url, {:controller => 'doc', :action => 'search', :name => url, :exact => 1})       
+        else
+         return "<a href="#">#{path}</a>"
+        end
       else
         "<a href=\"#{url}\" target=\"_blank\">#{text.sub(%r{^#{type}:/*}, '')}</a>"
       end

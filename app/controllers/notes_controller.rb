@@ -65,6 +65,7 @@ private
    # get the necessary information to create the note
    def get_note_params(id, type_string)
      case type_string
+	   when "RaChildren" then return get_codeobj_params(id, type_string)	     
 	   when RaModule.to_s then return get_container_params(id, type_string)
 	   when RaClass.to_s then return get_container_params(id, type_string) 
 	   when RaFile.to_s then return get_container_params(id, type_string)	                 
@@ -101,7 +102,7 @@ private
 	       :note_group => type_string, :note_type => type_string,
 	       :version => type.ra_library.ver_string}      
    end
-   
+
    def get_index_params()
 	     return {:container_name => "index", :ra_container_id => "0",
 	       :note_group => "index", :note_type => "index",

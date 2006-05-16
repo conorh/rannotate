@@ -87,6 +87,7 @@ class Note < ActiveRecord::Base
 	   when RaClass.to_s then return container_name 
 	   when RaFile.to_s then return container_name                
 	   when RaMethod.to_s then return "Method " + note_group + " of " + container_name
+	   when "RaChildren" then return "Children section of " + container_name	   
 	   when RaInFile.to_s then return "InFiles section of " + container_name
 	   when RaAttribute.to_s then return "Attributes section of " + container_name
 	   when RaConstant.to_s then return "Constants section of " + container_name

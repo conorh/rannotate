@@ -20,8 +20,8 @@
 
 <div id="sidebar_slim">
 <h2>Links</h2>
-<%= link_to 'Upload New Documentation', :action => 'create' %><br/>
-<%= link_to 'Manage Libraries', :action => 'list' %><br/>
+<%= link_to 'Upload New Documentation', :controller => 'upload', :action => 'create' %><br/>
+<%= link_to 'Manage Libraries', :controller => 'upload', :action => 'list' %><br/>
 <%= link_to 'Manage Annotations', :controller => 'notes' %><br/>
 <%= link_to 'Ban Ip Ranges', :controller => 'ban' %><br/>
 </div>

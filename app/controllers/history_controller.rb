@@ -135,7 +135,7 @@ protected
     	case new.class.to_s
     		when 'RaMethod'    		
     			if(new.parameters != old.parameters)
-    				result = new.name + new.parameters + " -> " + old.name + old.parameters
+    				result = new.name + new.parameters + " <strong>--></strong> " + old.name + old.parameters
     			end
     		when 'RaAlias'    			
     		when 'RaAttribute'

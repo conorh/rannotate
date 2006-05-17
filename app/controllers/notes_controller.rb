@@ -56,14 +56,8 @@ class NotesController < ApplicationController
     if !@note.save
       render :action => 'preview'
     else
-      NoteSweeper.expire_cache(self, @note)
-      
-      # if this is a container then render the resulting page with 
-      # expanded = true
-      
+      NoteSweeper.expire_cache(self, @note)            
       render :action => 'success'
-      
-      render :cont
     end
   end 
   

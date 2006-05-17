@@ -46,6 +46,18 @@ class DocController < ApplicationController
 	    render :action => 'container'     	
 	end
   end
+  
+  
+  # this is a method that causes a container to display without caching
+  def container
+    # this is needed because after creating a new note we go back to the container
+    # page and it gets cached. Howerver the page is in "expanded" mode to show the note that you just added
+    # this means that the section with your note is expanded out
+    # this page then gets cached and everyone that goes there after that sees your note
+    # to solve this problem we use this action that doesn't cache the page
+    # NOTE: let it be known that page caching can cause extreme headaches
+    get_container(params[:type])
+  end
 
   # display a method  
   def method(type)

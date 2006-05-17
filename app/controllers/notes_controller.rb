@@ -1,6 +1,7 @@
 class NotesController < ApplicationController
     
-  cache_sweeper :note_sweeper, :only => [:create]
+  # cache_sweeper :note_sweeper, :only => [:create]
+  caches_page :rss, :list_new
 	
   # Display a list of notes
   def list
@@ -55,9 +56,16 @@ class NotesController < ApplicationController
     if !@note.save
       render :action => 'preview'
     else
+      NoteSweeper.expire_cache(self, @note)
+      
+      # if this is a container then render the resulting page with 
+      # expanded = true
+      
       render :action => 'success'
+      
+      render :cont
     end
-  end
+  end 
   
 private
 
@@ -107,6 +115,6 @@ private
 	     return {:container_name => "index", :ra_container_id => "0",
 	       :note_group => "index", :note_type => "index",
 	       :version => "n/a"}  	      
-   end   
+   end 
 	
 end

@@ -6,17 +6,30 @@ ActionController::Routing::Routes.draw do |map|
   # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
   # Keep in mind you can assign values other than :controller and :action
 
-  # You can have the root of your site routed by hooking up '' 
-  # -- just remember to delete public/index.html.
+  # You can have the root of your site routed by hooking up ''
   map.connect '', :controller => "doc"  
   map.connect 'admin/', :controller => "admin/upload"  
   
-  map.connect 'class/:name/:method', :controller => 'doc', :action => 'classes', :method => nil
-  map.connect 'file/:name/:method', :controller => 'doc', :action => 'files', :method => nil
-  map.connect 'module/:name/:method', :controller => 'doc', :action => 'modules', :method => nil
-  map.connect 'list/:type', :controller => 'doc', :action => 'list'
+  # routing rules to give nice URLs to class and modules with version numbers
+  map.connect 'class/:name/:version', :controller => 'doc', :action => 'classes', 
+    :version => nil, :requirements => {:version => /\d\.\d\.\d/}
+  map.connect 'file/:name/:version', :controller => 'doc', :action => 'files',
+    :version => nil, :requirements => {:version => /\d\.\d\.\d/}
+  map.connect 'module/:name/:version', :controller => 'doc', :action => 'modules', 
+    :version => nil, :requirements => {:version => /\d\.\d\.\d/}
   
+  # routing ruls to give nice ULRs to class and modules with methods and version numbers
+  map.connect 'class/:name/:method/:version', :controller => 'doc', :action => 'classes', :method => nil, :version => nil
+  map.connect 'file/:name/:method/:version', :controller => 'doc', :action => 'files', :method => nil, :version => nil
+  map.connect 'module/:name/:method/:version', :controller => 'doc', :action => 'modules', :method => nil, :version => nil
   
+  # routing rule to match the list types with possible version numbers
+  map.connect 'list/:type/:library/:version', :controller => 'doc', :action => 'list', :library => nil, :version => nil
+  
+  # routing rule to give nice URL to history links
+  map.comment 'history/:type/:name', :controller => 'doc', :action => 'history'
+  
+  # routing rule to search for anything that doesn't match the above
   map.connect '/:name', :controller => 'doc', :action => 'search'
   
   # default route (id must be a number) 

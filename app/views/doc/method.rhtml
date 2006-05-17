@@ -19,6 +19,7 @@
 <%= render :partial => 'doc/partials/source_code' %>
 </div>
 
+<a name="notessec"></a>
 <div class="section_title" onClick="<%= show_or_hide("usercommentsec") %>">
 <span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :id => @method.id, :type => 'RaMethod'}) %></span>
 User Added Notes

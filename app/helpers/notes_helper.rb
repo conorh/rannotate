@@ -21,20 +21,23 @@ module NotesHelper
 	end
 	
 	def get_return_url(note)
-      container = RaContainer.type_to_route(note.ra_container.class.to_s)
+	  container_type = note.ra_container.class.to_s
+      container = RaContainer.type_to_route(container_type)
+      container_params = {:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'notessec'}
+      code_obj_params = {:controller => 'doc', :action => 'container', :type => container_type, :name => note.container_name}
       
       case note.note_type
-	    when RaModule.to_s then return url_for(:controller => 'doc', :action => "modules", :name => note.container_name, :anchor => 'usernotes')
-	    when RaClass.to_s then return url_for(:controller => 'doc', :action => "classes", :name => note.container_name, :anchor => 'usernotes')
-	    when RaFile.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'usernotes')	    	    
-	    when RaMethod.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => note.note_group, :expand => note.note_group) 
-	    when RaInFile.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'infiles', :expand => 'infiles') 
-	    when RaAttribute.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'attributes', :expand => 'attributes') 
-	    when RaConstant.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'constants', :expand => 'constants') 
-	    when RaInclude.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'includes', :expand => 'includes') 
-	    when RaRequire.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'requires', :expand => 'requires') 
-	    when RaAlias.to_s then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'aliases', :expand => 'aliases')
-	    when "RaChildren" then return url_for(:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'children', :expand => 'children')
+	    when RaModule.to_s then return url_for(container_params)
+	    when RaClass.to_s then return url_for(container_params)
+	    when RaFile.to_s then return url_for(container_params)   	    
+	    when RaMethod.to_s then return url_for(container_params.merge({:method => note.note_group}))
+	    when RaInFile.to_s then return url_for(code_obj_params.merge({:anchor => 'infiles', :expand => 'infiles'})) 
+	    when RaAttribute.to_s then return url_for(code_obj_params.merge({:anchor => 'attributes', :expand => 'attributes'}))
+	    when RaConstant.to_s then return url_for(code_obj_params.merge({:anchor => 'constants', :expand => 'constants'})) 
+	    when RaInclude.to_s then return url_for(code_obj_params.merge({:anchor => 'includes', :expand => 'includes'})) 
+	    when RaRequire.to_s then return url_for(code_obj_params.merge({:anchor => 'requires', :expand => 'requires'})) 
+	    when RaAlias.to_s then return url_for(code_obj_params.merge({:anchor => 'aliases', :expand => 'aliases'}))
+	    when "RaChildren" then return url_for(code_obj_params.merge({:anchor => 'children', :expand => 'children'}))
         when "index" then return url_for(:controller => 'doc', :action => "index")
       end
       

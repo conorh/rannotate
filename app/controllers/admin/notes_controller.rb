@@ -24,22 +24,25 @@ class Admin::NotesController < ApplicationController
 	end
 	
 	def edit
-		@note = Note.find(@params['id'])
+	  @note = Note.find(@params['id'])
 	end
 	
 	def show
-    @note = Note.find(@params['id'])		
+      @note = Note.find(@params['id'])		
 	end
 	
+	# update a note and expire the cache if necessary
 	def update
-    @note = Note.find(@params[:id])
-    @note.skip_ban_validation = true
-    if @note.update_attributes(@params[:note])
-      flash[:notice] = 'Note was successfully updated.'
-      redirect_to :action => 'show', :id => @params[:id]
-    else
-      render :action => 'edit'
-    end
+      @note = Note.find(@params[:id])
+      @note.skip_ban_validation = true
+            
+      if @note.update_attributes(@params[:note])
+        NoteSweeper.expire_cache(self, @note)       
+        flash[:notice] = 'Note was successfully updated.'       
+        redirect_to :action => 'show', :id => @params[:id]
+      else
+        render :action => 'edit'
+      end
 	end
 	
 	private
@@ -47,13 +50,21 @@ class Admin::NotesController < ApplicationController
 	def show_filtered_results
 	  if(@params['note_filter'])
 		@notes = Note.find_with_filter(@params['note_filter'])
-		  return true			
+		return true			
 	  end	
 	  return false
 	end	
 		
+	# delete a bunch of notes expiring the cache as we go
 	def delete_entries
-      Note.delete(@params['ids_for_delete'])		
+      notes = Note.find(@params['ids_for_delete'])
+      for note in notes
+         NoteSweeper.expire_cache(self, note)      
+         Note.delete(note.id)    
+      end
 	end	
+
+private
+   
 
 end

@@ -9,7 +9,7 @@
 </a>
 <% if(@version) then %>Version <%= @version %><% end %>
 <br/>
-[ <a href="#notes"><%= pluralize(get_count(@note_count, @ra_container.class.to_s), "Note") %></a> ]
+[ <a href="#notessec"><%= pluralize(get_count(@note_count, @ra_container.class.to_s), "Note") %></a> ]
 [ <%= link_to 'History', {:action => 'history', :name => @container_name, :type => @ra_container.class.to_s } %> ]
 
 <% if(@ra_container.ra_comment.comment.length > 0) %>
@@ -25,7 +25,7 @@
 <% if(@ra_children.length > 0) %><%= render :partial => 'doc/partials/children' %><% end %>
 <p>
 
-<a name="notes"></a>
+<a name="notessec"></a>
 
 <div class="section_title">
 <span class="note_link"><%= get_add_note_link(@ra_container, @ra_container.class.to_s) %></span>

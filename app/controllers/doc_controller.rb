@@ -2,7 +2,7 @@ class DocController < ApplicationController
   session :off
 
   # cache the main actions for this controller
-  caches_page :index, :list, :files, :modules, :classes
+  caches_page :index, :list, :files, :modules, :classes, :libraries
 
   # display the index page with an optional home page
   def index    

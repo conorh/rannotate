@@ -38,7 +38,7 @@ module NotesHelper
 	    when RaRequire.to_s then return url_for(code_obj_params.merge({:anchor => 'requires', :expand => 'requires'})) 
 	    when RaAlias.to_s then return url_for(code_obj_params.merge({:anchor => 'aliases', :expand => 'aliases'}))
 	    when "RaChildren" then return url_for(code_obj_params.merge({:anchor => 'children', :expand => 'children'}))
-        when "index" then return url_for(:controller => 'doc', :action => "index")
+        when "index" then return url_for(:controller => 'doc', :action => "index", :anchor => 'notessec')
       end
       
       return url_for(:controller => 'doc', :action => "index")	 	  	

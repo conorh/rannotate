@@ -1,7 +1,7 @@
 xml.instruct! :xml, :version=>"1.0" 
 xml.rss(:version=>"2.0"){
   xml.channel{
-    xml.title(RANNOTATE_SITE_NAME)
+    xml.title(RANNOTATE_SITE_NAME + " at " + @request.host)
     xml.link(@request.protocol + @request.host_with_port + url_for(:controller => 'notes', :action => 'rss'))
     xml.description("recently added user notes")
     xml.language('en-us')

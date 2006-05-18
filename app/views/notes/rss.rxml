@@ -1,21 +1,20 @@
 xml.instruct! :xml, :version=>"1.0" 
 xml.rss(:version=>"2.0"){
   xml.channel{
-    xml.title("rails.outertrack.com")
-    xml.link("http://rails.outertrack.com/notes/rss")
+    xml.title(RANNOTATE_SITE_NAME)
+    xml.link(@request.protocol + @request.host_with_port + url_for(:controller => 'notes', :action => 'rss'))
     xml.description("recently added user notes")
     xml.language('en-us')
       for note in @notes
         xml.item do
           xml.title("New note for - " + note.get_display)
           xml.category("Note")
-          xml.tag!("description") { xml.cdata!(fix_note_for_display(note.text)) }        
-         # xml.description("New note added to " + note.container_name)
+          xml.author(mangle_email_for_display(note.email))
+          xml.tag!("description") { xml.cdata!(fix_note_for_display(note.text)) }
          # xml.tag!("content:encoded") { xml.cdata!(note.text) }
           xml.pubDate(CGI.rfc1123_date(note.created_at))
-          xml.link("http://rails.outertrack.com" + get_return_url(note))
-         # TODO: Need to add a uniquie permalink style guid
-          xml.link("http://rails.outertrack.com" + get_return_url(note))
+          xml.link(@request.protocol + @request.host_with_port + get_return_url(note))
+          xml.link(@request.protocol + @request.host_with_port + get_return_url(note))
         end
       end
   }

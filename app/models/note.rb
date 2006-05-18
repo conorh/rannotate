@@ -7,7 +7,7 @@ class Note < ActiveRecord::Base
 	attr_accessor :ref_id, :ref_type
 	
 	validates_length_of :email, :in => 5..40
-	validates_length_of :text, :in => 10..1000
+	validates_length_of :text, :in => 10..5000
 	validates_presence_of :container_name
 	validates_presence_of :note_group
 

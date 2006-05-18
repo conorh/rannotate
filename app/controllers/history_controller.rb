@@ -4,8 +4,8 @@ class HistoryController < ApplicationController
   # show the file, class, module differences beteween two versions of a library
   def diff_libraries  	
   	# Get the two versions of the library
-  	new_lib = RaLibrary.find(:first, :conditions => ["version = ?", new_ver])
-  	old_lib = RaLibrary.find(:first, :conditions => ["version = ?", old_ver])
+  	new_lib = RaLibrary.find(:first, :conditions => ["version = ?", params[:new_ver]])
+  	old_lib = RaLibrary.find(:first, :conditions => ["version = ?", params[:old_ver]])
   	containers = RaContainer.find(:all, :conditions => ["ra_library_id IN(?)", [new_lib.id, old_lib.id]])
   	
     # Now we have to put the information into the format required by
@@ -13,18 +13,20 @@ class HistoryController < ApplicationController
     
     # create an array with the two libraries
     @versions = Array.new
-    @versions.push({:container => old_lib})
-    @versions.push({:container => new_lib, :added => [], :changed => [], :removed => []})    
+    @versions.push({:container => old_lib, :added => {}, :changed => {}, :removed => {}})       
+    @versions.push({:container => new_lib, :added => {}, :changed => {}, :removed => {}})
   	
     # Group the containers by library id
     containers_hash = Hash.new
     containers.each do |c|
-    	unless containers_hash[c.ra_library_id] then methods_hash[c.ra_library_id] = Hash.new end
+    	unless containers_hash[c.ra_library_id] then containers_hash[c.ra_library_id] = Hash.new end
     	containers_hash[c.ra_library_id][c.class.to_s + c.full_name] = c
 	end 	
   	
   	# Diff the two lists and put the results in @versions
-  	check_changes(@versions, :library, containers_hash)  	
+  	check_changes(@versions, 'files', containers_hash)
+  	
+  	render :action => :container, :layout => 'doc'
   end
 
   # Show the differences for all versions of a container
@@ -89,7 +91,7 @@ protected
 	def check_changes(versions, type, type_hash)
 		# For each version check all of the methods against the previous version
 		# to see if they have changed or if they were added or removed
-		for i in 1...versions.length			
+		for i in 1...versions.length		
 		
 		    # get the id of each version and it's previous version
 			current_ver = versions[i][:container].id

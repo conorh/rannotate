@@ -23,7 +23,7 @@ module NotesHelper
 	def get_return_url(note)
 	  container_type = note.ra_container.class.to_s
       container = RaContainer.type_to_route(container_type)
-      container_params = {:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'notessec'}
+      container_params = {:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'note_' + note.id.to_s}
       code_obj_params = {:controller => 'doc', :action => 'container', :type => container_type, :name => note.container_name}
       
       case note.note_type
@@ -31,14 +31,14 @@ module NotesHelper
 	    when RaClass.to_s then return url_for(container_params)
 	    when RaFile.to_s then return url_for(container_params)   	    
 	    when RaMethod.to_s then return url_for(container_params.merge({:method => note.note_group}))
-	    when RaInFile.to_s then return url_for(code_obj_params.merge({:anchor => 'infiles', :expand => 'infiles'})) 
-	    when RaAttribute.to_s then return url_for(code_obj_params.merge({:anchor => 'attributes', :expand => 'attributes'}))
-	    when RaConstant.to_s then return url_for(code_obj_params.merge({:anchor => 'constants', :expand => 'constants'})) 
-	    when RaInclude.to_s then return url_for(code_obj_params.merge({:anchor => 'includes', :expand => 'includes'})) 
-	    when RaRequire.to_s then return url_for(code_obj_params.merge({:anchor => 'requires', :expand => 'requires'})) 
-	    when RaAlias.to_s then return url_for(code_obj_params.merge({:anchor => 'aliases', :expand => 'aliases'}))
-	    when "RaChildren" then return url_for(code_obj_params.merge({:anchor => 'children', :expand => 'children'}))
-        when "index" then return url_for(:controller => 'doc', :action => "index", :anchor => 'notessec')
+	    when RaInFile.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'infiles'})) 
+	    when RaAttribute.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'attributes'}))
+	    when RaConstant.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'constants'})) 
+	    when RaInclude.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'includes'})) 
+	    when RaRequire.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'requires'})) 
+	    when RaAlias.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'aliases'}))
+	    when "RaChildren" then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'children'}))
+        when "index" then return url_for(:controller => 'doc', :action => "index", :anchor => 'note_' + note.id.to_s)
       end
       
       return url_for(:controller => 'doc', :action => "index")	 	  	

@@ -37,6 +37,7 @@ class NotesController < ApplicationController
   def preview
     note_params = get_note_params(params[:note][:ref_id], params[:note][:ref_type])
     
+    @hide_vote = true
     @note = Note.new(note_params.merge(params[:note]))
     @note.created_at = Time.now
     @note.skip_ban_validation = true
@@ -59,7 +60,47 @@ class NotesController < ApplicationController
       NoteSweeper.expire_cache(self, @note)            
       render :action => 'success'
     end
-  end 
+  end
+  
+  # Save a vote for a note and then show the success page if it was a success
+  def vote
+    ip = request.remote_ip;
+    note_id = params[:id]
+    vote_value = params[:value].to_i
+            
+    @note = Note.find_by_id(note_id) 
+    
+    if(@note == nil)
+      @error = "Could not find note, sorry!"
+      return
+    end
+    
+    existing_vote = NoteVote.find(:first, :conditions => ["ref_id = ? AND ip_address = ?", note_id, ip])
+    if(existing_vote != nil)
+      @error = "Sorry your IP has already voted for this note"
+      return
+    end 
+    
+    if(vote_value == NoteVote::USEFUL)
+      @note.total_votes += 1
+    elsif(vote_value == NoteVote::NOT_USEFUL || vote_value == NoteVote::SPAM)
+      @note.total_votes -= 1
+    end
+    @note.save
+    NoteSweeper.expire_cache(self, @note)    
+
+    @vote = NoteVote.new()
+    @vote.vote_value = vote_value
+    @vote.ip_address = ip
+    @vote.ref_id = note_id
+    @vote.save
+  end
+  
+  def rankings
+    @most_notes = Note.find_by_sql("SELECT *, COUNT(*) AS note_count FROM notes GROUP BY container_name ORDER BY note_count DESC LIMIT 10")
+    @highest_notes = Note.find(:all, :limit => 10, :order => "total_votes DESC") 
+    render :layout => 'doc'
+  end
   
 private
 

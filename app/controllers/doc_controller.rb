@@ -3,6 +3,8 @@ class DocController < ApplicationController
 
   # cache the main actions for this controller
   caches_page :index, :list, :files, :modules, :classes, :libraries
+  
+  helper :notes
 
   # display the index page with an optional home page
   def index    
@@ -64,10 +66,10 @@ class DocController < ApplicationController
   	@container_name = @params[:name]
   	@version = @params[:version]
     @ra_container = RaContainer.find_highest_version(@container_name, type, @version)
-    @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, @params[:method]])  	
+    @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, @params[:method]])
     @source_code = RaSourceCode.find(@method.ra_source_code_id).source_code
     @page_title = RANNOTATE_SITE_NAME + " " + @container_name + "-" + @method.name
-    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name, :method => nil)  
+    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name, :method => nil)
   end
   
   # display a list of entries

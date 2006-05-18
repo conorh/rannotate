@@ -15,7 +15,7 @@ xml.rss(:version=>"2.0"){
           xml.pubDate(CGI.rfc1123_date(note.created_at))
           xml.link("http://rails.outertrack.com" + get_return_url(note))
          # TODO: Need to add a uniquie permalink style guid
-         # xml.guid("railsoutertrackcom-note-id " + note.id.to_s)
+          xml.link("http://rails.outertrack.com" + get_return_url(note))
         end
       end
   }

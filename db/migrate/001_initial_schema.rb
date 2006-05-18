@@ -14,8 +14,8 @@ class InitialSchema < ActiveRecord::Migration
       t.column "text", :text
       t.column "ip_address", :string, :limit => 16
       t.column "created_at", :timestamp
-      t.column "updated_at", :timestamp
-    end
+      t.column "updated_at", :timestamp    
+    end    
 
     add_index "notes", ["container_name", "note_group"], :name => "ind_cont_group"
 
@@ -83,8 +83,6 @@ class InitialSchema < ActiveRecord::Migration
       t.column "password", :string, :limit => 40
     end  
     
-    # create an admin/admin user
-    User.create :login => "admin", :password => "admin", :password_confirmation => "admin"
   end
 
   def self.down

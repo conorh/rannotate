@@ -14,7 +14,7 @@ xml.rss(:version=>"2.0"){
          # xml.tag!("content:encoded") { xml.cdata!(note.text) }
           xml.pubDate(CGI.rfc1123_date(note.created_at))
           xml.link(@request.protocol + @request.host_with_port + get_return_url(note))
-          xml.link(@request.protocol + @request.host_with_port + get_return_url(note))
+          xml.guid(@request.protocol + @request.host_with_port + get_return_url(note))
         end
       end
   }

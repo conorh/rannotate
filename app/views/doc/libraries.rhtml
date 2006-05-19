@@ -5,7 +5,9 @@
 <div id="body_content_wide" style="padding-left: 10px;">
 <div style="font-size: 110%">
 <% @libraries.each do |name,ver_array| %>
-<h2>Library - <%= name.capitalize %></h2>
+<h2>Library - <%= name.capitalize %>
+<span style="font-size: 80%">[<%= link_to 'history', {:controller => 'history', :action => :libraries, :name => name} %>]</span>
+</h2>
 <% ver_array.each do |ver| %>
 ver <%= ver.ver_string %> - [<%= link_to 'files', {:action => 'list', :type => 'files', :library => name, :version => ver.ver_string} %>] 
 [<%= link_to 'classes', {:action => 'list', :type => 'classes', :library => name, :version => ver.ver_string} %>] 

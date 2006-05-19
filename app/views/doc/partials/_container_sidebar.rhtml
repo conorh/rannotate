@@ -1,7 +1,7 @@
 <% if @ra_children.length > 0 %>
 <h2>Child Classes and Modules</h2>
 <% for child in @ra_children %>
-<%= link_to_container(child, 35) %><br/>
+<%= link_to_container(child, 32) %><br/>
 <% end %>
 <br/>
 <% end %>
@@ -9,15 +9,15 @@
 <% if @ra_code_objects[RaConstant] %>
 <h2>Constants</h2>
 <% for constant in @ra_code_objects[RaConstant] %>
-<a href="#const_<%= constant.name %>"><%= constant.name[0,35] %></a><br/>
+<a href="#const_<%= constant.name %>" title="<%= constant.name %>"><%= limit_length(constant.name, 32) %></a><br/>
 <% end %>
 <br/>
 <% end %>
 
 <% if @ra_code_objects[RaAttribute] %>
 <h2>Attributes</h2>
-<% for attribute in @ra_code_objects[RaAttribute] %>  
-[<%= attribute.read_write %>] <a href="#attr_<%= attribute.name %>"><%= attribute.name[0,35] %></a><br/>
+<% for attribute in @ra_code_objects[RaAttribute] %> 
+[<%= attribute.read_write %>] <a href="#attr_<%= attribute.name %>" title="<%= attribute.name %>"><%= limit_length(attribute.name,32) %></a><br/>
 <% end %> 
 <br/>
 <% end %>  
@@ -26,7 +26,7 @@
 <% if(@ra_methods[visibility]) %>
 <h2><%= visibility %> Methods</h2>
 <% for method in @ra_methods[visibility] %>
-<a href="#<%= method.name %>"><%= method.name[0,35] %></a><br/>
+<a href="#<%= method.name %>" title="<%= method.name %>"><%= limit_length(method.name, 32) %></a><br/>
 <% end %>
 <br/>
 <% end 

@@ -1,14 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
     
-    # limit the length of text and add .. if it becomes too long
+    # limit the length of some text and add .. if it becomes too long
     def limit_length(text, max_length)
       if(text == nil)
         return nil
       end
       
       if(text.length > max_length)
-        return text[0,23] + ".."
+        return text[0,max_length] + ".."
       end
       
       return text

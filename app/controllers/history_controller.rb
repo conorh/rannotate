@@ -2,20 +2,18 @@ class HistoryController < ApplicationController
   session :off
 
   # show the file, class, module differences beteween two versions of a library
-  def diff_libraries  	
+  def libraries  	
   	# Get the two versions of the library
-  	new_lib = RaLibrary.find(:first, :conditions => ["version = ?", params[:new_ver]])
-  	old_lib = RaLibrary.find(:first, :conditions => ["version = ?", params[:old_ver]])
-  	containers = RaContainer.find(:all, :conditions => ["ra_library_id IN(?)", [new_lib.id, old_lib.id]])
+  	libs = RaLibrary.find(:all, :conditions => ["name = ?", params[:name]], :order => "version ASC")
+    @versions = []
+    lib_ids = []    
+  	for lib in libs
+  	 lib_ids.push(lib.id)
+     @versions.push({:container => lib, :added => {}, :changed => {}, :removed => {}})     	 
+  	end
   	
-    # Now we have to put the information into the format required by
-    # check_changes so that it can diff the two lists
-    
-    # create an array with the two libraries
-    @versions = Array.new
-    @versions.push({:container => old_lib, :added => {}, :changed => {}, :removed => {}})       
-    @versions.push({:container => new_lib, :added => {}, :changed => {}, :removed => {}})
-  	
+  	containers = RaContainer.find(:all, :conditions => ["ra_library_id IN(?)", lib_ids])
+  	  	
     # Group the containers by library id
     containers_hash = Hash.new
     containers.each do |c|
@@ -25,8 +23,9 @@ class HistoryController < ApplicationController
   	
   	# Diff the two lists and put the results in @versions
   	check_changes(@versions, 'files', containers_hash)
+  	@versions.reverse!
   	
-  	render :action => :container, :layout => 'doc'
+  	render :layout => 'doc'
   end
 
   # Show the differences for all versions of a container
@@ -103,8 +102,10 @@ protected
 			
 			    # for each of the entries in the current version check to see if it
 			    # has been added or removed since the previous version
-    			type_hash[current_ver].values.each do |obj|    			    
-    				old_obj = type_hash[pre_ver][obj.class.to_s + obj.name]
+    			type_hash[current_ver].values.each do |obj|
+    			    obj.respond_to?("full_name")? obj_name = obj.full_name : obj_name = obj.name
+    			    
+    				old_obj = type_hash[pre_ver][obj.class.to_s + obj_name]
     				type_string = obj.class.type_string	    			
 		    		if (old_obj == nil)
 		    		    if(versions[i][:added][type_string] == nil) then versions[i][:added][type_string] = [] end
@@ -117,7 +118,7 @@ protected
     					end    					   
 		    		end    		    		
     				# remove the method from the hash because it is already processed
-    				type_hash[pre_ver].delete(obj.class.to_s + obj.name)
+    				type_hash[pre_ver].delete(obj.class.to_s + obj_name)
 	    		end
 		    	# all the items left over are methods that were removed between versions
     			type_hash[pre_ver].values.each do |obj|

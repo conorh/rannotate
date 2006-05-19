@@ -26,8 +26,11 @@ ActionController::Routing::Routes.draw do |map|
   # routing rule to match the list types with possible version numbers
   map.connect 'list/:type/:library/:version', :controller => 'doc', :action => 'list', :library => nil, :version => nil
   
+  # routing rule to give nice url to history of library links
+  map.connect 'history/library/:name', :controller => 'history', :action=> 'library'
+  
   # routing rule to give nice URL to history links
-  map.comment 'history/:type/:name', :controller => 'doc', :action => 'history'
+  map.connect 'history/:type/:name', :controller => 'doc', :action => 'history'
   
   # routing rule to search for anything that doesn't match the above
   map.connect '/:name', :controller => 'doc', :action => 'search'

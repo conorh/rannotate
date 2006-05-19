@@ -111,7 +111,10 @@ H1,H2,H3,H4,H5,H6 {
 .comment PRE {
   padding: 0.5em;
   border: 1px dotted black;
-  background: #CBE6F3;
+  background: #CBE6F3; 
+  font-size: 110%;
+}
+.comment tt {
   font-size: 110%;
 }
 

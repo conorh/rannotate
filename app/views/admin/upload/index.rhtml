@@ -6,14 +6,19 @@ Using this administration tool you can manage your Rannotated documentation. Use
 <p>
 Number of user notes: 1231<br/>
 Number of libraries: 4<br/>
-Number of classes: 12311<br/>
-Number of modules: 1231<br/>
-Number of files: 123<br/>
-Number of methods: 1231<br/>
-Number of other code objects: 1231<br/>
-
-Number of methods with docs: 123<br/>
+...
+coming soon.
 
 <h2>Administration FAQ</h2>
 <p>
-Coming soon
+Environment Variables:<br/>
+There are several Rannotate environment variables at the bottom of config/environment.rb that can be customized for your site. You should at least change RANNOTATE_SITE_NAME to reflect what you are documenting. 
+<p>
+Generating docs:<br/>
+When generating the documentation the name of the YAML file output matters. When you import the YAML file via the admin web interface it uses the file name to determinte the library name and version. The format is appname-major.minor.release ex: rails-1.1.2
+<p>
+Page Caching<br/>
+Page caching is turned off by default. You can turn it on by editing the config.action_controller.perform_caching line in the relevant config/environments/ file, but make sure that the public/ directory is writable for the cached pages.
+<p>
+Manage Annotations:<br/>
+The Manage Annotations page allows you to delete and edit user annotations in bulk. Admittedly it doesn't look very good now, but it does the job.

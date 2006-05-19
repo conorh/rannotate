@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
     
   # cache_sweeper :note_sweeper, :only => [:create]
-  caches_page :rss, :list_new
+  caches_page :list_new
 	
   # Display a list of notes
   def list
@@ -87,16 +87,21 @@ class NotesController < ApplicationController
       @note.total_votes -= 1
     end
     @note.save
+    
+    # now that we have updated a note we have to expire all the pages it appears on from the cache
     NoteSweeper.expire_cache(self, @note)    
 
+    # save a record of this vote
     @vote = NoteVote.new()
     @vote.vote_value = vote_value
     @vote.ip_address = ip
     @vote.ref_id = note_id
     @vote.save
   end
-  
+
+  # show a rankings page for highest ranked notes and most notes (and more in the future)
   def rankings
+    # TODO: It seems to me that there should be a more active recordish way of doing this?
     @most_notes = Note.find_by_sql("SELECT *, COUNT(*) AS note_count FROM notes GROUP BY container_name ORDER BY note_count DESC LIMIT 10")
     @highest_notes = Note.find(:all, :limit => 10, :order => "total_votes DESC") 
     render :layout => 'doc'

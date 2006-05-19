@@ -41,7 +41,7 @@
 <div class="history_changed">
 <% version[:changed].each do |type_name, obj_hash| %>
   <div class="history_subhead"><%= type_name.pluralize.capitalize %></div>
-  <% obj_hash.sort{|x,y| x.name <=> y.name }.each do |obj| %>
+  <% obj_hash.sort{|x,y| x <=> y }.each do |obj| %>
   <span class="history_obj"><%= obj %></span><br/>
   <% end %>
 <% end %>

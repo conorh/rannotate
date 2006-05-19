@@ -2,7 +2,7 @@ class HistoryController < ApplicationController
   session :off
 
   # show the file, class, module differences beteween two versions of a library
-  def libraries  	
+  def library  	
   	# Get the two versions of the library
   	libs = RaLibrary.find(:all, :conditions => ["name = ?", params[:name]], :order => "version ASC")
     @versions = []

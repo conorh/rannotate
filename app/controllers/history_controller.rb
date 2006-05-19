@@ -1,5 +1,6 @@
 class HistoryController < ApplicationController
   session :off
+  caches_page :library
 
   # show the file, class, module differences beteween two versions of a library
   def library  	

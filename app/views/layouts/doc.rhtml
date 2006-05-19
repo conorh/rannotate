@@ -21,8 +21,7 @@
   <%= link_to(RANNOTATE_SITE_NAME, {:controller => 'doc', :action => 'index'},{:class=>"header_link"}) %><br/>
 		  <% cur_lib_ver = get_current_version() %>
 		  <span class="header_subtext">
-		    <b>Version:</b> <%= cur_lib_ver.ver_string %> 
-		    <b>Updated:</b>	<%= cur_lib_ver.date.strftime("%b %d %H:%M %Y") %>
+		    <b>Version:</b> <%= cur_lib_ver.ver_string %>
 		  </span>
 </div>     
 <%= @content_for_layout %>

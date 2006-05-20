@@ -9,30 +9,62 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
-task "ranapi" do
-  require 'rdoc/rdoc'
+require 'rubygems'
+require 'rdoc/rdoc'
+
+include Config 
+
+def rdoc_for(section_name, version)
+  section = "#{section_name}libdir"
   params = []
   params << "--fmt=yaml"
-  params << "--opname=rails-1.0.0"
+  params << "--opname=#{section_name}-#{version}"
   dirs = []
-  dirs << 'vendor/railsd/railties/README'  
-  dirs << 'vendor/railsd/railties/CHANGELOG'
-  dirs << 'vendor/railsd/railties/MIT-LICENSE'
-  dirs << 'vendor/railsd/activerecord/README' 
-  dirs << 'vendor/railsd/activerecord/CHANGELOG'
-  dirs << 'vendor/railsd/activerecord/lib/'
-  dirs << 'vendor/railsd/actionpack/README'
-  dirs << 'vendor/railsd/actionpack/CHANGELOG'
-  dirs << 'vendor/railsd/actionpack/lib/'
-  dirs << 'vendor/railsd/actionmailer/README'
-  dirs << 'vendor/railsd/actionmailer/CHANGELOG'
-  dirs << 'vendor/railsd/actionmailer/lib/'
-  dirs << 'vendor/railsd/actionwebservice/README'
-  dirs << 'vendor/railsd/actionwebservice/CHANGELOG'
-  dirs << 'vendor/railsd/actionwebservice/lib/'
-#  dirs << 'vendor/rails/activesupport/README'
-  dirs << 'vendor/railsd/activesupport/CHANGELOG'
-  dirs << 'vendor/railsd/activesupport/lib/'
+  dirs << CONFIG[section]
+  RDoc::RDoc.new.document(params + dirs)  
+end
+
+task "doc:api:site" do
+  rdoc_for('site', RUBY_VERSION)
+end
+
+task "doc:api:vendor" do
+  rdoc_for('vendor', RUBY_VERSION)
+end
+
+task "doc:api:ruby" do
+  rdoc_for('ruby', RUBY_VERSION)
+end
+
+task "doc:api:rails" do
+  rails = "#{Gem.dir}/gems/rails-#{Rails::VERSION::STRING}" 
+  activerecord = "#{Gem.dir}/gems/activerecord-#{ActiveRecord::VERSION::STRING}"
+  actionpack = "#{Gem.dir}/gems/actionpack-#{ActionPack::VERSION::STRING}"
+  actionmailer = "#{Gem.dir}/gems/actionmailer-#{ActionMailer::VERSION::STRING}"
+  actionwebservice = "#{Gem.dir}/gems/actionwebservice-#{ActionWebService::VERSION::STRING}"
+  activesupport = "#{Gem.dir}/gems/activesupport-#{ActiveSupport::VERSION::STRING}"
+  params = []
+  params << "--fmt=yaml"
+  params << "--opname=rails-#{Rails::VERSION::STRING}"
+  dirs = []
+  dirs << "#{rails}/README"  
+  dirs << "#{rails}/CHANGELOG"
+  dirs << "#{rails}/MIT-LICENSE"
+  dirs << "#{activerecord}/README" 
+  dirs << "#{activerecord}/CHANGELOG"
+  dirs << "#{activerecord}/lib/"
+  dirs << "#{actionpack}/README"
+  dirs << "#{actionpack}/CHANGELOG"
+  dirs << "#{actionpack}/lib/"
+  dirs << "#{actionmailer}/README"
+  dirs << "#{actionmailer}/CHANGELOG"
+  dirs << "#{actionmailer}/lib/"
+  dirs << "#{actionwebservice}/README"
+  dirs << "#{actionwebservice}/CHANGELOG"
+  dirs << "#{actionwebservice}/lib/"
+#  dirs << "#{activesupport}/README"
+  dirs << "#{activesupport}/CHANGELOG"
+  dirs << "#{activesupport}/lib/"
   
   RDoc::RDoc.new.document(params + dirs)
 end

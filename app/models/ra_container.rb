@@ -1,6 +1,7 @@
 class RaContainer < ActiveRecord::Base
   belongs_to :ra_comment
   belongs_to :ra_library
+  has_many :ra_code_object, :dependent => :delete_all
 
   VIS_PUBLIC = 1
   VIS_PROTECTED = 2  

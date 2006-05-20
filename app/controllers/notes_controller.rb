@@ -132,27 +132,27 @@ private
 
    def get_container_params(id, type_string)	
 	     type = RaContainer.find(id)
-	     return {:container_name => type.full_name, :ra_container_id => type.id, 
+	     return {:container_name => type.full_name,
 	       :note_group => type_string, :note_type => type_string,
 	       :version => type.ra_library.ver_string }	
    end
    
    def get_method_params(id, type_string)
 	     type = RaMethod.find(id)
-	     return {:container_name => type.ra_container.full_name, :ra_container_id => type.ra_container.id,
+	     return {:container_name => type.ra_container.full_name,
 	       :note_group => type.name, :note_type => type_string,
 	       :version => type.ra_container.ra_library.ver_string }  
    end
    
    def get_codeobj_params(id, type_string)
          type = RaContainer.find(id)
-	     return {:container_name => type.full_name, :ra_container_id => id,
+	     return {:container_name => type.full_name,
 	       :note_group => type_string, :note_type => type_string,
 	       :version => type.ra_library.ver_string}      
    end
 
    def get_index_params()
-	     return {:container_name => "index", :ra_container_id => "0",
+	     return {:container_name => "index",
 	       :note_group => "index", :note_type => "index",
 	       :version => "n/a"}  	      
    end 

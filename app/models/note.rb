@@ -99,6 +99,13 @@ class Note < ActiveRecord::Base
       
       return container_name + " - " + note_group
 	end	
+	
+	# get the container for this note
+	def get_container
+	  if(note_type != 'index')
+	    return RaContainer.find_by_full_name(container_name)
+	  end
+	end
 
 protected
 

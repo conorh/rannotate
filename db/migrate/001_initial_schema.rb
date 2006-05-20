@@ -6,7 +6,6 @@ class InitialSchema < ActiveRecord::Migration
 
     create_table "notes", :force => true do |t|
       t.column "container_name", :string, :limit => 150
-      t.column "ra_container_id", :integer
       t.column "note_group", :string, :limit => 100 # What group is this, attributes, constants, method name etc
       t.column "note_type", :string, :limit => 20 # What type is this RaMethod, RaConstant etc..
       t.column "version", :string, :limit => 20 # What version of the library does this note refer to ie. "1.0.0"

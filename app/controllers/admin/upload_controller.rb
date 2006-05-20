@@ -30,13 +30,13 @@ class Admin::UploadController < ApplicationController
 		  library = RaLibrary.find(library_id)
 		  name = library.name
 		
-		  RaCodeObject.connection.delete("DELETE ra FROM ra_code_objects AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		  RaInFile.connection.delete("DELETE ra FROM ra_in_files AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		  RaSourceCode.connection.delete("DELETE rs FROM ra_source_codes AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_source_code_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		  RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_methods AS rm, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rm.ra_comment_id AND rm.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		  RaMethod.connection.delete("DELETE ra FROM ra_methods AS ra, ra_containers AS rc, ra_libraries AS rl WHERE ra.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		  RaComment.connection.delete("DELETE rs FROM ra_comments AS rs, ra_containers AS rc, ra_libraries AS rl WHERE rs.id = rc.ra_comment_id AND rc.ra_library_id = rl.id AND rl.id =" + library_id)
-		  RaContainer.connection.delete("DELETE rc FROM ra_containers AS rc, ra_libraries AS rl WHERE rc.ra_library_id = rl.id AND rl.id =" + library_id)
+		  RaCodeObject.connection.delete("DELETE ra_code_objects FROM ra_code_objects, ra_containers WHERE ra_code_objects.ra_container_id = ra_containers.id AND ra_containers.ra_library_id = " + library_id)
+		  RaInFile.connection.delete("DELETE ra_in_files FROM ra_in_files, ra_containers WHERE ra_in_files.ra_container_id = ra_containers.id AND ra_containers.ra_library_id = " + library_id)
+		  RaSourceCode.connection.delete("DELETE ra_source_codes FROM ra_source_codes, ra_methods, ra_containers WHERE ra_source_codes.id = ra_methods.ra_source_code_id AND ra_methods.ra_container_id = ra_containers.id AND ra_containers.ra_library_id = " + library_id)
+		  RaComment.connection.delete("DELETE ra_comments FROM ra_comments, ra_methods, ra_containers WHERE ra_comments.id = ra_methods.ra_comment_id AND ra_methods.ra_container_id = ra_containers.id AND ra_containers.ra_library_id = " + library_id)
+		  RaMethod.connection.delete("DELETE ra_methods FROM ra_methods, ra_containers WHERE ra_methods.ra_container_id = ra_containers.id AND ra_containers.ra_library_id = " + library_id)
+		  RaComment.connection.delete("DELETE ra_comments FROM ra_comments, ra_containers WHERE ra_comments.id = ra_containers.ra_comment_id AND ra_containers.ra_library_id =" + library_id)
+		  RaContainer.connection.delete("DELETE FROM ra_containers WHERE ra_library_id = " + library_id)
 		  RaLibrary.connection.delete("DELETE FROM ra_libraries WHERE id =" + library_id)	
 		  
 		  # make sure that the highest library version is still marked as the current version
@@ -60,10 +60,34 @@ class Admin::UploadController < ApplicationController
 		redirect_to :action => :list
 	end
 	
+    # Try and avoid errors for PostgreSQL and maybe other databases too.
+    # If it fails, we log an exception instead of putting up an error page
+    # because we can still complete the mission, just slower?  
+	def autocommit(state=true)
+	  begin
+	   ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=' + state ? '1' : '0' )
+	  rescue
+	    begin
+	      ActiveRecord::Base.connection.execute( state ? 'BEGIN' : 'COMMIT' )
+	    rescue Exception => e
+	      logger.info "Oops. #{e.to_s}\n" + e.backtrace.join + "\n"
+	    end
+	  end
+	end
+	
 	def import
-	    init_classes()
+	    
+	  init_classes()
 		    
 		@connection = ActiveRecord::Base.connection
+
+		if(@connection.class.to_s =~ /mysql/i)
+          # check to see if the connection is MySQL, if so then we have created some 
+          # optimizations for MySql inserts          
+		  @connection_type = "mysql"
+		else
+		  @connection_type = "other"
+		end	
 		
 		# Lookup hash used to map ids in the YAML file to database IDs
 		lookup = {}
@@ -80,6 +104,7 @@ class Admin::UploadController < ApplicationController
 			return
 		end	
 		
+
 		ActiveRecord::Base.connection.transaction do									
 			# Create a new library object	
 			@library = RaLibrary.new({:name => match[1], :major => match[2], :minor => match[3], :release => match[4]})		
@@ -113,25 +138,27 @@ class Admin::UploadController < ApplicationController
 	 		  loglevel = logger.level
 	 		  logger.level = Logger::ERROR
 
-	 		  # TODO: Check if this causes problems on other DBs
-	 		  # Turn off autocommit to make inserts for MySQL InnoDB tables muuuch faster
-	 		  ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=0' )
+	 		  autocommit(true)
+	 		  
 	 		  count = 0
 			  # Read in the YAML file			
 			  yp = YAML::load_documents( @params['doc_file'] ) { |doc| 
+			  
 				  # Each record has a unique id. This id changes though when we insert it into the
-				  # database. This would not be a problem excep that all of the records are associated 
+				  # database. This would not be a problem except that all of the records are associated 
 				  # by these ids so when a record is inserted into the DB we need to make sure the associations are
 				  # updated. get_ids takes care of this updating.
+				  #
 				  # IMPORTANT NOTE: This requires that the YAML is written out in the correct order so that we always insert
-				  # a record before we need its id for an association.
+				  # a record before we need its id for an association.				  
 				  id = doc.id
 				  get_ids(doc, lookup)
-				  doc.id = nil	
 				  lookup[id] = insert_object(doc)				  
 				  count = count + 1
 			  }		
-			  ActiveRecord::Base.connection.execute( 'SET AUTOCOMMIT=1' )		 
+	 		  
+	 		  autocommit(false)
+	 		  	 
 			  @total_time = Time.now - start	
 			  @total_count = count
 			  logger.level = loglevel
@@ -146,18 +173,27 @@ class Admin::UploadController < ApplicationController
 private
 
 	# Insert an active record object into the DB
-	# We don't use the ActiveRecord::Base.save method because it is slow
-	# ~1300 inserts on a MySQL DB MyIASM table on windows is 5.7 seconds with this method 
-	# and 17.5 seconds using .save
-	def insert_object(obj)	
-		unless(@col_hash[obj.class.to_s])
-			@col_hash[obj.class.to_s] = column_list(obj.attributes.keys)
-		end
-		columns = @col_hash[obj.class.to_s]
-		values = value_list(obj.attributes.values)
-		val = @connection.insert "INSERT INTO #{obj.class.table_name} (#{columns}) VALUES (#{values})"
+	def insert_object(obj) 		
+	  
+	  if(@connection_type == "mysql")
+	    obj.id = nil
+	    # We don't want to  use the ActiveRecord::Base.save method because it is slow
+  	    # ~1300 inserts on a MySQL DB MyIASM table on windows is 5.7 seconds with this method 
+  	    # and 17.5 seconds using .save  	 
+	    unless(@col_hash[obj.class.to_s])
+	       @col_hash[obj.class.to_s] = column_list(obj.attributes.keys)
+	    end
+	    columns = @col_hash[obj.class.to_s]
+	    values = value_list(obj.attributes.values)
+	    
+	    val = @connection.insert "INSERT INTO #{obj.class.table_name} (#{columns}) VALUES (#{values})"
+	  else
+	    # slower but works on PostgreSQL and other DBs where they cannot have a NULL id in the insert
+	    obj.save
+	    obj.id
+	  end
 	end
-		
+  
   # Create a list of column names from an array of strings
   def column_list(keys)
     columns = keys.collect{ |column_name| ActiveRecord::Base.connection.quote_column_name(column_name) }

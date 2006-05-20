@@ -21,7 +21,7 @@ module NotesHelper
 	end
 	
 	def get_return_url(note)
-	  container_type = note.ra_container.class.to_s
+	  container_type = note.get_container().class.to_s
       container = RaContainer.type_to_route(container_type)
       container_params = {:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'note_' + note.id.to_s}
       code_obj_params = {:controller => 'doc', :action => 'container', :type => container_type, :name => note.container_name}

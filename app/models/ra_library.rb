@@ -1,5 +1,6 @@
 class RaLibrary < ActiveRecord::Base
-
+    has_many :RaContainer, :dependent => :delete_all
+    
 	validates_numericality_of :major, :minor, :release, :version
 	validates_length_of :name, :maximum => 128
 	validates_presence_of :name	

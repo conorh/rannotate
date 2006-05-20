@@ -3,6 +3,10 @@ require 'yaml'
 # This class processes the results of the rdoc parsing and outputs YAML formatted 
 # classes that can then be imported into the database using the Rannotate web app.
 #
+# The YAML that is generated is quite generic and could be used by any application
+# to see the DB structure that is required look at the DB schema that the rannotate
+# web application creates (all the tables beginning with ra_)
+#
 # How does it work?
 # Rdoc calls the generate method of this class from inside of rdoc.rb. By the 
 # time rdoc calls the generate method it has parsed all of the source files 
@@ -18,10 +22,10 @@ require 'yaml'
 
 module Generators
 
-  class YAMLGenerator                 
+  class YAMLGenerator
 
     TYPE = {:file => 1, :class => 2, :module => 3 }
-    VISIBILITY = {:public => 1, :private => 2, :protected => 3 }
+    VISIBILITY = {:public => 1, :private => 2, :protected => 3 }        
         
     # Create a new DB Generator object (used by RDoc)
     def YAMLGenerator.for(options)
@@ -35,13 +39,8 @@ module Generators
       # set up a hash to keep track of all the classes/modules we have processed
       @already_processed = {}      
       
-      @main_page = @options.main_page
-      # this boolean keeps track of whether we have found the main page or not
-      @main_page_found = false
-      
       # sequences used to generate unique ids for inserts
-      # starts from 2 because the main home page always has an ID of 1 (if there is a main page)
-      @seq = 2             
+      @seq = 1
             
       # An output filename must be specified on the commandline
       @output_file = @options.op_name
@@ -63,11 +62,7 @@ module Generators
       @output = String.new
       
       # Each object passed in is a file, process it
-      files.each { |file| process_file(file) }
-     
-      if(@main_page != nil && @main_page_found == false)
-        puts "\n***** DB GENERATOR WARNING: Could not find main page '" + @main_page + "'\n"
-      end
+      files.each { |file| process_file(file) }     
       
       @f << @output
       @f.close
@@ -93,10 +88,6 @@ module Generators
           process_class_or_module(child, file, id)      
       end       
       
-      if(@main_page != nil && @main_page == file.file_absolute_name)
-        file.id = 1      
-        @main_page_found = true
-      end
     end
     
     # Process classes and modiles   

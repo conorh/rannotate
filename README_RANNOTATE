@@ -36,7 +36,6 @@ User.create({:login => 'admin', :password => .., :password_confirmation => ..}).
 
 Step 6: Login to the admin section
 Admin URL - http://server:3000/admin/
-Login: admin Password: admin
 
 Step 7: Go to the Upload Documentation section and select the appname-0.2.3.out file that was generated at step 4.
 

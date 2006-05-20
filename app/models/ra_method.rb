@@ -3,7 +3,7 @@ class RaMethod < ActiveRecord::Base
   belongs_to :ra_comment 
   
   def RaMethod.type_string
-  	"method"
+  	'method'
   end
   
   def container_name

@@ -1,6 +1,6 @@
 class RaAttribute < RaCodeObject
   
   def RaAttribute.type_string
-  	"attribute"
+  	''attribute'
   end
 end

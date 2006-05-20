@@ -15,7 +15,7 @@ class NotesController < ApplicationController
     end
   end 
   
-  # Display a list of notes for the entire site.. up to 30
+  # Display a list of notes for the entire site.. up to 20
   def list_new    
     @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")						
   end
@@ -129,7 +129,8 @@ private
 
       return {}
    end
-
+   
+   # helper method used by get_note_params
    def get_container_params(id, type_string)	
 	     type = RaContainer.find(id)
 	     return {:container_name => type.full_name,
@@ -137,6 +138,7 @@ private
 	       :version => type.ra_library.ver_string }	
    end
    
+   # helper method used by get_note_params   
    def get_method_params(id, type_string)
 	     type = RaMethod.find(id)
 	     return {:container_name => type.ra_container.full_name,
@@ -144,6 +146,7 @@ private
 	       :version => type.ra_container.ra_library.ver_string }  
    end
    
+   # helper method used by get_note_params   
    def get_codeobj_params(id, type_string)
          type = RaContainer.find(id)
 	     return {:container_name => type.full_name,

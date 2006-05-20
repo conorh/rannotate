@@ -3,7 +3,7 @@ class Note < ActiveRecord::Base
 	
 	# This attribute is used to store the URL of the documentation this note refers to
 	# this is not stored in the DB as it can change depending on the URL that the documentation is accessed from
-	attr_accessor :content_url, :skip_ban_validation
+	attr_accessor :skip_ban_validation
 	attr_accessor :ref_id, :ref_type
 	
 	validates_length_of :email, :in => 5..40
@@ -16,9 +16,8 @@ class Note < ActiveRecord::Base
 		@skip_ban_validation = false
 	end
 
-	# This validate method checks to see if this ip_address has posted already in the last 1 minute
+	# This validate method checks to see if this ip_address has posted already within a specified time period
 	# It also checks to see if the user's IP address is in the list of banned IP addresses
-	# TODO: Finish this method and make each of these checks an application configurable option
 	def validate
 		if(@skip_ban_validation == false)		
 			searchIp = ip_address[0,ip_address.rindex('.')]

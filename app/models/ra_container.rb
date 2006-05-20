@@ -1,7 +1,7 @@
+# This is the base class of all container objects. Container objects are Classes, Modules and Files
 class RaContainer < ActiveRecord::Base
   belongs_to :ra_comment
   belongs_to :ra_library
-  has_many :ra_code_object, :dependent => :delete_all
 
   VIS_PUBLIC = 1
   VIS_PROTECTED = 2  

@@ -1,3 +1,4 @@
+# This class represents a single vote for a user submitted note
 class NoteVote < Vote
   USEFUL = 1
   NOT_USEFUL = 2

@@ -27,8 +27,12 @@ Step 3: Setup config\database.yml for your DB and run 'rake migrate'
 
 Step 4: Generate some rdoc for your application using:
 	rdoc --fmt=yaml --opname=appname-0.2.3 directory
+	
+NOTE: The format of the opname parameter MUST be name-[major]-[minor]-[release], or the generation will fail
 
-Step 5: Start webrick for rannotate
+Step 5: Create an admin login account
+ruby script\console
+User.create({:login => 'admin', :password => .., :password_confirmation => ..}).save
 
 Step 6: Login to the admin section
 Admin URL - http://server:3000/admin/
@@ -38,18 +42,14 @@ Step 7: Go to the Upload Documentation section and select the appname-0.2.3.out 
 
 Step 8: Open up the URL of the documentation http://server:3000/ and there it is!
 
-== Generating documentation for rails ==
+== Generating documentation for rails or ruby ==
 
-Step 1: Install the version of rails you need (if it is not already installed)
-gem install --include-dependencies --version "1.0.0" rails
+There are several tasks in the Rannotate Rakefile to help generate the documentation for rails or ruby.
 
-Step 2: Freeze the gems for the version of rails you are documenting ex:
-rake environment VERSION=1.0.0 freeze_gems
+rake doc:api:rails will generate the docs for the current version of rails
+rake doc:api:ruby will generate the docs for ruby
 
-Step 3: Making sure the yaml_generator is installed (see above) run this rake command
-rake ranapi
-
-Step 4: Check the /doc directory for the output file
+These tasks will place the docs in the /doc directory
 
 == Troubleshooting ==
 

@@ -1,0 +1,24 @@
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
+<% if(@error) %>Error: <%= @error %>
+<% else %>
+
+<div style="font-size: 120%"><h2>Search Results - <%= pluralize(@results_count, "hit") %> for search '<%= h(@search_text) %>'</h2></div>
+<% # get results for each type in order 
+@display.each do |type|
+  object_array = @search_results[type] 
+  unless object_array.nil? then
+  	%>
+		<h2><%= type.type_string.capitalize.pluralize %> (<%=object_array.length%>)</h2>
+		<% object_array.each do |object| %>
+			<%= link_to_doc(object) %><br/>
+		<% 		end %>
+			<br/>
+<% 	end		
+end 
+end # end if(@error)
+%>
+</div>

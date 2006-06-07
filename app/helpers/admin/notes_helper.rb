@@ -13,7 +13,8 @@ module Admin::NotesHelper
 	def get_order_fields(select)
 		return options_for_select({	
 			'Created Date' => 'created_at', 
-			'Category' => 'category', 
+			'Container' => 'container_name',
+			'Note Group' => 'note_group',			
 			'Email' => 'email', 
 			'Content Length' => 'content_length',
 			'IP Address' => 'ip_address',					

@@ -1,13 +1,43 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+    
+    # limit the length of some text and add .. if it becomes too long
+    def limit_length(text, max_length)
+      if(text == nil)
+        return nil
+      end
+      
+      if(text.length > max_length)
+        return text[0,max_length] + ".."
+      end
+      
+      return text
+    end
+
+    
+	# Display errors in a nicely formatted box
+	def display_errors_for(object_name, options = {})
+		options = options.symbolize_keys
+		object = instance_variable_get("@#{object_name}")
+	
+		unless object.errors.empty?
+			content_tag("div",			
+				content_tag("p", "There were problems with the following fields:") +
+				content_tag("ul", object.errors.full_messages.collect { |msg| content_tag("li", msg) }),
+					"id" => options[:id] || "errorExplanation", "class" => options[:class] || "errorExplanation"
+			)
+		end		
+	end
   
   # Given the name and type of a container (type = class,file, etc..)
   # link to that type
-  def link_to_container_by_name(type, name)
-    return link_to(name, 
-      {:controller => "doc", :action=> type.pluralize, :name => name},
-      :target=>'docwin')		
-	end
+  def link_to_container_by_name(type, name)      
+    link_params = {:controller => "doc", :action=> type.pluralize, :name => name}
+    if(@version)
+      link_params[:version] = @version
+    end    
+    return link_to(name, link_params)
+  end
   
   # This method looks at the type of the object and creates a link to the correct page
   # to display that object. ex. if the object is RaMethod then it will link to the parent
@@ -16,13 +46,22 @@ module ApplicationHelper
 		object.container? ? link_to_container(object) : link_to_container_child(object)
 	end
 	
-	# If this is a container type object (class, method, file) then link to it directly
-  def link_to_container(ra_container)
+  # If this is a container type object (class, method, file) then link to it directly
+  def link_to_container(ra_container, max_length = 300)
     action = ra_container.class.type_string.pluralize
     
-    return link_to(ra_container.full_name, 
-      {:controller => "doc", :action => action, :name => ra_container.full_name},
-      :target=>'docwin')
+    link_params = {:controller => "doc", :action => action, :name => ra_container.full_name}
+    if(@version)
+      link_params[:version] = @version
+    end
+    
+    link_name = ra_container.full_name
+    if(link_name.length > max_length)
+      link_name = link_name[0,max_length] + ".."
+      return link_to(link_name, link_params, :title => ra_container.full_name)      
+    end
+    
+    return link_to(link_name, link_params)
   end
   
   # If this is a child of a container object (method, constant etc.) then link to it's container
@@ -36,11 +75,34 @@ module ApplicationHelper
     	container_type = child.ra_container.class.to_s
     	container_name = child.ra_container.full_name
     end
+   
+    link_params = {:controller => 'doc', :action => RaContainer.type_to_route(container_type), :name => container_name }
+    if(@version)
+      link_params[:version] = @version
+    end
     
-    return link_to(child.name + " (" + child.ra_container.full_name + ")",     
-      { :controller => "doc", :action => RaContainer.type_to_route(container_type), :name => container_name, :anchor => child.name },
-       :target=>'docwin'
-      )
+    # if this is a method then link directly to the method instead of the parent class
+    if(child.class == RaMethod)
+      link_params[:method] = child.name
+    else
+      link_params[:anchor] = child.name
+    end
+    
+    return link_to(child.name + " (" + container_name + ")", link_params)
        
   end
+  
+  def link_to_method(method_name, container_type)
+    link_params = {:controller => 'doc', :action => container_type.pluralize, :method => method_name}
+    if(@version)
+      link_params[:version] = @version
+    end
+    link_to(method_name, link_params)  
+  end
+  
+  # get the current library version
+  def get_current_version()
+    return RaLibrary.find(:first, :conditions => ["current = ?", true])
+  end
+  
 end

@@ -1,31 +1,38 @@
-  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
-  <td><span class="file-title-prefix">
-    <%= @ra_container.class.type_string.capitalize %> </span>
-    <span class="file-title"><%= @container_name %></span>
-    <br/>
-    [ <a href="#notes"><%= pluralize(get_count(@note_count, @ra_container.class.type_string), "Note") %></a> ]
-    [ <%= link_to "link to this page", { :action => 'index', :name => @container_name, 
-                                         :type => @ra_container.class.type_string.pluralize}, {:target => "_top"} %> ]
-  </td>
-  <% if(@ra_container.class == RaClass) %>
-  <td align="right">
-  Parent: <%= link_to_container_by_name('class', @ra_container.superclass) %>
-  </td>
-  <% end %>
-  </tr>
- </table>
+<div id="sidebar">	
+<%= render :partial => 'doc/partials/container_sidebar' %>
+</div>
 
- <div id="bodyContent">
-   <div id="content">
-     <div class="description"><%= markup(@ra_container.ra_comment.comment) %></div>
-     <% if(@ra_in_files.length > 0) %><%= render :partial => 'in_file' %><% end %>
-     <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'require' %><% end %>
-  	 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'include' %><% end %>     
-     <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'constant' %><% end %>
-  	 <% if(@ra_code_objects[RaAttribute]) %><%= render :partial => 'attribute' %><% end %>     
-  	 <% if(@ra_methods.length > 0) %><%= render :partial => 'method' %><% end %>
-  	 <% if(@ra_children.length > 0) %><%= render :partial => 'children' %><% end %>
-  	 <a name="notes"></a>
-	 <%= render_notes(@ra_container.class.type_string, @container_name, @container_url) %>
-   </div>	
- </div>
+<div id="body_content">
+
+<a href="<%= @container_url %>" style="text-decoration: none;">
+<span class="container_header"><%= @ra_container.class.type_string.capitalize %> <%= @container_name %></span>
+</a>
+<% if(@version) then %>Version <%= @version %><% end %>
+<br/>
+[ <a href="#notessec"><%= pluralize(get_count(@note_count, @ra_container.class.to_s), "Note") %></a> ]
+[ <%= link_to 'History', {:action => 'history', :name => @container_name, :type => @ra_container.class.to_s } %> ]
+
+<% if(@ra_container.ra_comment.comment.length > 0) %>
+<div class="section_title" onClick="<%= show_or_hide("comment") %>">Comments</div>
+<div class="comment" id="comment"><%= markup(@ra_container.ra_comment.comment) %></div>
+<% end %>
+<% if(@ra_in_files.length > 0) %><%= render :partial => 'doc/partials/in_file' %><% end %>
+<% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'doc/partials/require' %><% end %>
+<% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'doc/partials/include' %><% end %>     
+<% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'doc/partials/constant' %><% end %>
+<% if(@ra_code_objects[RaAttribute]) %><%= render :partial => 'doc/partials/attribute' %><% end %>     
+<% if(@ra_methods.length > 0) %><%= render :partial => 'doc/partials/method' %><% end %>
+<% if(@ra_children.length > 0) %><%= render :partial => 'doc/partials/children' %><% end %>
+<p>
+
+<a name="notessec"></a>
+
+<div class="section_title">
+<span class="note_link"><%= get_add_note_link(@ra_container, @ra_container.class.to_s) %></span>
+<div onClick="<%= show_or_hide("usernotes_section") %>">User Added Notes</div>
+		</div>
+<div id="usernotes_section">
+	<%= render_notes(@container_name, @ra_container.class.to_s) %>	
+</div>
+
+</div>

@@ -1,36 +1,34 @@
-class Note < ActiveRecord::Base
+class Note < ActiveRecord::Base	
+    belongs_to :ra_container
 	
-	# This character is used after a class name to separate the method name. (ex. SomeClass::Child.method)
-	METHOD_SEPARATOR = '.'
-
 	# This attribute is used to store the URL of the documentation this note refers to
 	# this is not stored in the DB as it can change depending on the URL that the documentation is accessed from
-	attr_accessor :content_url, :skip_ban_validation
+	attr_accessor :skip_ban_validation
+	attr_accessor :ref_id, :ref_type
 	
 	validates_length_of :email, :in => 5..40
-	validates_length_of :text, :in => 10..1000
-	validates_presence_of :name
-	validates_presence_of :category
+	validates_length_of :text, :in => 10..5000
+	validates_presence_of :container_name
+	validates_presence_of :note_group
 
 	def initialize(params = nil)
 		super(params)
 		@skip_ban_validation = false
 	end
 
-	# This validate method checks to see if this ip_address has posted already in the last 1 minute
+	# This validate method checks to see if this ip_address has posted already within a specified time period
 	# It also checks to see if the user's IP address is in the list of banned IP addresses
-	# TODO: Finish this method and make each of these checks an application configurable option
 	def validate
 		if(@skip_ban_validation == false)		
-			searchIp = ip_address[0,ip_address.rindex('.')] + '%'
-			ban = Ban.find(:first, :conditions => ["ip_filter LIKE ?", searchIp])
+			searchIp = ip_address[0,ip_address.rindex('.')]
+			ban = Ban.find(:first, :conditions => ["? LIKE ip_filter", searchIp])
 			if(ban != nil)
 				errors.add_to_base("Your IP subnet has been banned from posting due to abuse. Please contact the system administrator for more information")
 			end			
 	
-			timeLimit = 1.minute.ago
-			count = Note.count(["created_at > ? AND ip_address = ?", timeLimit, ip_address])
-			if(count > 0)
+			timeLimit = DELAY_BETWEEN_POSTS.ago
+			found = Note.find(:first, :conditions => ["created_at > ? AND ip_address = ?", timeLimit, ip_address])
+			if(found != nil)
 				errors.add_to_base("Your IP address has already posted in the last minute, please wait a minute or so before posting again.")				
 			end
 		end
@@ -47,7 +45,7 @@ class Note < ActiveRecord::Base
 
 		filter = RecordFilter.new
 	
-		text_fields = %w{id name category text email ip_address}
+		text_fields = %w{id container_name note_group note_type text email ip_address}
 		text_fields.each { |name|
 			filter.addLike(name, params[name])
 		}		
@@ -78,11 +76,37 @@ class Note < ActiveRecord::Base
 			return Note.find(:all, find_params)
 		else
 			return Note.find(:all)
-		end
-																
+		end																
 	end	
 
-	protected
+    # display a string that specifies what this note is commenting
+	def get_display
+     case self.note_type
+	   when RaModule.to_s then return container_name
+	   when RaClass.to_s then return container_name 
+	   when RaFile.to_s then return container_name                
+	   when RaMethod.to_s then return "Method " + note_group + " of " + container_name
+	   when "RaChildren" then return "Children section of " + container_name	   
+	   when RaInFile.to_s then return "InFiles section of " + container_name
+	   when RaAttribute.to_s then return "Attributes section of " + container_name
+	   when RaConstant.to_s then return "Constants section of " + container_name
+	   when RaInclude.to_s then return "Includes section of " + container_name
+	   when RaRequire.to_s then return "Requires section of " + container_name
+	   when RaAlias.to_s then return "Aliases section of " + container_name
+	   when "index" then return "Index page"
+      end
+      
+      return container_name + " - " + note_group
+	end	
+	
+	# get the container for this note
+	def get_container
+	  if(note_type != 'index')
+	    return RaContainer.find_by_full_name(container_name)
+	  end
+	end
+
+protected
 
 	# Create a SQL datetime from the select_datetime form helper fields
 	def Note.create_datetime(values)
@@ -92,7 +116,7 @@ class Note < ActiveRecord::Base
 	
 		date = values[:year] + '-' + values[:month] + '-' + values[:day] + ' ' + values[:hour] + ':' + values[:minute]
 		return date
-	end
+	end			
 
 end
 

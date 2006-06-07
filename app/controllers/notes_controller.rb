@@ -1,49 +1,44 @@
 class NotesController < ApplicationController
-  cache_sweeper :note_sweeper, :only => [:create]
-	
-	# Display a list of notes
-  def list
-    @category = params[:category]
-    @name = params[:name]    
-    @content_url = params[:return_url]
     
-    @notes = Note.find(:all, :conditions => ["category = ? AND name = ?", @category, @name], :order=> "created_at ASC")	
+  # cache_sweeper :note_sweeper, :only => [:create]
+  caches_page :list_new
+	
+  # Display a list of notes
+  def list
+    @container_name = params[:container_name]
+    @note_group = params[:note_group]
+    
+    @notes = Note.find(:all, :conditions => ["container_name = ? AND note_group = ?", @container_name, @note_group], :order=> "created_at ASC")	
     
     if(params[:no_layout])
       render :layout=>false
-    end	
+    end
+  end 
+  
+  # Display a list of notes for the entire site.. up to 20
+  def list_new    
+    @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")						
   end
   
-  # Show all immediate children of this note. This only works for classes right now. Because...
-  # A note is the immediate child of another note if the parent has the format 'somename' and the child the format 'somename.blah'
-  # currently only methods have this format
-  def overview
-    @category = params[:category]
-    @name = params[:name]    
-    @content_url = params[:return_url]
-    
-    searchName = @name + Note::METHOD_SEPARATOR + '%';
-    @notes = Note.find_by_sql(["SELECT DISTINCT name FROM notes WHERE category = ? AND name LIKE ?", @category, searchName]) 	
-  end
+  # Generate an RSS feed of the 20 newest notes
+  def rss
+    @notes = Note.find(:all, :limit => 20, :order=> "created_at DESC")  
+    render :layout =>  false    
+  end  
   
-  # Display a list of notes for the entire site.. up to 30
-  def list_new
-    @category = params[:category]
-    @name = params[:name]    
-    @content_url = params[:return_url]
-    
-		@notes = Note.find(:all, :limit => 50, :order=> "created_at DESC")    	 								
-  end
-
+  # Create a note
   def new
-    @note = Note.new
-    @note.category = params[:category]
-    @note.name = params[:name]
-    @note.content_url = params[:content_url]
+    @note = Note.new(get_note_params(params[:id], params[:type]))
+    @note.ref_id = params[:id]
+    @note.ref_type = params[:type]
   end
-
-  def preview		
-    @note = Note.new(params[:note])
+  
+  # Preview a note
+  def preview
+    note_params = get_note_params(params[:note][:ref_id], params[:note][:ref_type])
+    
+    @hide_vote = true
+    @note = Note.new(note_params.merge(params[:note]))
     @note.created_at = Time.now
     @note.skip_ban_validation = true
     @note.valid?
@@ -53,20 +48,116 @@ class NotesController < ApplicationController
 	end
   end
 
+  # Save the note to the DB
   def create  
-    @note = Note.new(params[:note])
+    note_params = get_note_params(params[:note][:ref_id], params[:note][:ref_type])
+    
+    @note = Note.new(note_params.merge(params[:note]))
     @note.ip_address = request.remote_ip;
-    @note.skip_ban_validation = local_request?
     if !@note.save
       render :action => 'preview'
-    else        
-      expire_page(:controller => "doc", :action => 'files', :name => @note.name)
-      expire_page(:controller => "doc", :action => 'modules', :name => @note.name)
-      expire_page(:controller => "doc", :action => 'classes', :name => @note.name)    
-    
-    	expire_page :action => "list"
-    	render :action => 'success'
+    else
+      NoteSweeper.expire_cache(self, @note)            
+      render :action => 'success'
     end
   end
+  
+  # Save a vote for a note and then show the success page if it was a success
+  def vote
+    ip = request.remote_ip;
+    note_id = params[:id]
+    vote_value = params[:value].to_i
+            
+    @note = Note.find_by_id(note_id) 
+    
+    if(@note == nil)
+      @error = "Could not find note, sorry!"
+      return
+    end
+    
+    existing_vote = NoteVote.find(:first, :conditions => ["ref_id = ? AND ip_address = ?", note_id, ip])
+    if(existing_vote != nil)
+      @error = "Sorry your IP has already voted for this note"
+      return
+    end 
+    
+    if(vote_value == NoteVote::USEFUL)
+      @note.total_votes += 1
+    elsif(vote_value == NoteVote::NOT_USEFUL || vote_value == NoteVote::SPAM)
+      @note.total_votes -= 1
+    end
+    @note.save
+    
+    # now that we have updated a note we have to expire all the pages it appears on from the cache
+    NoteSweeper.expire_cache(self, @note)    
+
+    # save a record of this vote
+    @vote = NoteVote.new()
+    @vote.vote_value = vote_value
+    @vote.ip_address = ip
+    @vote.ref_id = note_id
+    @vote.save
+  end
+
+  # show a rankings page for highest ranked notes and most notes (and more in the future)
+  def rankings
+    # TODO: It seems to me that there should be a more active recordish way of doing this?
+    @most_notes = Note.find_by_sql("SELECT *, COUNT(*) AS note_count FROM notes GROUP BY container_name ORDER BY note_count DESC LIMIT 10")
+    @highest_notes = Note.find(:all, :limit => 10, :order => "total_votes DESC") 
+    render :layout => 'doc'
+  end
+  
+private
+
+   # Given the id and type of the object that this note is being attached to
+   # get the necessary information to create the note
+   def get_note_params(id, type_string)
+     case type_string
+	   when "RaChildren" then return get_codeobj_params(id, type_string)	     
+	   when RaModule.to_s then return get_container_params(id, type_string)
+	   when RaClass.to_s then return get_container_params(id, type_string) 
+	   when RaFile.to_s then return get_container_params(id, type_string)	                 
+	   when RaMethod.to_s then return get_method_params(id, type_string)
+	   when RaInFile.to_s then return get_codeobj_params(id, type_string)
+	   when RaAttribute.to_s then return get_codeobj_params(id, type_string)
+	   when RaConstant.to_s then return get_codeobj_params(id, type_string)
+	   when RaInclude.to_s then return get_codeobj_params(id, type_string)
+	   when RaRequire.to_s then return get_codeobj_params(id, type_string)
+	   when RaAlias.to_s then return get_codeobj_params(id, type_string)
+	   when "index" then return get_index_params()
+      end
+
+      return {}
+   end
+   
+   # helper method used by get_note_params
+   def get_container_params(id, type_string)	
+	     type = RaContainer.find(id)
+	     return {:container_name => type.full_name,
+	       :note_group => type_string, :note_type => type_string,
+	       :version => type.ra_library.ver_string }	
+   end
+   
+   # helper method used by get_note_params   
+   def get_method_params(id, type_string)
+	     type = RaMethod.find(id)
+	     return {:container_name => type.ra_container.full_name,
+	       :note_group => type.name, :note_type => type_string,
+	       :version => type.ra_container.ra_library.ver_string }  
+   end
+   
+   # helper method used by get_note_params   
+   def get_codeobj_params(id, type_string)
+         type = RaContainer.find(id)
+	     return {:container_name => type.full_name,
+	       :note_group => type_string, :note_type => type_string,
+	       :version => type.ra_library.ver_string}      
+   end
+
+   def get_index_params()
+	     return {:container_name => "index",
+	       :note_group => "index", :note_type => "index",
+	       :version => "n/a"}  	      
+   end 
 	
 end

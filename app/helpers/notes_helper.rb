@@ -1,7 +1,6 @@
 module NotesHelper
 
-	require 'syntax'
-	require 'syntax/convertors/html'	
+	require 'syntax/convertors/html'
 
 	# Remove the parent class/module name from a method name (ex. Something.blah -> blah)
 	def strip_parent(name)
@@ -12,20 +11,6 @@ module NotesHelper
 		
 		return name
 	end
-
-	# Display errors in a nicely formatted box
-	def display_errors_for(object_name, options = {})
-		options = options.symbolize_keys
-		object = instance_variable_get("@#{object_name}")
-	
-		unless object.errors.empty?
-			content_tag("div",			
-				content_tag("p", "There were problems with the following fields:") +
-				content_tag("ul", object.errors.full_messages.collect { |msg| content_tag("li", msg) }),
-					"id" => options[:id] || "errorExplanation", "class" => options[:class] || "errorExplanation"
-			)
-		end		
-	end
 	
 	# Mangle the input email address to hide it from email address harvesters
 	def mangle_email_for_display(email)
@@ -35,9 +20,33 @@ module NotesHelper
 		return h(newEmail)
 	end
 	
+	def get_return_url(note)
+	  container_type = note.get_container().class.to_s
+      container = RaContainer.type_to_route(container_type)
+      container_params = {:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'note_' + note.id.to_s}
+      code_obj_params = {:controller => 'doc', :action => 'container', :type => container_type, :name => note.container_name}
+      
+      case note.note_type
+	    when RaModule.to_s then return url_for(container_params)
+	    when RaClass.to_s then return url_for(container_params)
+	    when RaFile.to_s then return url_for(container_params)   	    
+	    when RaMethod.to_s then return url_for(container_params.merge({:method => note.note_group}))
+	    when RaInFile.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'infiles'})) 
+	    when RaAttribute.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'attributes'}))
+	    when RaConstant.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'constants'})) 
+	    when RaInclude.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'includes'})) 
+	    when RaRequire.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'requires'})) 
+	    when RaAlias.to_s then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'aliases'}))
+	    when "RaChildren" then return url_for(code_obj_params.merge({:anchor => 'note_' + note.id.to_s, :expand => 'children'}))
+        when "index" then return url_for(:controller => 'doc', :action => "index", :anchor => 'note_' + note.id.to_s)
+      end
+      
+      return url_for(:controller => 'doc', :action => "index")	 	  	
+	end
+	
 	# Syntax highlight the input
 	# Transform line breaks into HTML
-	#	If summary input parameter is set then limit text to 40 characters and replace newlines with spaces
+	# If summary input parameter is set then limit text to 40 characters and replace newlines with spaces
 	def fix_note_for_display(note, summary = nil)
 		text = String.new(note)
 		

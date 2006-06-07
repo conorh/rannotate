@@ -19,26 +19,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 == Using Rannotate == 
 
-Step 1: Put the db_generator.rb file from the rdoc_extension into your
+Step 1: Put the yaml_generator.rb file from the rdoc_extension directory into your
 rdoc generator directory which is:
 	[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\
-Put the mysql.rhtml template file from rdoc_extension\templates into:
-	[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\template\db
 
-Step 3: Create the DB using the file in \db and modify the
-config\database.yml for your DB setup. The sql inserts a user 'admin'
-with the password 'admin'. I did this because I password protected the
-signup page so you can't signup a new user without logging in :)
+Step 3: Setup config\database.yml for your DB and run 'rake migrate'
 
 Step 4: Generate some rdoc for your application using:
-	rdoc --fmt=db --template=mysql.rhtml
+	rdoc --fmt=yaml --opname=appname-0.2.3 directory
+	
+NOTE: The format of the opname parameter MUST be name-[major]-[minor]-[release], or the generation will fail
 
-Step 5: Import the generated SQL statements into MySql, you can use:
-	mysql -u dbuser -p dbname < inserts.sql
+Step 5: Create an admin login account
+ruby script\console
+User.create({:login => 'admin', :password => .., :password_confirmation => ..}).save
 
-Step 6: Start webrick for rannotate
+Step 6: Login to the admin section
+Admin URL - http://server:3000/admin/
 
-Step 7: Open up the URL of the documentation http://server:3000/doc/
+Step 7: Go to the Upload Documentation section and select the appname-0.2.3.out file that was generated at step 4.
 
-Admin URL - http://rannotateserver:3000/admin/notes
-Login: admin Password: admin
+Step 8: Open up the URL of the documentation http://server:3000/ and there it is!
+
+== Generating documentation for rails or ruby ==
+
+There are several tasks in the Rannotate Rakefile to help generate the documentation for rails or ruby.
+
+rake doc:api:rails will generate the docs for the current version of rails
+rake doc:api:ruby will generate the docs for ruby
+
+These tasks will place the docs in the /doc directory
+
+== Troubleshooting ==
+
+For some reason under rails 1.0 there are issues with importing the documentation using YAML. Please
+use later versions of rails.

@@ -1,0 +1,11 @@
+<% if(@error == nil) %>
+<h2>Thank you for voting</h2>
+Your vote has been recorded
+<% else %>
+<p>
+<%= @error %>
+<% end %>
+<% if(@note != nil) %>
+<p>
+<a href="<%= get_return_url(@note) %>">Click here</a> to reload the note page
+<% end %>

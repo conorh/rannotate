@@ -48,4 +48,19 @@ end
 #   inflect.uncountable %w( fish sheep )
 # end
 
-# Include your application configuration below
+# *******************************
+# Rannotate Configuration Options
+# *******************************
+
+# Specify the name of the container to use as a home page
+# REQUIRED: but can be nil for the default index
+RANNOTATE_HOME_PAGE = 'vendor/rails/railties/README'
+
+# Set the name of the site. Appears in the page title and header
+# REQUIRED
+RANNOTATE_SITE_NAME = "Rannotate Generated Documentation"
+
+# Configurable delay so that users cannot flood the site with posts
+# A user from an IP has to wait this long before posting again
+# REQUIRED
+DELAY_BETWEEN_POSTS = 1.minute

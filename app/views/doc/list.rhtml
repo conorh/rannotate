@@ -1,0 +1,63 @@
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
+<h2><span style="font-size: 130%"><%= @type.capitalize %>
+<% if(@library != nil) %>
+ for library '<%= @library %>' version <%= @version %><br/>
+<% end %></span></h2>
+<% ref_alpha = 'A' %>
+<% for ref_count in 1..26 %>
+<a href="#alpha_<%= ref_alpha %>"><%= ref_alpha %></a>
+<% ref_alpha.succ! %>
+<% end %>
+<div style="padding-top: 5px;"></div>
+<table>
+<tr valign="top" style="font-size: 70%; padding-top: 5px;">
+<% 
+   rows_per_col = ((@list.length + 26) / 2).to_i + 1
+   count = 0
+   alphabet = 'A'
+   alphabet_count = 0
+%>
+<td align="left">
+<strong><%= alphabet %></strong><a name="alpha_<%= alphabet %>"></a><br/>
+<% for entry in @list %>
+<%   # Check if we should display the next letter of the alphabet %>
+<%   entry.container? ? char = entry.full_name[0,1].upcase : char = entry.name[0,1].upcase %>
+<%   while(char >= 'A' && char <= 'Z' && char != alphabet && alphabet_count < 25)  
+       alphabet.succ!
+       alphabet_count += 1
+       count += 1
+%>
+<strong><%= alphabet %></strong><a name="alpha_<%= alphabet %>"></a><br/>
+<%     # if we crossed a column boundary then output a new column %>
+<%     if(count != @list.length && count % rows_per_col == 0) %>
+</td>
+<td align="left">
+<%     end
+     end %>
+<%= link_to_doc(entry) %><br/>
+<% count = count + 1
+     # if we crossed a column boundary then output a new column 
+     if(count != @list.length && count % rows_per_col == 0) %>
+</td>
+<td align="left">
+<%   end 
+   end 
+   # Display any remaining letters of the alphabet 
+   while(alphabet_count < 25) 
+     alphabet.succ!
+     alphabet_count += 1
+     count += 1
+%>
+<strong><%= alphabet %></strong><a name="alpha_<%= alphabet %>"></a><br/>
+<%   # if we crossed a column boundary then output a new column 
+     if(count != @list.length && count % rows_per_col == 0) %>
+</td>
+<td align="left">
+<%   end
+   end %>
+</td></tr></table> 
+</div>

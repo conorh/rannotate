@@ -1,0 +1,23 @@
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
+<table><tr></td>
+<h2><%= @type.capitalize %>
+<% if(@library != nil) %>
+ for library '<%= @library %>' version <%= @version %><br/>
+<% end %>
+</h2>
+</td></tr>
+<tr valign="top" style="font-size: 70%">
+<% 
+   rows_per_col = (@list.length / 3).to_i + 1
+   count = 0
+%>
+<td align="left">
+<% for entry in @list %>
+<%= link_to_doc(entry) %><br/>
+<% end %>
+</td></tr></table>
+</div>

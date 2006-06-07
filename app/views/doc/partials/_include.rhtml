@@ -1,0 +1,23 @@
+<div class="section_title">
+
+  <div class="note_link">
+  <%= show_notes_link(@ra_container.full_name, "RaInclude") %>
+  <span id="notes_RaInclude_add" style="<%= check_display("includes") %>">&nbsp;<%= get_add_note_link(@ra_container.id, "RaInclude") %>&nbsp;</span>
+  </div>
+
+<div onClick="<%= show_or_hide("includes") %>">Included Modules</div>
+</div>
+
+<div id="includes">
+<a name="includes"></a>
+<ul>
+<% for include in @ra_code_objects[RaInclude] %>
+<li><%= include.name %></li>
+<% end %>
+</ul>
+
+<div id="notes_RaInclude" style="<%= check_display("includes") %> margin-top: 5px;">
+<%= check_show_notes("includes", "RaInclude", @ra_container.full_name) %>
+</div>
+
+</div>

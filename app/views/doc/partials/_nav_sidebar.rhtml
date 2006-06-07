@@ -1,0 +1,29 @@
+<h2>Search Docs</h2>
+
+<%= form_tag :controller => 'doc', :action => 'search' %>		
+<input type="text" name="name" size="11"/>&nbsp;<%= submit_tag "search" %>
+		<%= end_form_tag %>
+<p>
+<h2>Browse Docs</h2>
+
+[<%= link_to "Classes/Modules", :controller => 'doc', :action => "list", :type => "classes" %>]<br/>
+[<%= link_to "Methods", :controller => 'doc', :action => "list", :type => "methods" %>]<br/>
+[<%= link_to "Files", :controller => 'doc', :action => "list", :type => "files"  %>]<br/>
+[<%= link_to "Libraries", :controller => 'doc', :action => "libraries" %>]<br/>
+<p>
+<h2>Site Links</h2>
+
+<%= link_to('RSS feed', {:controller => 'notes', :action => 'rss'}) %><br/>
+<%= link_to('Newest Notes', {:controller => 'notes', :action => 'list_new'}) %><br/>
+<%= link_to('Note Rankings', {:controller => 'notes', :action => 'rankings'}) %>
+<p>
+<h2>Useful Links</h2>
+
+<a href="http://www.rubyonrails.org">Ruby on Rails</a><br/>
+<a href="http://ruby.outertrack.com">Rannotated Ruby Docs</a><br/>
+<a href="http://rails.outertrack.com">Rannotated Rails Docs</a><br/>
+<a href="http://www.conorhunt.com/techblog/">Rannotate Blog</a></br/>
+<p>
+<span style="font-size: 80%;">
+This site powered by <a href="http://rannotate.rubyforge.org">Rannotate</a><br/>
+</p>

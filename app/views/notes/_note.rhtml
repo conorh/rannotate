@@ -1,8 +1,19 @@
+<a name="note_<%= @note.id %>"></a>
 <div class="note">
-  <strong><%= mangle_email_for_display(@note.email) %></strong><br />
-  <a href="#"><%= @note.created_at.strftime("%d-%b-%Y %H:%M") %></a>
-  </strong>
-  <div class="text">
+  <div class="note_header">
+<strong><%= mangle_email_for_display(@note.email) %></strong><br />
+<% if(@hide_vote == nil) %>
+		<span style="float: right; font-size: 80%;">		
+<%= if @note.total_votes >= 0 then '+' else '' end %><%= @note.total_votes %> vote [<%= link_to('up', :controller => 'notes', :action => 'vote', :value => NoteVote::USEFUL, :id => @note.id) %>] 
+		[<%= link_to('down', :controller => 'notes', :action => 'vote', :type => NoteVote::NOT_USEFUL, :id => @note.id)  %>]
+				[<%= link_to('spam', :controller => 'notes', :action => 'vote', :type => NoteVote::SPAM, :id => @note.id)  %>]
+		</span>    
+		<% end %>
+Added To Version <%= @note.version %> on <a href="#"><%= @note.created_at.strftime("%d-%b-%Y %H:%M") %></a> 
+</strong>
+		  
+  </div>
+  <div class="note_text">
   <div class="ruby">
   <%= fix_note_for_display(@note.text) %>
   </div><!-- ruby -->

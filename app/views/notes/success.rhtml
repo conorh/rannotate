@@ -1,13 +1,4 @@
-<table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'>
-<tr>
-  <td class="file-title">
-  <span class="file-title-prefix">Added Note To <%= @note.category.capitalize %> <% @note.name %></td>
-  </td>
-</tr>
-</table>
-<p>
-<p>
-<p>
+<h2>Note Added To - <%= @note.get_display %></h2>
 Your note was added succesfully.
 <p>
-<a href="<%= @note.content_url %>">Click here</a> to reload view the file again.
+<a href="<%= get_return_url(@note) %>">Click here</a> to reload view the file again.

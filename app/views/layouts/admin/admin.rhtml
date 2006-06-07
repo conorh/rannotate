@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />		
+		<title><%= @page_title ? @page_title : RANNOTATE_SITE_NAME %> Administration</title>
+		<%= stylesheet_link_tag "docs.css" %>
+		<%= javascript_include_tag "prototype", "scriptaculous", "checkboxes" %>
+	</head>
+	<body>
+	
+<div id="header">
+  <span class="header_search_links"> 
+		  </span>
+  <%= link_to(RANNOTATE_SITE_NAME + " Administration", {:controller => 'upload', :action => 'index'},{:class=>'header_link'}) %><br/>
+</div>
+
+<div id="sidebar_slim">
+<h2>Links</h2>
+<%= link_to 'Upload New Documentation', :controller => 'upload', :action => 'create' %><br/>
+<%= link_to 'Manage Libraries', :controller => 'upload', :action => 'list' %><br/>
+<%= link_to 'Manage Annotations', :controller => 'notes' %><br/>
+<%= link_to 'Ban Ip Ranges', :controller => 'ban' %><br/>
+</div>
+
+<div id="body_content_wide">
+<%= @content_for_layout %>
+</div>
+
+</body>
+</html>

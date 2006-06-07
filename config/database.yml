@@ -2,13 +2,13 @@ development:
   adapter: mysql
   database: rannotate
   host: 
-  username: rails
-  password: rails
+  username: root
+  password: 
   port: 
   sslcert: 
   sslcapath: 
   sslcipher: 
-  socket: /var/run/mysqld/mysqld.sock
+  socket: localhost
   sslkey: 
   schema_order: 
   dbfile: 
@@ -30,15 +30,7 @@ test:
 
 production:
   adapter: mysql
-  database: rannotate_production
-  host: 
-  username: root
-  password: 
-  port: 
-  sslcert: 
-  sslcapath: 
-  sslcipher: 
-  socket: /path/to/your/mysql.sock
-  sslkey: 
-  schema_order: 
-  dbfile: 
+  database: rannotate_prod
+  username: rails
+  password: rails
+  socket: /var/lib/mysql/mysql.sock

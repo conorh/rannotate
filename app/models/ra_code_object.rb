@@ -1,3 +1,4 @@
+# This is the base class for all code objects in the system. Code objects are requires, includes, constants and attributes
 class RaCodeObject < ActiveRecord::Base
   belongs_to :ra_container
   

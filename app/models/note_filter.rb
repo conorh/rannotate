@@ -2,7 +2,7 @@
 # TODO: Right now this is not getting reloaded by rails when it is modified.. need to figure out how to fix that
 class NoteFilter
 
-	attr_accessor :id, :category, :name, :text, :email, :ip_address
+	attr_accessor :id, :container_name, :note_group, :note_type, :text, :email, :ip_address
 	attr_accessor :period_count, :period_type
 	attr_accessor :order_by, :order_direction
 	attr_accessor :number_per_page

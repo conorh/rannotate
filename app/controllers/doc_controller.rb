@@ -1,132 +1,159 @@
 class DocController < ApplicationController
+  session :off
 
-  # cache the main controllers for this class
-  caches_page :files, :modules, :classes, :sidebar
+  # cache the main actions for this controller
+  caches_page :index, :list, :files, :modules, :classes, :libraries
+  
+  helper :notes
 
-
-	# display the index page with an optional home page
+  # display the index page with an optional home page
   def index    
-  	# if a class/name is specified then set that for the main frame link  
-    unless params[:type].nil? and params[:name].nil?
-      @start_page = url_for(:action => params[:type], :name => params[:name])
-    end
-    
-    # if no main page is specified then look for a home page to display (id == 1)  
-   	unless @start_page.nil?
-    	main_page = RaFile.find(:first, :conditions=>['id=1'])
-    	unless main_page.nil?
-      	@start_page = url_for(:action => 'files', :name => main_page.full_name)
+    if(RANNOTATE_HOME_PAGE != nil)
+      main_page = RaContainer.find_highest_version(RANNOTATE_HOME_PAGE, 'RaFile')      
+      if(main_page != nil)             
+        @home = main_page
       end
+    end     
+  end
+
+  # display a file
+  def files
+  	if(params[:method])
+  	  	method(RaFile.to_s)
+	    render :action => 'method'   	  	
+  	else  
+	    get_container(RaFile.to_s) 
+	    render :action => 'container'	          
+	end
+  end
+
+  # display a module
+  def modules
+  	if(params[:method])
+  	  	method(RaModule.to_s)
+	    render :action => 'method'   	  	  	
+  	else
+  		get_container(RaModule.to_s)
+    	render :action => 'container'     	
     end
   end
-
-  # display the left sidebar 
-  def sidebar 
-    type = params[:type]           
-        
-    # Get what should be displayed in the left sidebar
-    case type
-      when 'classes'
-        @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC")       
-      when 'files'
-        @list = RaContainer.find(:all, :conditions => ["type = ?", RaFile.to_s], :order => "full_name ASC")       
-      when 'methods'
-        @list = RaMethod.find(:all, :include => :ra_container, :order => "ra_methods.name ASC")
-      else
-        @list = RaContainer.find(:all, :conditions => ["type = ? OR type = ?", RaClass.to_s, RaModule.to_s], :order => "full_name ASC") 
-    end   
+  
+  # display a class  
+  def classes    
+  	if(params[:method])
+  	  	method(RaClass.to_s)
+	    render :action => 'method'   	  	  	
+  	else	    	
+	  	get_container(RaClass.to_s)
+	    render :action => 'container'     	
+	end
+  end
+  
+  
+  # this is a method that causes a container to display without caching
+  def container
+    # this is needed because after creating a new note we go back to the container
+    # page and it gets cached. Howerver the page is in "expanded" mode to show the note that you just added
+    # this means that the section with your note is expanded out
+    # this page then gets cached and everyone that goes there after that sees your note
+    # to solve this problem we use this action that doesn't cache the page
+    # NOTE: let it be known that page caching can cause extreme headaches
+    get_container(params[:type])
   end
 
+  # display a method  
+  def method(type)
+  	@container_name = @params[:name]
+  	@version = @params[:version]
+    @ra_container = RaContainer.find_highest_version(@container_name, type, @version)
+    @method = RaMethod.find(:first, :include => :ra_comment, :conditions => ["ra_container_id = ? AND name = ?", @ra_container.id, @params[:method]])
+    @source_code = RaSourceCode.find(@method.ra_source_code_id).source_code
+    @page_title = RANNOTATE_SITE_NAME + " " + @container_name + "-" + @method.name
+    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name, :method => nil)
+  end
+  
+  # display a list of entries
+  def list
+  	get_list(params[:type], params[:library], params[:version])
+  end 
+  
   # Used by AJAX to display inline notes
   def notes 
-    render_notes(params[:category], params[:name], params[:content_url])      
-  end
+    render_notes(params[:container_name], params[:note_group])     
+  end   
   
   # Used by AJAX to display inline source code
   def source_code
-    render_source(params[:method_id])
-  end
-
-	# display a file
-  def files
-    get_container(RaFile)
-    render :action => 'container'
-  end
+    render_source(params[:source_id])
+  end  
   
-  # display a module
-  def modules
-    get_container(RaModule)
-    render :action => 'container' 
-  end
-  
-  # display a class
-  def classes
-    get_container(RaClass)
-    render :action => 'container'
-  end
-  
-	# search the database for classes, methods, files
+  # search the database for classes, methods, files
   def search
   	@search_text = params[:name]
-  	
-  	if(@search_text == nil || @search_text.length < 3)
-    	@search_results = {}
-    	@error = "Search too short. Must be longer than 2 characters."
-	    render :action => 'sidebar'
-	    return
-  	end
-  	
-    @search_results = Hash.new   
-    
-    # what type to include in output, and what order to display them in
-    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute]
-      	
-    name = '%' + params[:name].downcase + '%'    
-    
-    temp = RaContainer.find(:all, :limit => 100, :conditions => ["lower(full_name) like ? AND type IN ('RaModule', 'RaClass')", name], :order => 'full_name ASC')    
-    
-    temp.push(RaMethod.find(:all, :limit => 100, 
-    	:conditions => ["lower(ram.name) like ? AND ram.ra_container_id = rc.id", name], 
-    	:joins => 'ram, ra_containers rc',
-    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
-    	:order => 'ram.name ASC'
-    	)
-    )
-    temp.push(RaCodeObject.find(:all,
-    	:limit => 100, 
-    	:conditions => ["lower(rco.name) like ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id", name],
-    	:joins => 'rco, ra_containers rc',
-    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
-    	:order => 'rco.name ASC'    	
-    	)
-    )
-        
-    temp.flatten!
-    # Create a hash of the results
-    temp.each do |obj| 
-      unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
-      @search_results[obj.class].push(obj)
-    end 
-    @results_count = temp.length
-    
-    render :action => 'sidebar'
-  end    
+  	get_search_results(@search_text)
+  end
   
+  # list all of the libraries in the system  
+  def libraries
+  	all_libs = RaLibrary.find(:all, :order => "name ASC, version DESC")
+  	
+  	# collect all of the libraries into a hash by library name, each
+  	# entry in the hash contains a list of all the library versions
+  	@libraries = Hash.new
+  	all_libs.each do |l|
+  		unless @libraries[l.name] then @libraries[l.name] = Array.new end
+  		@libraries[l.name].push(l)
+  	end  	  	
+  end  
+  
+  # Display the history for a container
+  def history
+    get_container(@params[:type])
+  end
+  
+  ###########################
   ### START protected methods
+  ###########################
   protected  
   
-  # Get a container (file,class, module) and everything necessary to display it's documentation
-  def get_container(type)
-    @container_name = @params[:name]
+  # get a list of entries to display for the left sidevar
+  def get_list(type = 'classes', library = nil, version = nil)
+    # Get what should be displayed in the left sidebar
+    case type
+      when 'files'
+        @list = RaContainer.find_all_highest_version([RaFile.to_s], library, version)           
+      when 'methods'
+        @list = RaMethod.find_all_highest_version()
+      else
+       	@list = RaContainer.find_all_highest_version([RaClass.to_s, RaModule.to_s], library, version)
+    end
+    @version = version
+    @library = library
+    @type = type
     
-    # Get the container
-    @ra_container = RaContainer.find(:first, :include => :ra_comment, :conditions => ["full_name = ? AND type = ?", @container_name, type.to_s])            
+    if(type == 'files')
+      render :action => 'list_files'
+    end
+  end
+  
+  # Get a container (file,class, module) and everything necessary to display it's documentation
+  def get_container(cont_type)
+    @container_name = @params[:name]
+    @version = @params[:version] # this can be nil if the most recent version is requested
+    @expand = @params[:expand]
+    @ra_container = RaContainer.find_highest_version(@container_name, cont_type, @version)   
+    unless(@ra_container)
+    	@error = "Could not find: " + @container_name
+    	return
+    end
+    
+    @page_title = RANNOTATE_SITE_NAME + " " + @container_name      
                 
     # Get all the methods in this container (and join with their comments)
     methods = RaMethod.find(:all, :include => :ra_comment, :conditions => ["ra_container_id = ?", @ra_container.id], :order => "name ASC")
       
     # Divide up the methods into public/protected and class/instance
-		@ra_methods = {}      
+	@ra_methods = {}      
     methods.each do |method|
         # Don't display private methods
         if(method.visibility.to_i == RaContainer::VIS_PRIVATE) then next end
@@ -144,7 +171,7 @@ class DocController < ApplicationController
     
     # Divide up the code objects into the various types
     @ra_code_objects = {}
-    results.each do |obj| 
+    results.each do |obj|
       unless @ra_code_objects.has_key?(obj.class) then @ra_code_objects[obj.class] = [] end
       @ra_code_objects[obj.class].push(obj)
     end
@@ -153,31 +180,97 @@ class DocController < ApplicationController
     @ra_children = RaContainer.find(:all, :conditions => ["parent_id = ?", @ra_container.id], :order => "full_name ASC")
     
     # Get the list of the files that this container is defined in
-    @ra_in_files = RaInFile.find(:all, :conditions => ["container_id = ?", @ra_container.id])
+    @ra_in_files = RaInFile.find(:all, :conditions => ["ra_container_id = ?", @ra_container.id])
     
     # Get a list of counts of the different categories of notes for this container
     # TODO: make this more active recordish
-    results = Note.connection.select_all("SELECT category, count(name) AS count FROM notes WHERE name = '" + @container_name + "' GROUP BY category");
+    results = Note.connection.select_all("SELECT note_group, count(container_name) AS count FROM notes WHERE container_name = '" + @container_name + "' GROUP BY note_group");
     @note_count = {}
     for result in results
-      @note_count[result['category']] = result['count']
+      @note_count[result['note_group']] = result['count']
     end
-                     
-    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name) 
-                     
-  end   
+
+    @container_type = @ra_container.class.type_string                         
+    @container_url = url_for(:action => @ra_container.class.type_string.pluralize, :name => @container_name)                      
+  end       
+  
+#  def get_special_docs()
+#    container = RaContainer.find_highest_version("README OR CHANGELOG OR LICENSE")
+#  end
+  
+  # execute a search and return the results
+  # results are put in the @search_results class variable and @result_count contains the total result count
+  # if something goes wrong then the class variable @error contains the error message
+  def get_search_results(search_text)
+  	@search_results = Hash.new
+  	
+  	if(search_text == nil || search_text.length < 3)
+    	@search_results = {}
+    	@error = "Search too short. Must be longer than 2 characters."
+	    return
+  	end
+    
+    # what type to include in output, and what order to display them in
+    @display = [RaModule, RaClass, RaMethod, RaConstant, RaAttribute, RaFile]
+    
+    if(params[:exact] == nil)
+      name = '%' + search_text.downcase + '%'
+    else
+      name = search_text.downcase
+    end
+    
+    temp = RaContainer.find(:all, :limit => 100, 
+    	:conditions => ["LOWER(rc.full_name) LIKE ? AND rl.id = rc.ra_library_id AND rl.current = ?", name, true], 
+    	:select => 'rc.*',
+    	:joins => "rc, ra_libraries AS rl",
+    	:order => 'rc.full_name ASC'    	
+    )
+    
+    temp.push(RaMethod.find(:all, :limit => 100, 
+    	:conditions => ["LOWER(ram.name) LIKE ? AND ram.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true], 
+    	:joins => 'ram, ra_containers AS rc, ra_libraries AS rl',
+    	:select => 'ram.*, rc.full_name AS container_name, rc.type AS container_type',
+    	:order => 'ram.name ASC'
+    	)
+    )
+    temp.push(RaCodeObject.find(:all, :limit => 100, 
+    	:conditions => ["LOWER(rco.name) LIKE ? AND rco.type IN('RaConstant', 'RaMethod', 'RaAttribute') AND rco.ra_container_id = rc.id AND rc.ra_library_id = rl.id AND rl.current = ?", name, true],
+    	:joins => 'rco, ra_containers AS rc, ra_libraries AS rl',
+    	:select => 'rco.*, rc.full_name AS container_name, rc.type AS container_type',
+    	:order => 'rco.name ASC'
+    	)
+    )
+        
+    temp.flatten!
+        
+    # Check to see if there is only one result, it is a container and we are only looking for an exact result
+    # if so then redirect to that container        
+    if(temp.length == 1)
+      obj = temp[0]
+      if(params[:exact] && obj.container?)    
+        redirect_to :action => obj.class.type_string.pluralize, :name => obj.full_name, :method => nil
+      end
+    end
+    
+    # Create a hash of the results
+    temp.each do |obj|
+      unless @search_results.has_key?(obj.class) then @search_results[obj.class] = [] end
+      @search_results[obj.class].push(obj)
+    end
+    @results_count = temp.length        
+  end
   
   # Render the notes inline
-  def render_notes(container_type, container_name, current_url)
+  def render_notes(container_name, note_group)
     render_component(:controller => 'notes', :action => 'list', 
-      :params=> {:no_layout => true, :category=>container_type, :name=>container_name, :return_url=>current_url }
-    )         
+      :params=> {:no_layout => true, :container_name=>container_name, :note_group=>note_group }
+    )
   end 
   
   # Render the source inline
   def render_source(id)
     @source_code = RaSourceCode.find(id).source_code
-    render :partial => 'source_code'
+    render :partial => 'doc/partials/source_code'
   end
 
 end

@@ -1,3 +1,31 @@
+HTML {
+  PADDING: 0px; MARGIN: 0px;
+}
+BODY {
+  PADDING: 0px; MARGIN: 0px; FONT: 1em/1.4em "Lucida Grande", Helvetica, sans-serif;
+}
+A {
+	  COLOR: #213449
+}
+TABLE {
+  PADDING: 0px; MARGIN: 0px; BORDER: 0px; BORDER-COLLAPSE: collapse;
+}
+TD, TR {
+  PADDING: 0px; MARGIN: 0px;
+}
+FORM {
+  DISPLAY: inline;
+}
+FORM INPUT {
+  	FONT-SIZE: 80%;
+}
+H1,H2,H3,H4,H5,H6 {
+  	MARGIN: 0 0 0 0px;
+	}
+	IMG {
+  	BORDER: 0px;
+}
+
 /* User notes display */
 
 .ruby .normal {}
@@ -19,26 +47,15 @@
 .ruby .expr { color: #227; }
 .ruby .escape { color: #277; }
 
-
-body, td {
-  font-family: "Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
-  background: #FFF;
-  color: #000;
-  margin: 4px;
-  font-size: small;
-}
-
 .file-title-prefix {
   font-size: large;
 }
-
 .file-title {
   font-size: large;
   font-weight: bold;
   background: #005;
   color: #FFF;
 }
-
 .banner {
   background: #005;
   color: #FFF;

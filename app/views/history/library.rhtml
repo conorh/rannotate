@@ -1,0 +1,66 @@
+<% if @error %>    
+	<%= @error %>
+<% end %>
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
+NOTE: This page only shows the classes/modules/files that were added or removed between versions.
+It DOES NOT show classes and modules that had changes made to them. You will need to go to individual class or module and click
+on the history link to see that.
+<p>
+<% 
+   for count in 0..@versions.length-2
+   version = @versions[count]
+   container = version[:container]
+   prev_container = @versions[count + 1][:container]
+   link_params = {:controller => "doc", :action => "library", :name => container.name, :version => container.ver_string } 
+%>
+<h2 style="font-size: 130%">Changes from Version: <%= link_to prev_container.ver_string, link_params, :style => "text-decoration: none;" %> to Version <%= link_to container.ver_string, link_params, :style => "text-decoration: none;" %> </h2>
+  
+
+<% if(version[:added].length > 0 || version[:removed].length > 0 || version[:changed].length > 0) %>
+<%if(version[:added].length > 0) %>
+<span class="history_box_head">Added</span>
+<div class="history_added">
+<% version[:added].each do |type_name, obj_hash| %>
+  <div class="history_subhead"><%= type_name.pluralize.capitalize %></div>
+  <% obj_hash.sort{|x,y| x.full_name <=> y.full_name }.each do |obj| %>
+  <span class="history_obj"><%= link_to_doc obj %></span><br/>
+  <% end %>
+<% end %>
+</div>
+<% end %>
+
+<%if(version[:removed].length > 0) %>
+<div class="history_box_head">Removed</div>
+<div class="history_removed">
+<% version[:removed].each do |type_name, obj_hash| %>
+  <div class="history_subhead"><%= type_name.pluralize.capitalize %></div>
+  <% obj_hash.sort{|x,y| x.full_name <=> y.full_name }.each do |obj| %>
+  <span class="history_obj"><%= obj.full_name %></span><br/>
+  <% end %>
+<% end %>
+</div>
+<% end %> 
+
+<%if(version[:changed].length > 0) %>
+<div class="history_box_head">Changed</div>
+<div class="history_changed">
+<% version[:changed].each do |type_name, obj_hash| %>
+  <div class="history_subhead"><%= type_name.pluralize.capitalize %></div>
+  <% obj_hash.sort{|x,y| x.full_name <=> y.full_name }.each do |obj| %>
+  <span class="history_obj"><%= link_to_doc obj %></span><br/>
+  <% end %>
+<% end %>
+</div>
+<% end %>
+<p>
+<% else %>
+<p>
+<b>[ No changes ]</b>
+<p>
+<% end %>
+<% end %>
+</div>

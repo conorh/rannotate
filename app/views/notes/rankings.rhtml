@@ -1,0 +1,20 @@
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide">
+<div style="font-size: 120%; padding-left: 10px;">
+<p>
+<h2>Most notes</h2>
+<% for note in @most_notes %>
+<a href="<%= get_return_url(note) %>" title="<%= note.get_display %>"><%= note.get_display %></a> (<%= note.note_count %>)<br/>
+<% end %>
+<p>
+<h2>Higest Rated Notes</h2>
+<% for note in @highest_notes %>
+<%= note.total_votes >= 0 ? '+' : '' %><%= note.total_votes %> 
+<a href="<%= get_return_url(note) %>" title="<%= note.get_display %>">Note <%= note.id %></a> 
+by <b><%= mangle_email_for_display(note.email) %></b> for <%= note.get_display %><br/>
+<% end %>
+</div>
+</div>

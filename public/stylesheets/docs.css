@@ -1,99 +1,133 @@
-a {
-  color: #00F;
+HTML {
+  PADDING: 0px; MARGIN: 0px;
+}
+BODY {
+  PADDING: 0px; MARGIN: 0px; FONT: 1em "Lucida Grande", Helvetica, sans-serif;
+}
+A {
+	  COLOR: #213449
+}
+TABLE {
+  PADDING: 0px; MARGIN: 0px; BORDER: 0px; BORDER-COLLAPSE: collapse;
+}
+TD, TR {
+  PADDING: 0px; MARGIN: 0px;
+}
+FORM {
+  DISPLAY: inline;
+}
+FORM INPUT {
+  	FONT-SIZE: 80%;
+}
+H1,H2,H3,H4,H5,H6 {
+  	MARGIN: 0 0 0 0px;
+	}
+	IMG {
+  	BORDER: 0px;
+}
+
+		#wrap {
+  margin:0 0 0 0;
+  background: #fafaea; 
+		}
+		
+	#header {
+  width: 100%;
+  	font-size: 80%;  
+  background-color: #213449;
+  padding: 5px;
+  color: #ffff66; 
+  vertical-align:middle;   
+	}
+	
+.header_link {
+  font-size: 140%;
+  color: #ffff66;  
   text-decoration: none;
+  font-weight: bold;
+}
+.header_search_links {
+  float: right;
+  margin-right: 10px;
+  color: #ffff66;   
+}
+.header_search_links a {
+  color: #ffff66;   
+}
+.header_subtext {
+  font-size: 80%;
+}
+.header_space {
+  padding-top: 8px;
 }
 
-a:hover {
-  color: #77F;
-  text-decoration: underline;
-}
-
-body, td, p {
-  font-family: "Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
-  background: #FFF;
-  color: #000;
+#sidebar {
+  position: absolute;
+  left: 0px;
+  width: 190px;
   margin: 0px;
-  font-size: small;
+  padding: 10px 10px 0px 5px;
+  font-size: 70%;
 }
 
-#content {
-  margin: 2em;
+#sidebar_slim {
+  position: absolute;
+  left: 0px;
+  width: 150px;
+  margin: 0px;
+  padding: 10px 0px 0px 8px;
+  font-size: 70%;    
 }
 
-#description p {
-  margin-bottom: 0.5em;
+#body_content {
+  border-left: 1px solid black;
+  margin-left: 200px;
+  padding: 10px 10px 200px 5px;
+  background: #fff;
+  font-size: 80%;   
 }
 
-.sectiontitle {
-  margin-top: 1em;
-  margin-bottom: 1em;
+#body_content_wide {
+  border-left: 1px solid black;
+  margin-left: 160px;
+  padding: 10px 10px 200px 5px;
+  background: #fff;
+  font-size: 80%;   
+}
+
+.container_header {
+  font-size: 170%;  font-weight: bold; 
+}
+
+.section_title {
+  	margin: 10 0 10 0px; font-size: 120%; font-weight: bold; color: #ffff66;
+  padding: 0.3em;
+  background: #213449;	
+}
+
+	.comment H1, H2 {
+	  	margin: 0px 0px 5px; font-size: 120%; color: #555; border-bottom: #ccc 1px dotted;  
+	}
+.comment PRE {
   padding: 0.5em;
-  padding-left: 2em;
-  background: #005;
-  color: #FFF;
   border: 1px dotted black;
+  background: #CBE6F3; 
+  font-size: 110%;
+}
+.comment tt {
+  font-size: 110%;
 }
 
-.sectiontitle_note {
-  margin-top: 1em;
-  padding: 0.5em;
-  padding-left: 2em;
-  background: #005;
-  color: #FFF;
-  border: 1px dotted black;
+.note_link {
+  display: inline;
+  float: right;
+  font-size: 100%;
+  font-weight: normal;
 }
-
-div.sectiontitle span.note_link {
-	float: right;
-}
-
-.attr-rw {
-  padding-left: 1em;
-  padding-right: 1em;
-  text-align: center;
-  color: #055;
-}
-
-.attr-name {
-  font-weight: bold;
-}
-
-.attr-desc {
-}
-
-.attr-value {
-  font-family: monospace;
-}
-
-.file-title-prefix {
-  font-size: large;
-}
-
-.file-title {
-  font-size: large;
-  font-weight: bold;
-  background: #005;
-  color: #FFF;
-}
-
-.banner {
-  background: #005;
-  color: #FFF;
-  border: 1px solid black;
-  padding: 1em;
-}
-
-.banner td {
-  background: transparent;
-  color: #FFF;
-}
-
-h1 a, h2 a, .sectiontitle a, .sectiontitle_note a,.banner a {
-  color: #FF0;
-}
-
-h1 a:hover, h2 a:hover, .sectiontitle a:hover, .sectiontitle_note a:hover, .banner a:hover {
-  color: #FF7;
+.note_link a {
+  font-size: 100%;
+  font-weight: normal;
+  color: #ffff66;
 }
 
 .method {
@@ -103,192 +137,68 @@ h1 a:hover, h2 a:hover, .sectiontitle a:hover, .sectiontitle_note a:hover, .bann
 }
 
 .description pre {
-  padding: 0.5em;
+  padding: 0.4em;
   border: 1px dotted black;
-  background: #FFE;
-}
-
-.method .title {
-  font-family: monospace;
-  font-size: large;
-  border-bottom: 1px dashed black;
-  margin-bottom: 0.3em;
-  padding-bottom: 0.1em;
-}
-
-.method .description, .method .sourcecode {
-  margin-left: 1em;
+  background: #CBE6F3;
+  font-size: 110%;  
 }
 
 .description p, .sourcecode p {
-  margin-bottom: 0.5em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+  font-size: 110%;  
 }
 
-.method .sourcecode p.source-link {
-  text-indent: 0em;
-  margin-top: 0.5em;
+.description tt {
+  font-size: 110%;
 }
 
-.method .aka {
-  margin-top: 0.3em;
-  margin-left: 1em;
-  font-style: italic;
-  text-indent: 2em;
+.note {
+ background-color: #CBE6F3;
+ padding: 5px;
+}
+.note_header {
+ background-color: #AAD7FB;
+ padding: 5px;
+}
+.note_text {
+ background-color: #CBE6F3;
+ padding: 3px;
+ margin-top:2px;
 }
 
-h1 {
-  padding: 1em;
-  border: 1px solid black;
-  font-size: x-large;
-  font-weight: bold;
-  color: #FFF;
-  background: #007;
-}
-
-h2 {
-  padding: 0.5em 1em 0.5em 1em;
-  border: 1px solid black;
-  font-size: large;
-  font-weight: bold;
-  color: #FFF;
-  background: #009;
-}
-
-h3, h4, h5, h6 {
-  padding: 0.2em 1em 0.2em 1em;
-  border: 1px dashed black;
-  color: #000;
-  background: #AAF;
-}
-
-.sourcecode > pre {
+.sourcecode {
   padding: 0.5em;
   border: 1px dotted black;
-  background: #FFE;
+  background: #fafaea; 
 }
 
-
-
-
-
-
-.left_sidebar {
-    background: #EEE;
-    font-family: "Bitstream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
-    color: #000;
-    margin: 0px;
-    valign: top;
+.history_box_head {
+ font-size: 120%;
+ font-weight: bold;
+ padding-top: 10px;
 }
-
-.left_banner {
-	background: #005;
-	color: #FFF;
-	padding: 0.2em;
-	font-size: 13px; 
-	font-weight: bold;
-	text-align: left;
+.history_added {
+ padding: 0.5em; border: 1px dotted black;
+ background: #aed9c0;
 }
-
-.left_banner a {
-  color: #FF0;
+.history_removed {
+ padding: 0.5em; border: 1px dotted black;
+ background: #e982a1;
 }
-
-.left_banner a:hover {
-  color: #FF7;
+.history_changed {
+ padding: 0.5em; border: 1px dotted black;
+ background: #CBE6F3;
 }
-
-.left_banner form {
-	padding-top: 4px;
-	padding-bottom: 4px;
-  margin-top: 0px;	
-  margin-bottom: 0px;	
+.history_obj {
+ padding-left: 10px;
+ font-size: 120%;
+ font-family: monospace;
 }
-
-.left_banner input {
-	margin: 0;
-	font-size: 85%;
-}
-
-.left_entries {
-    margin: 0.25em 1em 0 1em;
-	font-size: 9px; 
-}
-
-.left_entries h4 {
-  border: 1px dashed black;
-  color: #000;
-  background: #AAF;
-	font-size: 10px; 
-  margin-top: 8px;	
-  margin-bottom: 5px;		
-}
-
-.left_entries a {
-    color: #00F;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.left_entries a:hover {
-	color: #77F;
-	text-decoration: underline;
-}
-
-
-div#usernotes {
-	background-color: #e0e0e0;
-}
-div#usernotes div.head, div#usernotes div.foot {
-	background: #556;
-	color: white;
-	padding: 4px;
-}
-div#usernotes div.foot {
-	text-align: right;
-}
-div#usernotes div.foot a, div#usernotes div.head a {
-  color: #FF0;
-	background-color: transparent;
-}
-
-div#usernotes div.foot a:hover, div#usernotes div.head a:hover {
-  color: #FF7;
-	background-color: transparent;
-}
-
-div#usernotes span.action {
-	float: right;
-}
-div#usernotes div.note {
-	padding: 4px;
-}
-div#usernotes div.text {
-	background-color: #f0f0f0;
-	color: inherit;
-	padding: 2px;
-	margin-top: 4px;
-}
-
-
-
-.dyn-source {
-  background: #FFE;
-  color: #000;
-  border: 1px dotted black;
-  margin: 0.5em 2em 0.5em 2em;
-  padding: 0.5em;
-}
-
-.dyn-source .comment {
-color: #005; font-style: italic;
-}
-
-.dyn-source .keyword {
-color: #A00; font-weight: bold;
-}
-
-pre,tt {
-	font-size: 10pt;
+.history_subhead {
+ font-size: 100%;
+ font-weight: bold;
+ padding-top: 5px;
 }
 
 .ruby .normal {}

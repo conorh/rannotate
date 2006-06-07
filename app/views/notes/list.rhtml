@@ -1,11 +1,5 @@
-<div id="usernotes">
- <div class="sectiontitle_note">
-  <span class="action">
-  		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :category => @category, :name => @name, :content_url => @content_url}) %>
-  </span>    
-  <strong><%= pluralize(@notes.length, "Note") %> for <%= @category.capitalize! %></strong>
- </div> 
+<div class="usernotes">
 <% for @note in @notes %> 
 <%= render :partial => 'note' %> 
 <% end %> 
-</div><!-- usernotes -->
+</div>

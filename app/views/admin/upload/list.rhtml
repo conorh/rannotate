@@ -1,0 +1,11 @@
+<%= form_tag :action => 'delete' %>
+<% @libraries.each do |name,ver_array| %>
+Library - <%= name.capitalize %><br/>
+<% ver_array.each do |ver| %>
+<%= check_box :id, ver.id %> <%= ver.current ? "* " : "" %>ver <%= ver.ver_string %><br/>
+<% end %>
+<br/>
+<% end %>
+<%= submit_tag "Delete selected libraries" %>
+<%= end_form_tag %>
+* - This is the default library and version that is displayed when you are browsing the site.

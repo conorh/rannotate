@@ -1,5 +1,9 @@
 <%= error_messages_for 'ban' %>
 
+The IP Filter field uses % as a wild card<br/>
+123.% would ban everyone whose IP address starts with 123.<br/>
+123.23.2% would ban everyone whose IP address starts with 123.23.2 INCLUDING addresss like 123.23.211.3</br>
+
 <!--[form:ban]-->
 <p><label for="ban_ip_filter">Ip filter</label><br/>
 <%= text_field 'ban', 'ip_filter'  %></p>

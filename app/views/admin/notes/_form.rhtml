@@ -1,10 +1,16 @@
 <%= display_errors_for 'note' %>
 
-<label for="note_name"><strong>Name:</strong></label>
-<%= text_field('note', 'name', {:size=>20, :maxlength=>100}) %>
+<label for="note_name"><strong>Container Name:</strong></label>
+<%= text_field('note', 'container_name', {:size=>20, :maxlength=>150}) %>
 
-<label for="note_category"><strong>Category:</strong></label>
-<%= text_field('note', 'category', {:size=>20, :maxlength=>20}) %><br/>
+<label for="note_note_group"><strong>Note Group:</strong></label>
+<%= text_field('note', 'note_group', {:size=>20, :maxlength=>100}) %><br/>
+
+<label for="note_name"><strong>Container Name:</strong></label>
+<%= text_field('note', 'container_name', {:size=>20, :maxlength=>100}) %>
+
+<label for="note_version"><strong>Container Version:</strong></label>
+<%= text_field('note', 'version', {:size=>20, :maxlength=>100}) %>
 
 <label for="note_ip_address"><strong>IP Address:</strong></label>
 <%= text_field('note', 'ip_address', {:size=>16, :maxlength=>40}) %><br/>
@@ -14,6 +20,3 @@
 
 <p><label for="note_text"><strong>Note</strong></label><br/>
 <%= text_area('note', 'text', {:rows=>20, :cols=>80, :wrap=>:virtual}) %></p>
-
-</p>
-

@@ -1,0 +1,21 @@
+<div id="sidebar_slim">	
+<%= render :partial => 'doc/partials/nav_sidebar' %>
+</div>
+
+<div id="body_content_wide" style="padding-left: 10px;">
+<span class="container_header">Library - <%= @library.name %></span> <% if(@version) then %>Version <%= @version %><% end %>
+<br/>
+[ <a href="#notessec">0 Notes</a> ]
+[<%= link_to 'History', {:controller => 'history', :action => :library, :name => @library.name} %>]
+[<a href="<%= url_for(:action => :library, :name => @library.name, :type => 'files') %>">Files</a>]
+[<a href="<%= url_for(:action => :library, :name => @library.name, :type => 'classes') %>">Classes/Modules</a>]
+[<a href="<%= url_for(:action => :library, :name => @library.name, :type => 'methods') %>">Methods</a>]
+
+<div class="section_title" onClick="<%= show_or_hide("comment") %>">Library Description</div>
+<div class="comment"><%= markup_rdoc(@description) %></div>
+
+<div class="section_title" onClick="<%= show_or_hide("comment") %>">Classes/Modules</div>
+<%= render :partial => 'doc/partials/list' %>
+<div class="section_title" onClick="<%= show_or_hide("comment") %>">Comments</div>
+User comments go here
+</div>

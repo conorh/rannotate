@@ -6,9 +6,9 @@
 <p>
 <h2>Browse Docs</h2>
 
-[<%= link_to "Classes/Modules", :controller => 'doc', :action => "list", :type => "classes" %>]<br/>
-[<%= link_to "Methods", :controller => 'doc', :action => "list", :type => "methods" %>]<br/>
-[<%= link_to "Files", :controller => 'doc', :action => "list", :type => "files"  %>]<br/>
+[<%= link_to "All Classes/Modules", :controller => 'doc', :action => "list", :type => "classes" %>]<br/>
+[<%= link_to "All Methods", :controller => 'doc', :action => "list", :type => "methods" %>]<br/>
+[<%= link_to "All Files", :controller => 'doc', :action => "list", :type => "files"  %>]<br/>
 [<%= link_to "Libraries", :controller => 'doc', :action => "libraries" %>]<br/>
 <p>
 <h2>Site Links</h2>
@@ -23,6 +23,12 @@
 <a href="http://ruby.outertrack.com">Rannotated Ruby Docs</a><br/>
 <a href="http://rails.outertrack.com">Rannotated Rails Docs</a><br/>
 <a href="http://www.conorhunt.com/techblog/">Rannotate Blog</a></br/>
+<p>
+<h2>Libraries</h2>
+<% libs = get_all_libs() %>
+<% for lib in libs %>
+<%= link_to_library(lib) %> [<%= lib.ver_string %>]<br/>
+<% end%>
 <p>
 <span style="font-size: 80%;">
 This site powered by <a href="http://rannotate.rubyforge.org">Rannotate</a><br/>

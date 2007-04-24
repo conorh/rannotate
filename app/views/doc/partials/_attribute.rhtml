@@ -15,7 +15,7 @@
   <tr valign='top'>
     <td class='attr-rw'>[<%= attribute.read_write %>]</td>
     <td class='attr-name'><a name="attr_<%= attribute.name %>"></a><%= attribute.name %></td>
-    <td class='attr-desc'><%= markup(attribute.comment) %></td>
+    <td class='attr-desc'><%= markup_rdoc(attribute.comment) %></td>
   </tr>
   	<% end %>  
 </table>

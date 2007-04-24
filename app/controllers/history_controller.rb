@@ -40,7 +40,7 @@ class HistoryController < ApplicationController
     # Get all versions of this container
     container_versions = RaContainer.find(:all, :include => [:ra_comment, :ra_library], 
     	:conditions => ["full_name = ? AND type = ?", @container_name, type],
-    	:order => "version ASC")
+    	:order => "version ASC")    
     	
     unless(container_versions && container_versions.length > 0)
     	@error = "Could not find: " + type + " " + @container_name + " for history"

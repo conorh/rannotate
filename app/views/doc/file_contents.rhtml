@@ -1,0 +1,92 @@
+<div id="sidebar">
+<h2>Files</h2>
+<% for file in @file_contents.values %>
+<a href="#sec_<%= file[:obj].id %>" title="<%= file[:obj].full_name%>"><%= limit_length(file[:obj].full_name,32) %></a>
+<% end %>
+</div>
+
+<div id="body_content">
+
+<a href="<%= @container_url %>" style="text-decoration: none;">
+<span class="container_header"><%= @ra_container.class.type_string.capitalize %> <%= @ra_container.full_name %></span>
+</a>
+<% if(@version) then %>Version <%= @version %><% end %>
+<br/>
+[ <a href="<%= @container_url %>">Back To Contents</a> ]
+<p>
+In Ruby the definition for a class or module can be divided up across multiple files. This page shows which files
+define <%= @ra_container.full_name %>, and what parts they define. This information can be important because sometimes
+the functionality listed for this class may only be present if you 'require' one of these files.
+<p>
+<% for file in @file_contents.values %>
+<div class="section_title" onClick="<%= show_or_hide('sec_'+ file[:obj].id.to_s) %>"><%= file[:obj].full_name %></div>
+
+<% if file[RaClass] %>
+<b>Classes</b><br/>
+<div style="padding-left: 10px;">
+<% for raclass in file[RaClass] %>
+<%= link_to_container raclass %><br/>
+<% end %>
+</div>
+<% end %>
+
+<% if file[RaModule] %>
+<b>Modules</b><br/>
+<div style="padding-left: 10px;">
+<% for ramodule in file[RaModule] %>
+<%= link_to_container ramodule %><br/>
+<% end %>
+</div>
+<% end %>
+
+
+<div id="sec_<%= file[:obj].id %>">
+<% if file[RaRequire] %>
+<b>Requires:</b><br/>
+<div style="padding-left: 10px;">
+<% for require in file[RaRequire] %>
+<%= require.name %><br/>
+<% end %>
+</div>
+<% end %>
+
+<% if file[RaInclude] %>
+<b>Includes</b><br/>
+<div style="padding-left: 10px;">
+<% for include in file[RaInclude] %>
+<%= include.name %><br/>
+<% end %>
+</div>
+<% end %>
+
+<% if file[RaConstant] %>
+<b>Constants</b><br/>
+<div style="padding-left: 10px;">
+<% for constant in file[RaConstant] %>
+<%= constant.name %><br/>
+<% end %>
+</div>
+<% end %>
+
+<% if file[RaAttribute] %>
+<b>Attributes</b><br/>
+<div style="padding-left: 10px;">
+<% for attribute in file[RaAttribute] %>
+<%= attribute.name %><br/>
+<% end %>
+</div>
+<% end %>
+
+<% if file[RaMethod] %>
+<b>Methods</b><br/>
+<div style="padding-left: 10px;">
+<% for method in file[RaMethod] %>
+<%= link_to_method(method, @ra_container) %> <%= method.parameters %><br/>
+<% end %>
+</div>
+<% end %>
+
+<% end %>
+</div>
+
+</div>

@@ -41,14 +41,14 @@ module Generators
       
       # sequences used to generate unique ids for inserts
       @seq = 1
-            
+               
       # An output filename must be specified on the commandline
       @output_file = @options.op_name
-      if @output_file == nil || !(@output_file =~ /[a-zA-Z]+-[0-9]+\.[0-9]+\.[0-9]+/)
+      if @output_file == nil || !(@output_file =~ /[a-zA-Z0-9]+-[0-9]+\.[0-9]+\.[0-9]+/)
         puts "Error:"
       	puts "You must specify an output filename on the command line."
       	puts "and it must have the format: name-[major]-[minor]-[release"
-      	puts "(matching the regex: [a-zA-Z]+-[0-9]+\.[0-9]+\.[0-9]+)"
+      	puts "(matching the regex: [a-zA-Z0-9]+-[0-9]+\.[0-9]+\.[0-9]+)"
       	puts "Ex: rdoc --fmt=yaml --opname=rannotate-1.2.1"
       	exit
       end  
@@ -74,24 +74,24 @@ module Generators
     def process_file(file)
       putc('.')
       id = create_file(file)           
-          
+
       # Process all of the objects that this file contains
-      file.method_list.each { |child| process_method(child, file, id) }
-      file.aliases.each { |child| process_alias(child, file, id) }
-      file.constants.each { |child| process_constant(child, file, id) }
-      file.requires.each { |child| process_require(child, file, id) }
-      file.includes.each { |child| process_include(child, file, id) }
-      file.attributes.each { |child| process_attribute(child, file, id) }   
+      file.method_list.each { |child| process_method(child, file, id, id) }
+      file.aliases.each { |child| process_alias(child, file, id, id) }
+      file.constants.each { |child| process_constant(child, file, id, id) }
+      file.requires.each { |child| process_require(child, file, id, id) }
+      file.includes.each { |child| process_include(child, file, id, id) }
+      file.attributes.each { |child| process_attribute(child, file, id, id) }   
     
       # Recursively process contained subclasses and modules 
-       file.each_classmodule do |child| 
-          process_class_or_module(child, file, id)      
+      file.each_classmodule do |child|
+        process_class_or_module(child, file, id, id)      
       end       
       
     end
     
     # Process classes and modiles   
-    def process_class_or_module(obj, parent, parent_id)    
+    def process_class_or_module(obj, parent, parent_id, file_id)   
       # One important note about the code_objects.rb structure. A class or module
       # definition can be spread a cross many files in Ruby so code_objects.rb handles
       # this by keeping only *one* reference to each class or module that has a definition
@@ -100,25 +100,28 @@ module Generators
       # twice. So we need to keep track of what classes/modules we have
       # already seen and make sure we don't create two INSERT statements for the same
       # object.
-      if(!@already_processed.has_key?(obj.full_name)) then      
-        id = create_class_or_module(obj, parent_id)
-        @already_processed[obj.full_name] = id        
-          
-        # Process all of the objects that this class or module contains
-        obj.method_list.each { |child| process_method(child, obj, id) }
-        obj.aliases.each { |child| process_alias(child, obj, id) }
-        obj.constants.each { |child| process_constant(child, obj, id) }
-        obj.requires.each { |child| process_require(child, obj, id) }
-        obj.includes.each { |child| process_include(child, obj, id) }
-        obj.attributes.each { |child| process_attribute(child, obj, id) } 
-        obj.in_files.each { |child| process_in_file(child, obj, id) }  
+      if(@already_processed.has_key?(obj.full_name))      
+        id = @already_processed[obj.full_name]
+      else
+        id = create_class_or_module(obj, parent_id, file_id)
+        @already_processed[obj.full_name] = id
       end
       
-      id = @already_processed[obj.full_name]
+      # Process all of the objects that this class or module contains
+      obj.method_list.each { |child| process_method(child, obj, id, file_id) }
+      obj.aliases.each { |child| process_alias(child, obj, id, file_id) }
+      obj.constants.each { |child| process_constant(child, obj, id, file_id) }
+      obj.requires.each { |child| process_require(child, obj, id, file_id) }
+      obj.includes.each { |child| process_include(child, obj, id, file_id) }
+      obj.attributes.each { |child| process_attribute(child, obj, id, file_id) } 
+      obj.in_files.each { |child| process_in_file(child, obj, id) }  
+            
       # Recursively process contained subclasses and modules 
-      obj.each_classmodule do |child| 
-      	process_class_or_module(child, obj, id) 
+      obj.each_classmodule do |child|
+      	process_class_or_module(child, obj, id, file_id) 
       end
+      
+      # @ loop would happen when we process a class that contains itself as a class or module      
     end       
     
     def output_yaml(c)
@@ -134,9 +137,9 @@ module Generators
     end
     
     def create_file(obj)
-      comment_id = create_comment(obj)      
+      comment_id = create_comment(obj)
             
-      id = get_next_id(:files)            
+      id = get_next_id(:files)
       c = RaFile.new({
         'name' => obj.file_relative_name,
         'type' => 'RaFile', 
@@ -151,7 +154,7 @@ module Generators
       return id  
     end
     
-    def create_class_or_module(obj, parent_id)
+    def create_class_or_module(obj, parent_id, file_id)
       comment_id = create_comment(obj)      
       
       if(obj.is_module?)
@@ -169,6 +172,7 @@ module Generators
         'id' => id, 
         'ra_comment_id' => comment_id,
         'ra_library_id' => 0,
+        'file_id' => file_id,
         'full_name' => obj.full_name,
         'parent_id' => parent_id,
         'superclass' => obj.superclass
@@ -178,7 +182,7 @@ module Generators
       return id     
     end          
     
-    def process_method(obj, parent, parent_id)  
+    def process_method(obj, parent, parent_id, file_id)  
       comment_id = create_comment(obj)
             
       source_id = get_next_id(:source)
@@ -192,7 +196,9 @@ module Generators
         'visibility' => VISIBILITY[obj.visibility], 
         'name' => obj.name,
         'ra_container_id' => parent_id,
+        'file_id' => file_id,
         'parameters' => obj.params,
+        'call_seq' => obj.call_seq,
         'singleton' => bool_to_int(obj.singleton),
         'force_documentation' => bool_to_int(obj.force_documentation),
         'block_parameters' => obj.block_params,
@@ -215,16 +221,17 @@ module Generators
       })
       
       output_yaml(c)
-      return id                  
+      return id
     end
     
-    def process_alias(obj, parent, parent_id)
+    def process_alias(obj, parent, parent_id, file_id)
       id = get_next_id(:aliases)
       
       c = RaAlias.new({
         'id' => id,
         'name' => obj.old_name,
         'ra_container_id' => parent_id,
+        'file_id' => file_id,        
         'type' => 'RaAlias',
         'value' => obj.new_name,
         'comment' => obj.comment
@@ -233,13 +240,14 @@ module Generators
       return id    
     end
     
-    def process_constant(obj, parent, parent_id)
+    def process_constant(obj, parent, parent_id, file_id)
       id = get_next_id(:constants) 
       
       c = RaConstant.new({
         'id' => id,
         'name' => obj.name,
         'ra_container_id' => parent_id,
+        'file_id' => file_id,        
         'type' => 'RaConstant',
         'value' => obj.value,
         'comment' => obj.comment
@@ -248,7 +256,7 @@ module Generators
       return id     
     end
     
-    def process_attribute(obj, parent, parent_id)
+    def process_attribute(obj, parent, parent_id, file_id)
       id = get_next_id(:attributes)   
       
       c = RaAttribute.new({
@@ -257,6 +265,7 @@ module Generators
         'visibility' => VISIBILITY[obj.visibility],
         'name' => obj.name,
         'ra_container_id' => parent_id,
+        'file_id' => file_id,        
         'type' => 'RaAttribute',
         'comment' => obj.comment
       })
@@ -264,12 +273,13 @@ module Generators
       return id             
     end
     
-    def process_require(obj, parent, parent_id)
+    def process_require(obj, parent, parent_id, file_id)
       id = get_next_id(:requires)
       c = RaRequire.new({
         'id' => id,
         'name' => obj.name,
         'ra_container_id' => parent_id,
+        'file_id' => file_id,        
         'type' => 'RaRequire',
         'comment' => obj.comment
       })
@@ -277,12 +287,13 @@ module Generators
       return id
     end
     
-    def process_include(obj, parent, parent_id) 
+    def process_include(obj, parent, parent_id, file_id) 
       id = get_next_id(:includes)   
       c = RaInclude.new({
         'id' => id,
         'name' => obj.name,
         'ra_container_id' => parent_id,
+        'file_id' => file_id,        
         'type' => 'RaInclude',
         'comment' => obj.comment
       })
@@ -322,7 +333,6 @@ end
 
 # The classes below emulate the ActiveRecord models used by Rannotate
 # We emulate them so that we can output them to YAML and easily import them in the Rails App
-# TODO: Investigate importing the active record models instead of creating these mock objects
 
 class RaFile
   def initialize(attr)

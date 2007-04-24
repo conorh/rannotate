@@ -23,8 +23,8 @@ module NotesHelper
 	def get_return_url(note)
 	  container_type = note.get_container().class.to_s
       container = RaContainer.type_to_route(container_type)
-      container_params = {:controller => 'doc', :action => container, :name => note.container_name, :anchor => 'note_' + note.id.to_s}
-      code_obj_params = {:controller => 'doc', :action => 'container', :type => container_type, :name => note.container_name}
+      container_params = {:controller => 'doc', :action => container, :container => note.container_name, :anchor => 'note_' + note.id.to_s}
+      code_obj_params = {:controller => 'doc', :action => 'container', :type => container_type, :container => note.container_name}
       
       case note.note_type
 	    when RaModule.to_s then return url_for(container_params)
@@ -58,18 +58,15 @@ module NotesHelper
 				text += " ... "
 			end
 		end
-			
-		# Extract anything between <ruby></ruby> tags and syntax highlight it
-		syntax = Syntax::Convertors::HTML.for_syntax "ruby"
-		
-		# To prevent the ruby code from being mangled by the rest of the text substitutions
-		# we save it in an instance variable and then re-add it later
-		@rubycode = []
-		text.gsub!(/<ruby>(.*?)<\/ruby>/m ) { @rubycode.push($1); "!CODE_EXTRACT!" }					
-					
+				
 		# Kill all HTML elements
 		text.gsub!(/</,"&lt;")
 		text.gsub!(/>/,"&gt;")		
+		
+		# To prevent the ruby code from being mangled by the rest of the text substitutions
+		# we save it in an instance variable and then re-add it later
+		@rubycode = []		
+		text.gsub!(/<ruby>(.*?)<\/ruby>/m ) { @rubycode.push($1); "!CODE_EXTRACT!" }										
 	
 		# Take care of newlines
 		text.gsub!(/(\r\n|\n|\r)/, "\n") # lets make them newlines crossplatform
@@ -77,10 +74,14 @@ module NotesHelper
 		text.gsub!(/([^\n])(\n)([^\n])/, '\1\2<br/>\3') # turn single newline into <br />		
 		text.gsub!(/\n\n/, "<br/><br/>\n") # turn two newlines into paragraph
 		
+		# Extract anything between <ruby></ruby> tags and syntax highlight it
+		syntax = Syntax::Convertors::HTML.for_syntax "ruby"
+				
 		# Now place back in the ruby code that we extracted
+		@rubycode.reverse!()
 		text.gsub!(/!CODE_EXTRACT!/) { syntax.convert(@rubycode.pop()) }
 
-		# auto link any links	
+		# auto link any links	 
 		text = auto_link(text, :all, :rel => "nofollow", :target=> "_blank")
 		return text
 	end

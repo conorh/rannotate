@@ -1,6 +1,6 @@
 class NotesController < ApplicationController
     
-  # cache_sweeper :note_sweeper, :only => [:create]
+  cache_sweeper :note_sweeper, :only => [:preview]
   caches_page :list_new
 	
   # Display a list of notes
@@ -43,13 +43,13 @@ class NotesController < ApplicationController
     @note.skip_ban_validation = true
     @note.valid?
 		
-	if @params['create'] && @note.errors.empty?
+	  if @params['create'] && @note.errors.empty?
       create
-	end
+	  end
   end
 
   # Save the note to the DB
-  def create  
+  def create
     note_params = get_note_params(params[:note][:ref_id], params[:note][:ref_type])
     
     @note = Note.new(note_params.merge(params[:note]))
@@ -57,9 +57,14 @@ class NotesController < ApplicationController
     if !@note.save
       render :action => 'preview'
     else
-      NoteSweeper.expire_cache(self, @note)            
+      send_note_edit_email(@note)      
       render :action => 'success'
     end
+  end
+  
+  # Send an email
+  def send_note_edit_email
+    
   end
   
   # Save a vote for a note and then show the success page if it was a success
@@ -126,7 +131,6 @@ private
 	   when RaAlias.to_s then return get_codeobj_params(id, type_string)
 	   when "index" then return get_index_params()
       end
-
       return {}
    end
    

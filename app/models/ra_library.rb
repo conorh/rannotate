@@ -33,7 +33,7 @@ class RaLibrary < ActiveRecord::Base
 	
 	# A helper method to find the a library when you have the name and release information
 	def find_lib
-	    return RaLibrary.find(:first, :conditions => ["name = ? AND major = ? AND minor = ? AND `release` = ?", name, major, minor, release]) 
+    return RaLibrary.find(:first, :conditions => ["name = ? AND major = ? AND minor = ? AND `release` = ?", name, major, minor, release])
 	end
 	
 	# on create checks to see if a library with this version and name exists already

@@ -36,6 +36,11 @@ Rails::Initializer.run do |config|
   # (enables use of different database adapters for development and test environments)
   # config.active_record.schema_format = :ruby
 
+  # RANNOTATE addition
+  # For Rannotate we use page caching extensively. In order to make things simpler for
+  # expiration we want all of the cached pages to be in a separate folder
+  config.action_controller.page_cache_directory = RAILS_ROOT+"/public/cache/"   
+
   # See Rails::Configuration for more options
 end
 
@@ -51,6 +56,9 @@ end
 # *******************************
 # Rannotate Configuration Options
 # *******************************
+
+# Specify the default library to display on the site
+RANNOTATE_DEFAULT_LIB = ''
 
 # Specify the name of the container to use as a home page
 # REQUIRED: but can be nil for the default index

@@ -2,37 +2,32 @@ ActionController::Routing::Routes.draw do |map|
   # Add your own custom routes here.
   # The priority is based upon order of creation: first created -> highest priority.
   
-  # Here's a sample route:
-  # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # You can have the root of your site routed by hooking up ''
-  map.connect '', :controller => "doc"  
-  map.connect 'admin/', :controller => "admin/upload"  
+  # Route / to /doc/index
+  map.connect '', :controller => "doc"
+    
+  # routing urls for container/library browsing
+  map.connect 'lib/:lib_name/:container/:method', :controller => 'doc', :action => 'container',
+    :container => nil, :method => nil
+    
+  # routing urls for container/library browsing
+  map.connect 'lib/:lib_name/:version/:container/:method', :controller => 'doc', :action => 'container',
+    :name => nil, :method => nil, :requirements => {:version => /\d\.\d\.\d/}
   
-  # routing rules to give nice URLs to class and modules with version numbers
-  map.connect 'class/:name/:version', :controller => 'doc', :action => 'classes', :requirements => {:version => /\d\.\d\.\d/}
-  map.connect 'file/:name/:version', :controller => 'doc', :action => 'files', :requirements => {:version => /\d\.\d\.\d/}
-  map.connect 'module/:name/:version', :controller => 'doc', :action => 'modules', :requirements => {:version => /\d\.\d\.\d/}
+  # route to list all classes/files/methods for a library
+  map.connect 'lib/:lib_name/list/:type', :controller => 'doc', :action => 'list'
   
-  # routing ruls to give nice ULRs to class and modules with methods and version numbers
-  map.connect 'class/:name/:method/:version', :controller => 'doc', :action => 'classes', :method => nil, :version => nil
-  map.connect 'file/:name/:method/:version', :controller => 'doc', :action => 'files', :method => nil, :version => nil
-  map.connect 'module/:name/:method/:version', :controller => 'doc', :action => 'modules', :method => nil, :version => nil
+  # routing rule to give nice url to history links for both libraries and for classes/modules in that library
+  map.connect 'lib/:lib_name/:name/history', :controller => 'doc', :action=> 'history', :name => nil
   
-  # routing rule to match the list types with possible version numbers
-  map.connect 'list/:type/:library/:version', :controller => 'doc', :action => 'list', :library => nil, :version => nil
+  # route to list all classes/files/methods in the system
+  map.connect 'list/:type/:version', :controller => 'doc', :action => 'list'
   
-  # routing rule to give nice url to history of library links
-  map.connect 'history/library/:name', :controller => 'history', :action=> 'library'
-  
-  # routing rule to give nice URL to history links
-  map.connect 'history/:type/:name', :controller => 'doc', :action => 'history'
-  
-  # routing rule to search for anything that doesn't match the above
-  map.connect '/:name', :controller => 'doc', :action => 'search'
+  # Route to the admin portion of the site
+  map.connect 'admin/', :controller => 'admin/upload'  
   
   # default route (id must be a number) 
   map.connect ':controller/:action/:id'
-    
+  
+  # routing rule to search for anything that doesn't match the above
+  map.connect '/:name', :controller => 'doc', :action => 'search'
 end

@@ -1,32 +1,14 @@
 development:
   adapter: mysql
   database: rannotate
-  host: 
+  host: localhost
   username: root
-  password: 
-  port: 
-  sslcert: 
-  sslcapath: 
-  sslcipher: 
-  socket: localhost
-  sslkey: 
-  schema_order: 
-  dbfile: 
-
+  
 test:
   adapter: mysql
   database: rannotate_test
-  host: 
-  username: rails
-  password: rails
-  port: 
-  sslcert: 
-  sslcapath: 
-  sslcipher: 
-  socket: localhost
-  sslkey: 
-  schema_order: 
-  dbfile: 
+  host: localhost
+  username: root
 
 production:
   adapter: mysql

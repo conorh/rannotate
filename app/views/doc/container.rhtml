@@ -11,12 +11,12 @@
 <br/>
 [ <a href="#notessec"><%= pluralize(get_count(@note_count, @ra_container.class.to_s), "Note") %></a> ]
 [ <%= link_to 'History', {:action => 'history', :name => @container_name, :type => @ra_container.class.to_s } %> ]
+[ <%= link_to 'Show Files', {:action => 'file_contents', :container => @container_name, :type => @ra_container.class.to_s } %> ]
 
 <% if(@ra_container.ra_comment.comment.length > 0) %>
-<div class="section_title" onClick="<%= show_or_hide("comment") %>">Comments</div>
-<div class="comment" id="comment"><%= markup(@ra_container.ra_comment.comment) %></div>
+<div class="section_title" onClick="<%= show_or_hide("comment") %>"><%= @ra_container.class.type_string.capitalize %> Description</div>
+<div class="comment" id="comment"><%= markup_rdoc(@ra_container.ra_comment.comment) %></div>
 <% end %>
-<% if(@ra_in_files.length > 0) %><%= render :partial => 'doc/partials/in_file' %><% end %>
 <% if(@ra_code_objects[RaRequire]) %><%= render :partial => 'doc/partials/require' %><% end %>
 <% if(@ra_code_objects[RaInclude]) %><%= render :partial => 'doc/partials/include' %><% end %>     
 <% if(@ra_code_objects[RaConstant]) %><%= render :partial => 'doc/partials/constant' %><% end %>

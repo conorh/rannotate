@@ -1,17 +1,9 @@
-<div id="sidebar_slim">	
-<%= render :partial => 'doc/partials/nav_sidebar' %>
-</div>
-
-<div id="body_content_wide" style="padding-left: 10px;">
-<h2><span style="font-size: 130%"><%= @type.capitalize %>
-<% if(@library != nil) %>
- for library '<%= @library %>' version <%= @version %><br/>
-<% end %></span></h2>
 <% ref_alpha = 'A' %>
 <% for ref_count in 1..26 %>
-<a href="#alpha_<%= ref_alpha %>"><%= ref_alpha %></a>
+<% if(@list.length > 50) %><a href="#alpha_<%= ref_alpha %>"><%= ref_alpha %></a><% end %>
 <% ref_alpha.succ! %>
 <% end %>
+
 <div style="padding-top: 5px;"></div>
 <table>
 <tr valign="top" style="font-size: 70%; padding-top: 5px;">
@@ -22,7 +14,9 @@
    alphabet_count = 0
 %>
 <td align="left">
+<% if(@list.length > 50) %>
 <strong><%= alphabet %></strong><a name="alpha_<%= alphabet %>"></a><br/>
+<% end %>
 <% for entry in @list %>
 <%   # Check if we should display the next letter of the alphabet %>
 <%   entry.container? ? char = entry.full_name[0,1].upcase : char = entry.name[0,1].upcase %>
@@ -31,7 +25,9 @@
        alphabet_count += 1
        count += 1
 %>
+<% if(@list.length > 50) %>
 <strong><%= alphabet %></strong><a name="alpha_<%= alphabet %>"></a><br/>
+<% end %>
 <%     # if we crossed a column boundary then output a new column %>
 <%     if(count != @list.length && count % rows_per_col == 0) %>
 </td>
@@ -52,7 +48,9 @@
      alphabet_count += 1
      count += 1
 %>
+<% if(@list.length > 50) %>
 <strong><%= alphabet %></strong><a name="alpha_<%= alphabet %>"></a><br/>
+<% end %>
 <%   # if we crossed a column boundary then output a new column 
      if(count != @list.length && count % rows_per_col == 0) %>
 </td>
@@ -60,4 +58,3 @@
 <%   end
    end %>
 </td></tr></table> 
-</div>

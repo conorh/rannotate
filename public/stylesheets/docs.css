@@ -1,45 +1,25 @@
-HTML {
-  PADDING: 0px; MARGIN: 0px;
-}
-BODY {
-  PADDING: 0px; MARGIN: 0px; FONT: 1em "Lucida Grande", Helvetica, sans-serif;
-}
-A {
-	  COLOR: #213449
-}
-TABLE {
-  PADDING: 0px; MARGIN: 0px; BORDER: 0px; BORDER-COLLAPSE: collapse;
-}
-TD, TR {
-  PADDING: 0px; MARGIN: 0px;
-}
-FORM {
-  DISPLAY: inline;
-}
-FORM INPUT {
-  	FONT-SIZE: 80%;
-}
-H1,H2,H3,H4,H5,H6 {
-  	MARGIN: 0 0 0 0px;
-	}
-	IMG {
-  	BORDER: 0px;
-}
+HTML { PADDING: 0px; MARGIN: 0px; }
+BODY { PADDING: 0px; MARGIN: 0px; FONT: 1em "Lucida Grande", Helvetica, sans-serif; }
+A { COLOR: #213449 }
+TABLE { PADDING: 0px; MARGIN: 0px; BORDER: 0px; BORDER-COLLAPSE: collapse; }
+TD, TR { PADDING: 0px; MARGIN: 0px; }
+FORM { DISPLAY: inline; }
+FORM INPUT { FONT-SIZE: 80%; }
+H1,H2,H3,H4,H5,H6 { MARGIN: 0 0 0 0px; }
+IMG { BORDER: 0px; }
 
-		#wrap {
+#wrap {
   margin:0 0 0 0;
   background: #fafaea; 
-		}
-		
-	#header {
+}
+#header {
   width: 100%;
-  	font-size: 80%;  
+  font-size: 80%;  
   background-color: #213449;
   padding: 5px;
   color: #ffff66; 
-  vertical-align:middle;   
-	}
-	
+  vertical-align:middle;
+}
 .header_link {
   font-size: 140%;
   color: #ffff66;  
@@ -100,14 +80,15 @@ H1,H2,H3,H4,H5,H6 {
 }
 
 .section_title {
-  	margin: 10 0 10 0px; font-size: 120%; font-weight: bold; color: #ffff66;
+  margin: 10 0 10 0px; font-size: 120%; font-weight: bold; color: #ffff66;
   padding: 0.3em;
   background: #213449;	
+  cursor: pointer;
 }
 
-	.comment H1, H2 {
-	  	margin: 0px 0px 5px; font-size: 120%; color: #555; border-bottom: #ccc 1px dotted;  
-	}
+.comment H1, H2 {
+  margin: 0px 0px 5px; font-size: 120%; color: #555; border-bottom: #ccc 1px dotted;  
+}
 .comment PRE {
   padding: 0.5em;
   border: 1px dotted black;
@@ -168,6 +149,7 @@ H1,H2,H3,H4,H5,H6 {
 }
 
 .sourcecode {
+  font-size: 110%;
   padding: 0.5em;
   border: 1px dotted black;
   background: #fafaea; 

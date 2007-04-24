@@ -3,20 +3,33 @@ require 'rdoc/markup/simple_markup/to_html'
 
 module DocHelper
 
-    # return the number of notes in a certain category, or 0 if there are none
-    def get_count(note_count, category)
-      note_count[category] ? note_count[category] : 0
+  # Display the parameters for calling a method
+  def display_method_parameters(method)      
+    if(method.call_seq != nil && method.call_seq.length > 0)
+      method.call_seq.split("\n")
+      return
     end
+    
+    if(method.block_parameters)    
+    end
+    
+    return
+  end
+   
+  # return the number of notes in a certain category, or 0 if there are none
+  def get_count(note_count, category)
+    note_count[category] ? note_count[category] : 0
+  end
 
 	# markup the source code using the syntax helper
-    def markup_source_code(code)
-      begin
-    	  syntax = Syntax::Convertors::HTML.for_syntax "ruby"
-	      return syntax.convert(code)   	  
-      rescue
-        return code
-      end        
-    end
+  def markup_source_code(code)
+    begin
+      syntax = Syntax::Convertors::HTML.for_syntax "ruby"
+	    return syntax.convert(code)   	  
+    rescue
+      return "<pre>" + code + "</pre>"
+    end        
+  end
 
 	# show a link to display the source code for a method
     def show_source_link(method_id, source_id)      
@@ -96,26 +109,23 @@ module DocHelper
     end
 
 		# Markup the rdoc comments for display
-    def markup(str, remove_para=false)
+    def markup_rdoc(str, remove_para=false)
       return '' unless str
 
-#      unless defined? @markup # only define the markup object once
+      unless defined? @markup # only define the markup object once
         @markup = SM::SimpleMarkup.new
         
-        # TODO: This does not work, previously it depended on us being able to check if something was defined before we would link it
-        # here though it is too expensive to do that for each entry as it would involve a DB lookup
-        # instead we should do it at the time we are generating the inserts into the DB and place special
-        # markers around those things to be hyperlinked
-        
-        # class names, variable names, file names, or instance variables
-        
-#        @markup.add_special(/(
+        # class names, variable names, file names, or instance variables        
+        @markup.add_special(/(\#\w+[!?=]?
+                             | \b([A-Z]\w+::\w+)
+                             )/x, :CROSSREF)
+
+# TODO: Some of these crossreferences are very expensive
+# for some of them we need to do searches for each match to see if it exists
+# with page links this is not so bad, but with other things it could be epxensive
+# at doc generation time we should use a hashtable to speed this up
 #                             \b([A-Z]\w*(::\w+)*[.\#]\w+)  #    A::B.meth
-#                             | \b([A-Z]\w+(::\w+)*)       #    A::B..
-#                              \#\w+[!?=]?                #    #meth_name 
 #                             | \b\w+([_\/\.]+\w+)+[!?=]?  #    meth_name
-#                             )/x, 
-#                            :CROSSREF)
 
         # external hyperlinks
         # @markup.add_special(/((link\.)\S+\w)/, :HYPERLINK)
@@ -123,18 +133,19 @@ module DocHelper
 
         # and links of the form  <text>[<url>]
         @markup.add_special(/(((\{.*?\})|\b\S+?)\[\S+?\.\S+?\])/, :TIDYLINK)
-#      end
-
-#      unless defined? @html_formatter
-        @html_formatter = Hyperlinker.new(self)
-#      end
-
-      # Convert leading comment markers to spaces, but only if all non-blank lines have them
-      if str =~ /^(?>\s*)[^\#]/
-        content = str
-      else
-        content = str.gsub(/^\s*(#+)/)  { $1.tr('#',' ') }
       end
+
+      unless defined? @html_formatter
+        @html_formatter = Hyperlinker.new(self)
+      end
+
+     # Remove leading comment markers if all blank lines have them
+     if str =~ /^(?>\s*)[^\#]/
+        content = str
+     else
+        content = str.gsub(/^\s*#+/, '')
+        content.gsub!(/^ /, '')
+     end
 
       res = @markup.convert(content, @html_formatter)
       if remove_para
@@ -155,17 +166,17 @@ module DocHelper
 
 	# We're invoked when any text matches the CROSSREF pattern
 	# (defined in MarkUp). If we fine the corresponding reference,
-  	# generate a hyperlink.
-  	def handle_special_CROSSREF(special)
-  	  name = special.text
-      if name[0,1] == '#'
-        name = name[1..-1]
-      end
+  # generate a hyperlink.
+  def handle_special_CROSSREF(special)  	    	  
+    name = special.text  	  
+    if name[0,1] == '#'
+      name = name[1..-1]
+    end
 
-  	  if /([A-Z].*)[.\#](.*)/ =~ name
-	    ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => $1})
+ 	  if /([A-Z].*)[.\#](.*)/ =~ name
+	    ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => $1, :exact => 1})
 	  else
-  	    ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => name})
+  	  ref = @dochelper.link_to(name, {:controller => 'doc', :action => 'search', :name => name, :exact => 1})
 	  end
 	  ref
 	end

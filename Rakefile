@@ -68,3 +68,30 @@ task "doc:api:rails" do
   
   RDoc::RDoc.new.document(params + dirs)
 end
+
+task "doc:api:rails_vendor" do
+  params = []
+  params << "--fmt=yaml"
+  params << "--opname=rails-1.1.2"
+  dirs = []
+  dirs << 'vendor/rails/railties/README'  
+  dirs << 'vendor/rails/railties/CHANGELOG'
+  dirs << 'vendor/rails/railties/MIT-LICENSE'
+  dirs << 'vendor/rails/activerecord/README' 
+  dirs << 'vendor/rails/activerecord/CHANGELOG'
+  dirs << 'vendor/rails/activerecord/lib/'
+  dirs << 'vendor/rails/actionpack/README'
+  dirs << 'vendor/rails/actionpack/CHANGELOG'
+  dirs << 'vendor/rails/actionpack/lib/'
+  dirs << 'vendor/rails/actionmailer/README'
+  dirs << 'vendor/rails/actionmailer/CHANGELOG'
+  dirs << 'vendor/rails/actionmailer/lib/'
+  dirs << 'vendor/rails/actionwebservice/README'
+  dirs << 'vendor/rails/actionwebservice/CHANGELOG'
+  dirs << 'vendor/rails/actionwebservice/lib/'
+#  dirs << 'vendor/rails/activesupport/README'
+  dirs << 'vendor/rails/activesupport/CHANGELOG'
+  dirs << 'vendor/rails/activesupport/lib/'
+  
+  RDoc::RDoc.new.document(params + dirs)
+end

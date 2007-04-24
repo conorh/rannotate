@@ -7,11 +7,11 @@
 <span class="container_header"><%= @method.name %><%= @method.parameters %></span> <% if(@version) then %>Ver: <%= @version %><% end %>
 <br/>From: <a href="<%= @container_url %>"><%= @container_name %></a>
 <% if(@version) then %>Version <%= @version %><% end %>
+Defined in: <%= link_to_container @method.file_container %>
 
-
-<div class="section_title" onClick="<%= show_or_hide("commentssec") %>">Comments</div>
+<div class="section_title" onClick="<%= show_or_hide("commentssec") %>">Method Description</div>
 <div id="commentssec" class="description">
-<p><%= markup(@method.ra_comment.comment) %></p>
+<p><%= markup_rdoc(@method.ra_comment.comment) %></p>
 </div>
   
 <div class="section_title" onClick="<%= show_or_hide("sourcesec") %>">Sourcecode</div>
@@ -21,10 +21,11 @@
 
 <a name="notessec"></a>
 <div class="section_title" onClick="<%= show_or_hide("usercommentsec") %>">
-<span class="note_link">		<%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :id => @method.id, :type => 'RaMethod'}) %></span>
+<span class="note_link"> <%= link_to('Add New Note', {:controller => 'notes', :action => 'new', :id => @method.id, :type => 'RaMethod'}) %></span>
 User Added Notes
-		</div>
-		<div id="usercommentsec">
+</div>
+
+<div id="usercommentsec">
 <%= render_notes(@container_name, @method.name) %>
 </div>
 

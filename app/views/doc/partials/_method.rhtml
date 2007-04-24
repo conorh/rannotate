@@ -8,10 +8,10 @@
 <div class="method">
   <h2>
   <a name="<%= method.name %>"></a>
-  	<b><%= link_to_method(method.name, @container_type) %></b> <%= method.parameters %>
+  	<b><%= link_to_method(method, @ra_container, 'Defined In File: ' + method.file_container.full_name) %></b> <%= method.parameters %>
   </h2>
   <div class="description">   
-  <%= markup(method.ra_comment.comment) %>
+  <%= markup_rdoc(method.ra_comment.comment) %>
   </div>
   [ <%= show_source_link(method.id, method.ra_source_code_id) %> ]
   [ <%= show_notes_link(@ra_container.full_name, method.name, method.id, "RaMethod") %> ]

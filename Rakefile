@@ -72,7 +72,7 @@ end
 task "doc:api:rails_vendor" do
   params = []
   params << "--fmt=yaml"
-  params << "--opname=rails-1.1.2"
+  params << "--opname=rails-#{Rails::VERSION::STRING}"
   dirs = []
   dirs << 'vendor/rails/railties/README'  
   dirs << 'vendor/rails/railties/CHANGELOG'

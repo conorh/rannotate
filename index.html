@@ -1,0 +1,137 @@
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />		
+    <title>Rannotate - Annotatable and Searchable Documentation for Ruby Projects</title>
+		<link href="docs.css" media="screen" rel="Stylesheet" type="text/css" />
+	</head>
+	<body>
+	
+<div id="header">
+  <span class="header_search_links"></span>
+		  <a href="#" class="header_link">Rannotate</a><br/>
+</div>
+
+<div id="sidebar_slim">
+<h2>Project Links</h2>
+<a href="http://rubyforge.org/projects/rannotate/">Rubyforge project</a><br/>
+<a href="http://rubyforge.org/tracker/?group_id=1051">Bug Tracking</a><br/>
+<a href="http://github.com/conorh/rannotate">Git repo</a>
+<p>
+<h2>Examples</h2>
+<a href="http://rails.outertrack.com">Rails Docs</a><br/>
+<a href="http://ruby.outertrack.com">Ruby Docs</a><br/>
+<p>
+<h2>Author</h2>
+conor DOT hunt PLUS rannotate AT gmail DOT com
+</div>
+
+<div id="body_content_wide">
+
+<h1>Rannotate - Annotatable and Searchable Docs for Ruby Projects</h1>
+<p>
+<h2>What is it?</h2>
+<p>
+Rannotate is a rails application and rdoc generator that work together to provide user submitted notes for rdoc generated documentation.
+It is modeled after the successful online PHP documentation at <a href="http://www.php.net">www.php.net</a>
+<p>
+<h2>Examples</h2>
+<p>
+Rannotated Rails API documetation: <a href="http://rails.outertrack.com/">Rails API Documentation - Rannotated</a><br/>
+Rannotated Ruby (1.8.4) API documentation: <a href="http://ruby.outertrack.com">Ruby Docs - Rannotated</a><br/>
+<p>
+<h2>Features?</h2>
+- Display and submit notes for any file, class, module, method and other code objects<br/>
+- Search the entire documentation<br/>
+- Host multiple versions of documentation for a library at the same time<br/>
+- Diff between versions of a class or module to see what has changed between library versions<br/>
+- Ruby syntax highlighting for notes<br/>
+- Page caching for extremely high performance browsing of the documentation<br/>
+- Administration interface that allows you to edit and delete submitted notes, ban IP ranges and upload new documentation<br/>
+- Custom RDoc YAML generator<br/>
+<p>
+<h2>Who is it by</h2>
+The main code monkey is Conor Hunt. You can email him at conor DOT hunt PLUS rannotate AT gmail DOT com
+<p>
+Rannotate has been through a couple of iterations and has received some contributions along the way.
+<p>
+Kudos:<br/>
+* Guido Sohne for his excellent rakefile tasks and for some patches to help it work with Postgres<br/>
+* Jamis Buck for his excellent rdoc template (<a href="http://jamis.jamisbuck.org/articles/2005/04/08/rdoc-template">Jamis Rdoc template</a>). This got me started.<br/>
+* Matias Pelenur contributed a SVN repository, search code, bug fixes and suggestions<br/>
+* Justin Palmer contributed the start of a new site design with the beginnings of a new CSS template<br/>
+<p>
+<h2>How does it work?</h2>
+<p>
+Rannotate depends on a custom rdoc generator that creates YAML. The rails application imports this YAML into the DB
+to generate the documentation on the fly and allow for neat features like searching and user annotations.
+<p>
+<h2>Where do I get it?</h2>	
+See the install instructions below..
+<p>
+<h2>Where do I get help/submit bugs/suggestions?</h2>	
+<a href="http://rubyforge.org/projects/rannotate/">Rannotate rubyforge site</a><br/>
+<a href="http://rannotate.rubyforge.org/wiki/wiki.pl">Rannotate wiki</a><br/>
+<a href="http://rubyforge.org/forum/?group_id=1051">Rannotate forums</a><br/>
+<a href="http://rubyforge.org/tracker/?group_id=1051">Rannotate bug/feature trackers</a><br/>
+<p>
+<h2>Installation</h2>
+
+<strong>Step 0:</strong><br/> Install the syntax gem: <tt>gem install syntax</tt> (rannotate uses this to do ruby syntax highlighting).<br/>
+Pull down the code from our subversion repository. The current release is 0.9.0 so you want the tags/0.9.0 directory from the repository.<br/>
+<tt>svn checkout https://matiaspelenur.com/svn/rannotate/tags/0.9.0 rannotate</tt>
+<br/><br/>
+<strong>Step 1:</strong><br/>Put the yaml_generator.rb file from the rdoc_extension directory into your
+rdoc generator directory which is: <tt>[RUBY_DIR]\lib\ruby\1.8\rdoc\generators\</tt>
+<br/><br/>
+<strong>Step 2:</strong><br/>Setup config\database.yml for your DB and run 'rake migrate'
+<br/><br/>
+<strong>Step 3:</strong><br/>Generate some rdoc for your application using:<br/>
+	<tt>rdoc --fmt=yaml --opname=appname-0.2.3 directory</tt><br/>
+NOTE: The output format must be appname-[major].[minor].[release] rannotate uses the filename when importing the documentation to figure
+out the name of the library and the version. Unfortunately the generator can only tell you this issue after the generation has finished :(
+<br/><br/>
+<strong>Step 4:</strong><br/> Create an admin login account<br/>
+ruby script\console<br/>
+>> User.create({:login => 'admin', :password => .., :password_confirmation => ..}).save
+<br/><br/>
+<strong>Step 5:</strong><br/>Start webrick for rannotate (going to the homepage will error until you upload docs)
+<br/><br/>
+<strong>Step 6:</strong><br/>Login to the administration section using the login you generated at step 4<br/>
+Admin URL - http://server:3000/admin/<br/>
+<br/>
+<strong>Step 6:</strong><br/>Go to the Upload Documentation section and select the appname-0.2.3.out file that was generated at step 3.<br/>
+<br/>
+<strong>Step 7:</strong><br/>Open up the URL of the documentation http://server:3000/ and there it is!<br/>
+
+<p>
+<h2>Notes on generating docs for rails and ruby</h2>
+There are several tasks in the Rannotate Rakefile to help generate the documentation for rails or ruby.<br/>
+<br/>
+rake doc:api:rails will generate the docs for the current version of rails<br/>
+<br/>
+These tasks will place the docs in the /doc directory<br/>
+<br/>
+Troubleshooting:-<br/>
+There are files within the Rails repository that are RHTML style templates but that have .rb endings. This causes RDoc to be confused.
+My documentation method above doesn't hit those files, so there is not a problem. Howerever if you try and RDoc everything you may see errors
+like:<br/>
+<tt>/rails/railties/lib/rails_generator/generators/components/controller/templates/controller.rb:3:15:
+Expected class name or '<<'. Got RubyToken::TkLT: "<"</tt><br/>
+To avoid these errors you must exclude those directories with RDoc:<br/>
+<tt>rdoc -x railties/lib/rails_generator/generators/*/*/templates</tt>
+<p>
+<h2>Notes on using CGI/FCGI instead of webrick:</h2>
+
+1. The dispatch files are set to run the ruby interpreter from my home
+dir you will need to modify the #! at the top of each
+/public/dispatch* file.
+<br/>
+2. I didn't check in the log files so you may need to create the log
+directory and the development.log/production.log files in it.
+<br/>
+3. You need to make the public and log directories read/writable by
+your web server, chmod 755 log -R, chmod 755 public -r
+</div>
+
+</body>
+</html>
